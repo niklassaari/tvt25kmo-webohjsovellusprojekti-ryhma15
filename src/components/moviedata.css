@@ -1,0 +1,13 @@
+.movie-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    padding: 20px;
+    margin-bottom: 15px;
+
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    gap: 20px;
+}
+
