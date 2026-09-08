@@ -1,13 +1,41 @@
-.movie-card {
+.movie {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    padding: 20px;
-    margin-bottom: 15px;
-
-    border: 1px solid #ccc;
-    border-radius: 1px;
-    gap: 20px;
+    height: 150px;
 }
 
+.movie-poster {
+    
+}
+.movie-card {
+    
+    font-family: "Times New Roman", Times, serif;
+    display: flex;
+    
+    align-items: flex-left;
+    height: 150px;
+
+ flex-direction: column;
+    
+
+    border: 1px solid #333;
+    border-right: none;
+    border-radius: 0px;
+    gap: 10px;
+   
+    
+}
+
+.movie-title {
+        
+    align-items: left
+}
+
+
+
+.movie-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+     text-indent: 20px;
+    
+}
