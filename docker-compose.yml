@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Tietokanta nää pitää sit muuttaa kun on se tietokanta tehty 
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: moviedb
+    ports:
+      - "5432:5432"
+## ^
+
+
+  # Node.js backend
+  backend:
+    build: ./backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=mysecretpassword
+      - DB_NAME=moviedb
+      - TMDB_API_KEY=${TMDB_API_KEY}
+    depends_on:
+      - db
+
+  # React frontend
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
