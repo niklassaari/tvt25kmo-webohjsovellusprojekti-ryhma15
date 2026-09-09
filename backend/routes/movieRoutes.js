@@ -1,1 +1,1 @@
-/* tänne tulee osoiteet verkko osotteet ja yhistää ne oikeaan kontrolleri funktioon */
+/* tänne tulee verkko osotteet ja yhistää ne oikeaan kontrolleri funktioon */
