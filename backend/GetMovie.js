@@ -1,5 +1,5 @@
 // If the search field is empty, don't make a unnecessary request
-async function SearchMovies(searchTerm) {
+export async function SearchMovies(searchTerm) {
     
     if (!searchTerm || searchTerm.trim() === '') {
         return [];
