@@ -1,0 +1,1 @@
+/* tänne tulee kaikki logiikka ja eri "skenaariot"/tapahtumat */
