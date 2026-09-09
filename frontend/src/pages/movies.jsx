@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SearchMovies } from '../../../backend/GetMovie';
 
 import MovieData from '../components/moviedata';
 //import './movies.css';
@@ -11,6 +12,7 @@ const API_KEY = import.meta.env.VITE_TMBD_API_KEY
 const fetchMovies = () => {
 
   const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('') // Added search areas status
 
   // 'movie?' on sarjojen kohdalla 'tv?', eli se pitää vaan se vaihtaa jos haluaa hakea sarjoja
   // se mitä niiden getit palauttaa on kuitenkin kai samassa muodossa
@@ -31,9 +33,20 @@ const fetchMovies = () => {
 
   }, []);
 
+  // Added search funktion, wich uses imported SearchMovie funktion
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
 
-  
-  
+    try {
+      const results = await SearchMovies(searchTerm);
+      setMovies(results);
+    } catch(err){
+      console.error('Error while searching a movie', err);
+    }
+  };
+
+
   return (
     <div id="container">
       

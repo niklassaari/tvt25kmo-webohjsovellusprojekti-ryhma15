@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <title>Elokuvahaku</title>
+</head>
+<body>
+
+    <h1>Elokuvahaku</h1>
+
+    <!-- Hakulomake -->
+    <form id="search-form">
+        <input type="text" id="search-input" placeholder="Syötä elokuvan nimi..." />
+        <button type="submit">Hae</button>
+    </form>
+
+    <!-- Paikka hakutuloksille -->
+    <div id="results-container"></div>
+
+    <!-- Huom! type="module" vaaditaan, että import/export toimivat -->
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
+
