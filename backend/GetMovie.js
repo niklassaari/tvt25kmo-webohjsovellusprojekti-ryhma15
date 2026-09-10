@@ -1,6 +1,7 @@
 // If the search field is empty, don't make a unnecessary request
 export async function SearchMovies(searchTerm) {
     
+    // If the search field is empty, don't make a unnecessary request
     if (!searchTerm || searchTerm.trim() === '') {
         return [];
     }
@@ -8,7 +9,8 @@ export async function SearchMovies(searchTerm) {
     // Use the TMDB API to search for movies based on the search term
     try { 
         const response = await fetch(
-            `${import.meta.env.VITE_TMDB_API_URL}/search/movie?query=${encodeURIComponent(searchTerm)}&language=fi-FI`, 
+            `${import.meta.env.VITE_TMDB_API_URL}/search/movie?query=${encodeURIComponent(searchTerm)}&language=fi-FI`,
+             
             {
                 headers: {
                     'Authorization': `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`
