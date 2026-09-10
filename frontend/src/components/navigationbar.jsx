@@ -31,12 +31,20 @@ const Navbar = () => {
         Movies
       </Dropdown.Item>
 
+
+<Dropdown.Item as={Link} to="/Moviestesti">
+        Testi
+      </Dropdown.Item>
+      
       <Dropdown.Item as={Link} to="/profile">
         Profile
       </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
     
+    
+      
+
   <form>
   <div className="form-group">
     

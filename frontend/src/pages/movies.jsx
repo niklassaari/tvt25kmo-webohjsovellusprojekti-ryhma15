@@ -1,47 +1,49 @@
-import { useEffect, useState } from 'react';
-
+import { useState } from 'react';
+import { SearchMovies } from '../../../backend/GetMovie';
 import MovieData from '../components/moviedata';
-//import './movies.css';
 
-// Mulla oli envissä nuo omat tokenit jne, muistakaa laittaa omat sitten sinne
-const API_URL = import.meta.env.VITE_TMDB_API_URL;
-const TOKEN = import.meta.env.VITE_TMDB_TOKEN;
-const API_KEY = import.meta.env.VITE_TMBD_API_KEY
 
-const fetchMovies = () => {
+
+const Movies = () => {
 
   const [movies, setMovies] = useState([]);
-
-  // 'movie?' on sarjojen kohdalla 'tv?', eli se pitää vaan se vaihtaa jos haluaa hakea sarjoja
-  // se mitä niiden getit palauttaa on kuitenkin kai samassa muodossa
-  // hakusana, vuosi, jne. lisätään myös tuohon queryyn
-  // genre id:n perusteella, eli pitää porukalla valikoida jotkut tietyt genret, niinkuin palaverissa todettiinki
+  const [searchTerm, setSearchTerm] = useState('') 
+  
 
   
-  useEffect(() => {
-  fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=12', {
-      headers: {
-        accept: 'application/json', 
-        Authorization: 'Bearer ' + TOKEN}
-  })
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return;
 
-    .then(res => res.json())
-  .then(res => setMovies(res.results))
-  .catch(err => console.error(err));
+    try {
+      const results = await SearchMovies(searchTerm);
+      
+      // Testausta varten että consolessa näkyy mitä palauttaa
+      console.log("Search results:", results);
 
-  }, []);
+      setMovies(results);
+    } catch(err){
+      console.error('Error while searching a movie', err);
+    }
+  };
 
 
-  
-  
   return (
     <div id="container">
       
+      <h1>Elokuvahaku</h1>
+
+   
+    <form id="search-form" onSubmit={handleSearch}>
+<input type="text" id="search-input" placeholder="Syötä elokuvan nimi..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />        
+        <button type="submit">Hae</button>
+    </form>
+
 
       <div className="movie-list">
         {movies.map(movie => (
           <div key={movie.id} className="movie-card">
-            <MovieData key={movie.id} movie={movie} />
+            <MovieData movie={movie} />
           </div>
         ))}
       </div>
@@ -49,4 +51,4 @@ const fetchMovies = () => {
   );
 };
 
-export default fetchMovies;
+export default Movies;
