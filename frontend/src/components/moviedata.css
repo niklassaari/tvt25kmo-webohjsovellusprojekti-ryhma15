@@ -3,6 +3,96 @@
     height: 150px;
 }
 
+
+.OnTheaters{
+    margin-top: 50px;
+}
+
+.OnTheaters .movie-list{
+display: flex;
+  flex-direction: row;
+  overflow-x: auto;           
+  scroll-behavior: smooth;     
+  scroll-snap-type: x mandatory; 
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.OnTheaters .movie {
+    display: flex;
+    flex-direction: column; 
+    width: 200px;
+    min-width: 200px;
+    height: 380px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    overflow: hidden; 
+    justify-content: flex-start !important;
+}
+
+.OnTheaters .movie-poster {
+    width: 100%;
+    height: 220px; 
+    flex-shrink: 0;
+}
+
+.OnTheaters .movie-card {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: none; 
+    font-family: "Times New Roman", Times, serif;
+    text-indent: 0 !important;
+    height: auto;
+justify-content: flex-start !important;
+gap: 0px !important;
+    font-size: 16px;
+    text-align: center;
+}
+.OnTheaters .movie-card .movie-modal-button {
+    font-size: 20px !important; 
+    text-align: left !important;
+    font-weight: bold;
+    padding: 0;
+    margin-bottom: 4px;
+    width: 100%;
+    white-space: normal;       
+    line-height: 1.2;
+}
+
+.OnTheaters .movie-info {
+ display: flex;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-indent: 0 !important;
+    width: 100%;
+    gap: 0px !important;
+    margin: 0 !important;
+}
+
+.OnTheaters .movie-info p {
+    margin: 0 !important;       
+    padding: 0 !important;
+    line-height: 1.5 !important; 
+    font-size: 15px !important;
+    font-weight: bold !important; 
+    color: #222222;
+    text-align: left !important;
+}
+
+.OnTheaters .movie-poster img {
+    width: 100% !important;  
+    height: 100% !important; 
+    object-fit: cover;
+}
+
+.OnTheaters h2{
+    color: black;
+}
 .movie-modal-button {
      background-color: #FFFFFF;
   border: none;
@@ -39,9 +129,9 @@
     height: 150px;
 }
 
-.movie-poster {
+/*.movie-poster {
     
-}
+}*/
 .movie-card {
     
     font-family: "Times New Roman", Times, serif;
@@ -60,10 +150,6 @@
    
     
 }
-
-
-
-
 
 .movie-info {
     display: flex;
