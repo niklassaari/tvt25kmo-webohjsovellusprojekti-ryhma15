@@ -3,6 +3,42 @@
     height: 150px;
 }
 
+.movie-modal-button {
+     background-color: #FFFFFF;
+  border: none;
+  color: #222222;
+  padding: 15px 20px;
+  text-align: left;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.movie-modal-body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    color: #222222;
+    line-height: 1.5;
+    text-align: left;
+    margin-top: 1px;
+    padding: 20px;
+
+    
+}
+
+.modal-dialog {
+    max-width: 1000px !important;
+}
+
+.modal-title {
+    padding: 10px;
+}
+
+.modal-header {
+    height: 150px;
+}
+
 .movie-poster {
     
 }
@@ -25,10 +61,7 @@
     
 }
 
-.movie-title {
-        
-    align-items: left
-}
+
 
 
 
@@ -36,6 +69,5 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-     text-indent: 20px;
-    
+    text-indent: 20px;
 }
