@@ -24,3 +24,30 @@ export async function getNowPlayingMovies(req,res) {
         res.status(500).json({error: 'error while finding movies'});
     }
 }
+
+export async function searchMovies(req, res){
+    const searchTerm = req.query.q
+    if (!searchTerm || searchTerm.trim()==''){
+        return res.json([])
+    }
+    try{
+        const response = await fetch(
+            `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(searchTerm)}&language=en-US`,
+            {
+                headers:{
+                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    accept: 'application/json'
+                }
+            }
+        )
+        if (!response.ok){
+            throw new Error('TMDB error: ${response.status}')
+        }
+        const data = awaitresponse.json()
+        res.json(data.results)
+    }catch(error){
+        console.error('Error searching movies:',error)
+        res.status(500).json({error:'Error searchin movies'})
+    
+    }
+}

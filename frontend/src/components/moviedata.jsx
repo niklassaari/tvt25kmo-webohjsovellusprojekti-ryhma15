@@ -3,12 +3,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useState } from 'react';
 
+import halfstar from '../assets/reviewstars/halfstar.png';
+import fullstar from '../assets/reviewstars/fullstar.png';
 
 
 
 const MovieData = ({ movie }) => {
   
   const [currentMovie, setCurrentMovie] = useState(null); // Added current movie state
+
+  const starRating = movie.vote_average / 2;
+  const fullStars = Math.floor(starRating);
+
 
   return (
    <div className="movie">
@@ -58,7 +64,140 @@ const MovieData = ({ movie }) => {
     <div className="movie-info">
       <p>Genre:{movie.genre_ids}</p>
       <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>
-      <p>Rating: {movie.vote_average}</p>
+      <p>Rating: {Math.round(movie.vote_average * 2) / 2}</p>
+
+    {/* Todella kömpelö tapa, pitää keksiä vielä jokin järkevämpi tapa toteuttaa tämä*/}
+      {/* 0 - 0.5 stars */}
+          {starRating < 0.5 ? (
+            <img src={halfstar} className="review-star" alt="Half star"
+            />
+          ) : null}
+
+
+          {/* 0.5 - 1 star */}
+          {starRating >= 0.5 && starRating < 1 ? (
+            <>
+              <img src={halfstar} className="review-star" alt="Half star"
+              />
+              <img
+                src={halfstar} className="review-star" alt="Half star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 1 - 1.5 stars */}
+          {starRating >= 1 && starRating < 1.5 ? (
+            <img src={fullstar} className="review-star" alt="Full star"
+            />
+          ) : null}
+
+
+          {/* 1.5 - 2 stars */}
+          {starRating >= 1.5 && starRating < 2 ? (
+            <>
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img
+                src={halfstar} className="review-star" alt="Half star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 2 - 2.5 stars */}
+          {starRating >= 2 && starRating < 2.5 ? (
+            <>
+              <img
+                src={fullstar} className="review-star" alt="Full star"
+              />
+              <img
+                src={fullstar} className="review-star" alt="Full star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 2.5 - 3 stars */}
+          {starRating >= 2.5 && starRating < 3 ? (
+            <>
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={halfstar} className="review-star" alt="Half star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 3 - 3.5 stars */}
+          {starRating >= 3 && starRating < 3.5 ? (
+            <>
+              <img  src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 3.5 - 4 stars */}
+          {starRating >= 3.5 && starRating < 4 ? (
+            <>
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar}  className="review-star"  alt="Full star"
+              />
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img  src={halfstar} className="review-star" alt="Half star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 4 - 4.5 stars */}
+          {starRating >= 4 && starRating < 4.5 ? (
+            <>
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar} className="review-star" alt="Full star"
+              />
+              <img src={fullstar}  className="review-star" alt="Full star"
+              />
+            </>
+          ) : null}
+
+
+          {/* 4.5 stars */}
+{starRating >= 4.5 && starRating < 5 ? (
+  <>
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={halfstar} className="review-star" alt="Half star" />
+  </>
+) : null}
+
+          {/* 5 stars */}
+
+{starRating == 5 ? (
+  <>
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+    <img src={fullstar} className="review-star" alt="Full star" />
+  </>
+) : null}
+
+      
     </div>
   </div>
   
