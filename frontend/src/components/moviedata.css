@@ -53,6 +53,15 @@ gap: 0px !important;
     font-size: 16px;
     text-align: center;
 }
+
+.OnTheaters .review-stars {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+}
+
 .OnTheaters .movie-card .movie-modal-button {
     font-size: 20px !important; 
     text-align: left !important;
@@ -132,16 +141,42 @@ gap: 0px !important;
 }
 
 .modal-title {
-    padding: 10px;
+    text-align: left;
 }
 
 .modal-header {
     height: 150px;
 }
 
-/*.movie-poster {
-    
-}*/
+.modal-header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 15px;
+}
+
+.modal-header-text {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+.modal-header-text p {
+    margin: 0;
+}
+
+
+
+
+
+.movie-list .movie-card {
+    border-bottom: 2px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
 .movie-card {
     
     font-family: "Times New Roman", Times, serif;
@@ -158,13 +193,17 @@ gap: 0px !important;
     border-radius: 0px;
     gap: 10px;
    
+    border-bottom: 2px solid #333;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    width: 100%;
     
 }
 
 .movie-info {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
     text-indent: 20px;
     gap: 5px;
 }

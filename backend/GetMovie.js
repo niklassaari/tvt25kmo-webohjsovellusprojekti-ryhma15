@@ -9,7 +9,7 @@ export async function SearchMovies(searchTerm) {
     // Use the TMDB API to search for movies based on the search term
     try { 
         const response = await fetch(
-            `${import.meta.env.VITE_TMDB_API_URL}/search/movie?query=${encodeURIComponent(searchTerm)}&language=fi-FI`,
+            `${import.meta.env.VITE_TMDB_API_URL}/search/movie?query=${encodeURIComponent(searchTerm)}&language=en-US`,
              
             {
                 headers: {

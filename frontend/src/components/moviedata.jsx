@@ -40,12 +40,20 @@ const MovieData = ({ movie }) => {
 <div className="modal fade" tabIndex="-1" id={`movieModal-${movie.id}`}>
   <div className="modal-dialog">
     <div className="modal-content">
+
       <div className="modal-header">
         <img src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`} name="logo" style={{ width: '90px', height: '150px' }} />
-        <h5 className="modal-title">{currentMovie?.title}</h5>
+  
+    <div className="modal-header-content">
+          <h5 className="modal-title">{currentMovie?.title}</h5>
 
-        
-      </div>
+          <div className="modal-header-text">
+      <p>Genre:{movie.genre_ids}</p>
+      <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>
+      <p>Rating: {movie.vote_average}</p>
+    </div>
+  </div>
+</div>
 
       <div className="movie-modal-body">
         <p>{currentMovie?.overview}</p>
@@ -66,41 +74,35 @@ const MovieData = ({ movie }) => {
       <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>
       <p>Rating: {Math.round(movie.vote_average * 2) / 2}</p>
 
+
+<div className="review-stars">
     {/* Todella kömpelö tapa, pitää keksiä vielä jokin järkevämpi tapa toteuttaa tämä*/}
       {/* 0 - 0.5 stars */}
           {starRating < 0.5 ? (
-            <img src={halfstar} className="review-star" alt="Half star"
-            />
+            <img src={halfstar} className="review-star" alt="Half star"/>
           ) : null}
 
 
           {/* 0.5 - 1 star */}
           {starRating >= 0.5 && starRating < 1 ? (
             <>
-              <img src={halfstar} className="review-star" alt="Half star"
-              />
-              <img
-                src={halfstar} className="review-star" alt="Half star"
-              />
+              <img src={halfstar} className="review-star" alt="Half star"/>
+              <img src={halfstar} className="review-star" alt="Half star" />
             </>
           ) : null}
 
 
           {/* 1 - 1.5 stars */}
           {starRating >= 1 && starRating < 1.5 ? (
-            <img src={fullstar} className="review-star" alt="Full star"
-            />
+            <img src={fullstar} className="review-star" alt="Full star"/>
           ) : null}
 
 
           {/* 1.5 - 2 stars */}
           {starRating >= 1.5 && starRating < 2 ? (
             <>
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img
-                src={halfstar} className="review-star" alt="Half star"
-              />
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={halfstar} className="review-star" alt="Half star"/>
             </>
           ) : null}
 
@@ -108,12 +110,8 @@ const MovieData = ({ movie }) => {
           {/* 2 - 2.5 stars */}
           {starRating >= 2 && starRating < 2.5 ? (
             <>
-              <img
-                src={fullstar} className="review-star" alt="Full star"
-              />
-              <img
-                src={fullstar} className="review-star" alt="Full star"
-              />
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
             </>
           ) : null}
 
@@ -121,12 +119,9 @@ const MovieData = ({ movie }) => {
           {/* 2.5 - 3 stars */}
           {starRating >= 2.5 && starRating < 3 ? (
             <>
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={halfstar} className="review-star" alt="Half star"
-              />
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={halfstar} className="review-star" alt="Half star"/>
             </>
           ) : null}
 
@@ -134,12 +129,9 @@ const MovieData = ({ movie }) => {
           {/* 3 - 3.5 stars */}
           {starRating >= 3 && starRating < 3.5 ? (
             <>
-              <img  src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
+              <img  src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
             </>
           ) : null}
 
@@ -147,14 +139,10 @@ const MovieData = ({ movie }) => {
           {/* 3.5 - 4 stars */}
           {starRating >= 3.5 && starRating < 4 ? (
             <>
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar}  className="review-star"  alt="Full star"
-              />
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img  src={halfstar} className="review-star" alt="Half star"
-              />
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar}  className="review-star"  alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img  src={halfstar} className="review-star" alt="Half star"/>
             </>
           ) : null}
 
@@ -162,14 +150,10 @@ const MovieData = ({ movie }) => {
           {/* 4 - 4.5 stars */}
           {starRating >= 4 && starRating < 4.5 ? (
             <>
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar} className="review-star" alt="Full star"
-              />
-              <img src={fullstar}  className="review-star" alt="Full star"
-              />
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar} className="review-star" alt="Full star"/>
+              <img src={fullstar}  className="review-star" alt="Full star"/>
             </>
           ) : null}
 
@@ -196,7 +180,7 @@ const MovieData = ({ movie }) => {
     <img src={fullstar} className="review-star" alt="Full star" />
   </>
 ) : null}
-
+</div>
       
     </div>
   </div>
