@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import nowPlayingRoute from "./routes/nowPlayingRoute.js"
+import movieRoutes from "./routes/movieRoutes.js"
 
 
 const port = process.env.PORT||3001
@@ -13,7 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 
-
+app.use('/api/movies',movieRoutes);
 
 
 
