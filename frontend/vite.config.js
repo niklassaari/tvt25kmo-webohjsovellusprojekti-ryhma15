@@ -4,4 +4,15 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  server: {
+    host: true, // Sallii ulkoiset yhteydet VM:llä
+    proxy: {
+      '/api': {
+      
+        target: process.env.VITE_BACKEND_URL || 'http://backend:3001',
+        changeOrigin: true,
+      },
+    },
+  },
+});
+
