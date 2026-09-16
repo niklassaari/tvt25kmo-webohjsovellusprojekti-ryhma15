@@ -9,7 +9,7 @@ const NowPlaying = () => {
 
   
   useEffect(() => {
-  fetch('http://localhost:3001/api/movies/now-playing') 
+  fetch('/api/movies/now-playing') 
   .then(res => res.json())
   .then(res => setMovies(res))
   .catch(err => console.error(err));
@@ -17,7 +17,7 @@ const NowPlaying = () => {
 
 
 useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(() => { // pitäs näyttää seuraava elokuva automaattisesti mutta ei toimi jostainsyystä
       if (listRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
         
