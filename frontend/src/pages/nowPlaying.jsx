@@ -4,7 +4,10 @@ import MovieData from '../components/moviedata';
 
 const NowPlaying = () => {
 
-  const [movies, setMovies] = useState([]);
+ const [movies, setMovies] = useState([
+  { id: 1, title: "Testielokuva 1", poster_path: "/sample.jpg" },
+  { id: 2, title: "Testielokuva 2", poster_path: "/sample.jpg" }
+]);
 
 
   
