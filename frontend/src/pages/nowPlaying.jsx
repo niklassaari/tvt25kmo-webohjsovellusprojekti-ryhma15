@@ -5,7 +5,6 @@ import MovieData from '../components/moviedata';
 const NowPlaying = () => {
 
   const [movies, setMovies] = useState([]);
-  const listRef = useRef(null);
 
   /* // väliaikaisesti kommentoituna paikallista työstöä varten */
   useEffect(() => {
@@ -51,7 +50,7 @@ useEffect(() => {
   return (
     <div id="Playing">
       <h2>Now in theaters</h2>
-      <div className="movie-list" ref={listRef}>
+      <div className="movie-list">
         {movies.map(movie => ( 
             <MovieData key={movie.id} movie={movie} />
         ))}

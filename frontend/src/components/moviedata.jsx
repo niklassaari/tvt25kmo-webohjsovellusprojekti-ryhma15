@@ -37,6 +37,11 @@ const MovieData = ({ movie }) => {
   {movie.title}
 </button>
 
+{/* PATRIK, tuossa ylhäällä on koodi semmoselle modal napille (logout nappi), onClick jne. turhia. Tärkeä tuo alhaalla oleva koodi joka avaa sen näkymän. Sinne tunget sitten- */}
+{/* sähköpostin ja salasanan ja napin. Kopsaa siis tuo modal koodi sinne rekisteröinti sivulle ja liitä semmoseen logout nappiin */}
+
+
+
 <div className="modal fade" tabIndex="-1" id={`movieModal-${movie.id}`}>
   <div className="modal-dialog">
     <div className="modal-content">

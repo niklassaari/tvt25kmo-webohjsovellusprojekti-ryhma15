@@ -23,7 +23,7 @@ display: flex;
     flex-direction: column; 
     width: 200px;
     min-width: 200px;
-    height: 380px;
+    height: auto;
     border: 2px solid black;
     border-radius: 8px;
     background-color: #ffffff;
@@ -42,6 +42,8 @@ display: flex;
 
 .OnTheaters .movie-card {
     display: flex;
+    align-items: center;
+    height: 150px;
     flex-direction: column;
     padding: 10px;
     border: none; 
@@ -213,3 +215,69 @@ gap: 0px !important;
     width: 30px;
     height: 30px;
 }
+
+{/* kopioitu timiltä, mitä nämä tekee?*/}
+@media(max-width: 500px){
+
+    .OnTheaters {
+    margin-top: 5px !important;
+ }
+ .OnTheaters .movie {
+    width: 170px !important;    
+    min-width: 140px !important;
+    min-height: 250px !important; 
+  }
+
+
+  .OnTheaters .movie-poster {
+    height: 120px !important; 
+  }
+
+
+  .OnTheaters .movie-card .movie-modal-button {
+    font-size: 17px !important; 
+  }
+
+  .OnTheaters .movie-info p {
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+  }
+
+  .OnTheaters .movie-card {
+    padding: 5px !important;
+  }
+}
+
+
+@media(max-width: 400px){
+
+    .OnTheaters {
+    margin-top: 5px !important;
+ }
+
+ .OnTheaters .movie {
+    width: 140px !important;     
+    min-width: 140px !important;
+    min-height: 220px !important;
+  }
+
+
+  .OnTheaters .movie-poster {
+    height: 110px !important;
+  }
+
+
+  .OnTheaters .movie-card .movie-modal-button {
+    font-size: 15px !important;
+  }
+
+  .OnTheaters .movie-info p {
+    font-size: 13px !important; 
+    line-height: 1.2 !important;
+  }
+
+  .OnTheaters .movie-card {
+    padding: 5px !important; 
+  }
+}
+
