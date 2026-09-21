@@ -3,7 +3,7 @@ drop table if exists group_movies;
 drop table if exists group_members;
 drop table if exists reviews;
 drop table if exists favorites;
-drop table if exists groups;
+drop table if exists moviegroups;
 drop table if exists users;
 
 create table users (
@@ -14,7 +14,7 @@ create table users (
     created_at timestamp default current_timestamp
 );
 
-create table groups (
+create table moviegroups (
     id serial primary key,
     owner_id int references users(id) on delete cascade,
     name varchar(100) not null unique,
@@ -26,7 +26,8 @@ create table favorites (
     id serial primary key,
     user_id int references users(id) on delete cascade,
     movie_id int not null,
-    created_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp,
+    unique (user_id, movie_id)
 );
 
 create table reviews (
@@ -40,16 +41,19 @@ create table reviews (
 
 create table group_members (
     id serial primary key,
-    group_id int references groups(id) on delete cascade,
+    group_id int references moviegroups(id) on delete cascade,
     user_id int references users(id) on delete cascade,
     role varchar(20) default 'member',
-    created_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp,
+    unique (user_id, movie_id)
 );
 
 create table group_movies (
     id serial primary key,
-    group_id int references groups(id) on delete cascade,
+    group_id int references moviegroups(id) on delete cascade,
     user_id int references users(id) on delete cascade,
     movie_id int not null,
-    created_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp,
+    unique (group_id, user_id)
 );
+
