@@ -16,27 +16,7 @@ const NowPlaying = () => {
 
 
 useEffect(() => {
-<<<<<<< HEAD
     const interval = setInterval(() => { // pitäs näyttää seuraava elokuva automaattisesti mutta ei toimi jostainsyystä
-=======
-  fetch(
-    `${import.meta.env.VITE_TMDB_API_URL}/movie/now_playing?language=en-US&page=1`,
-    {
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_TOKEN}`,
-        accept: 'application/json'
-      }
-    }
-  )
-    .then(res => res.json())
-    .then(res => setMovies(res.results))
-    .catch(err => console.error(err));
-}, []);
-
-
-useEffect(() => {
-    const interval = setInterval(() => {
->>>>>>> origin/NiklasBranch
       if (listRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
         
