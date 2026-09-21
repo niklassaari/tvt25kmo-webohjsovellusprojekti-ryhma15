@@ -53,7 +53,7 @@ const Navbar = () => {
   </div>
 
   <div className="form-group">
-    <label htmlFor="exampleInputPassword1">Laske näitä alemmas css myöhemmi</label>
+    <label htmlFor="exampleInputPassword1"></label>
     <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"/>
   </div>
 </form>
