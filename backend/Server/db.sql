@@ -1,10 +1,11 @@
 
-drop table if exists group_movies;
-drop table if exists group_members;
-drop table if exists reviews;
-drop table if exists favorites;
-drop table if exists moviegroups;
-drop table if exists users;
+drop table if exists group_movies cascade;
+drop table if exists group_members cascade;
+drop table if exists reviews cascade;
+drop table if exists favorites cascade;
+drop table if exists moviegroups cascade;
+drop table if exists groups cascade; -- Poistetaan myös vanha 'groups'-taulu
+drop table if exists users cascade;
 
 create table users (
     id serial primary key,
@@ -45,7 +46,7 @@ create table group_members (
     user_id int references users(id) on delete cascade,
     role varchar(20) default 'member',
     created_at timestamp default current_timestamp,
-    unique (user_id, movie_id)
+    unique (group_id, user_id)
 );
 
 create table group_movies (
@@ -54,6 +55,6 @@ create table group_movies (
     user_id int references users(id) on delete cascade,
     movie_id int not null,
     created_at timestamp default current_timestamp,
-    unique (group_id, user_id)
+    unique (group_id, movie_id)
 );
 
