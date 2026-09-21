@@ -41,8 +41,8 @@ const [message, setMessage] = useState("");
 console.log("REGISTER DATA SENT:", 
   { username: newusername, email: newemail, password: newpassword 
 });
-
-    const response = await fetch("128.214.255.200:3001/user/register", 
+// tuohon ip kun testaat localisti
+    const response = await fetch("http://localhost:3001/user/register", 
       { 
       method: "POST", 
       headers: { "Content-Type": "application/json" }, 
