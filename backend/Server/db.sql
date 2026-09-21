@@ -4,7 +4,6 @@ drop table if exists group_members cascade;
 drop table if exists reviews cascade;
 drop table if exists favorites cascade;
 drop table if exists moviegroups cascade;
-drop table if exists groups cascade; -- Poistetaan myös vanha 'groups'-taulu
 drop table if exists users cascade;
 
 create table users (
@@ -57,4 +56,3 @@ create table group_movies (
     created_at timestamp default current_timestamp,
     unique (group_id, movie_id)
 );
-
