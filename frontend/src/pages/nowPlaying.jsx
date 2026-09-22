@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import MovieData from '../components/moviedata';
 
 
@@ -6,7 +6,8 @@ const NowPlaying = () => {
 
   const [movies, setMovies] = useState([]);
 
-  /* // väliaikaisesti kommentoituna paikallista työstöä varten */
+
+  
   useEffect(() => {
   fetch('/api/movies/now-playing') 
   .then(res => res.json())
@@ -36,7 +37,7 @@ useEffect(() => {
       <h2>Now in theaters</h2>
       <div className="movie-list">
         {movies.map(movie => ( 
-            <MovieData key={movie.id} movie={movie} />
+            <MovieData key={movie.id}movie={movie} />
         ))}
       </div>
     </div>
