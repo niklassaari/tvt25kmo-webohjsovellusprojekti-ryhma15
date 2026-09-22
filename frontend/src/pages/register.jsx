@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "../context/authContext";
 
 
 // HUOM!!
@@ -14,20 +15,19 @@ import { useState } from "react";
 // Eli vaiha noihin kaikkiin sit tuo ${API_URL}
 
 
-
 const Register = () => {
 
+  const { loggedIn } = useAuth();
 
-const [newusername, setNewusername] = useState(""); 
-const [newemail, setNewemail] = useState(""); 
-const [newpassword, setNewpassword] = useState(""); 
-// error paskaa
-const [message, setMessage] = useState("");
+  const [newusername, setNewusername] = useState("");
+  const [newemail, setNewemail] = useState("");
+  const [newpassword, setNewpassword] = useState("");
+
+  // error paskaa
+  const [message, setMessage] = useState("");
 
 
-
-
-// gpt juttuja, hienosäädän sitten kun taulut jne. on pystyssä
+  // gpt juttuja, hienosäädän sitten kun taulut jne. on pystyssä
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,17 +37,19 @@ const [message, setMessage] = useState("");
       password: newpassword
     };
 
-//TESTI KOODI, palauttaa datan mikä rekisteröinnistä lähtee
-console.log("REGISTER DATA SENT:", 
-  { username: newusername, email: newemail, password: newpassword 
-});
-// tuohon ip kun testaat localisti
-    const response = await fetch("http://localhost:3001/user/register", 
-      { 
-      method: "POST", 
-      headers: { "Content-Type": "application/json" }, 
-      body: JSON.stringify(newUser) 
-  });
+    // TESTI KOODI, palauttaa datan mikä rekisteröinnistä lähtee
+    console.log("REGISTER DATA SENT:", {
+      username: newusername,
+      email: newemail,
+      password: newpassword
+    });
+
+    // tuohon ip kun testaat localisti
+    const response = await fetch("http://localhost:3001/user/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newUser)
+    });
 
 
     // testi, console näyttää mitä rekisteörityminen palauttaa
@@ -57,64 +59,72 @@ console.log("REGISTER DATA SENT:",
 
     const data = await response.json();
 
- if (response.ok) {
-    setMessage("Registration successful!");
-  } else {
-    setMessage("Registration failed.");
-  }
+    if (response.ok) {
+      setMessage("Registration successful!");
+    } else {
+      setMessage("Registration failed.");
+    }
 
 
     console.log(data);
   };
 
 
-return (
+  // Jos käyttäjä on kirjautunut sisään,
+  // Register-sivun sisältöä ei näytetä.
+  if (loggedIn) {
+    return null;
+  }
 
-<form onSubmit={handleSubmit}>
-  
-  
-  <div className="form-group">
-    
-    <input 
-    type="text"
-    className="userinput" 
-    id="exampleInputusername"  
-    value={newusername} 
-    onChange={(e) => setNewusername(e.target.value)}
-    placeholder="Enter new username"/>
-  </div>
 
-  <div className="form-group">
-    
-    <input 
-    type="email"
-    className="emailinput"
-    id="exampleInputEmail1" 
-    value={newemail} 
-    onChange={(e) => setNewemail(e.target.value)}
-    placeholder="Enter new email"/>
-  </div>
+  return (
 
-  <div className="form-group">
-  
-    <input 
-    type="password"
-    className="passwordinput"
-    id="exampleInputPassword1"
-    value={newpassword}
-    onChange={(e) => setNewpassword(e.target.value)}
-    placeholder="Enter new password"/>
-  </div>
+    <form onSubmit={handleSubmit}>
 
-  <button type="submit" className="register-submit">
+      <div className="form-group">
+
+        <input
+          type="text"
+          className="userinput"
+          id="exampleInputusername"
+          value={newusername}
+          onChange={(e) => setNewusername(e.target.value)}
+          placeholder="Enter new username"
+        />
+      </div>
+
+      <div className="form-group">
+
+        <input
+          type="email"
+          className="emailinput"
+          id="exampleInputEmail1"
+          value={newemail}
+          onChange={(e) => setNewemail(e.target.value)}
+          placeholder="Enter new email"
+        />
+      </div>
+
+      <div className="form-group">
+
+        <input
+          type="password"
+          className="passwordinput"
+          id="exampleInputPassword1"
+          value={newpassword}
+          onChange={(e) => setNewpassword(e.target.value)}
+          placeholder="Enter new password"
+        />
+      </div>
+
+      <button type="submit" className="register-submit">
         Register new profile
       </button>
 
-  {message && <p>{message}</p>}
+      {message && <p>{message}</p>}
 
-
-</form>
-);
+    </form>
+  ); 
 };
 
 
