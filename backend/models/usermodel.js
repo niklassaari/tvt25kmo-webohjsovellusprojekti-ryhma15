@@ -1,4 +1,4 @@
-import pool from "../database.js";
+import pool from "./database.js";
 import bcrypt from "bcryptjs";
 const SALT_ROUNDS = 10;
 
