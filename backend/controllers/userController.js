@@ -1,3 +1,5 @@
+// tää pitää pushaa sit, selvitä route jututki
+
 import {
  getAll,
  addOne,
@@ -54,18 +56,20 @@ export async function addUser(req, res, next) {
  next(err);
  }
 }
-// Kirjaudu sisään
+// Kirjaudu sisään 
+// 
+//tähän piti vaihtaa id
 export async function login(req, res, next) {
  try {
- const { username, password } = req.body;
- if (!username || !password) {
- return res.status(400).json({ error: "Username and password are required"
+ const { email, password } = req.body;
+ if (!email || !password) {
+ return res.status(400).json({ error: "Email and password are required"
 });
 
 }
- const user = await authenticateUser(username, password);
+ const user = await authenticateUser(email, password);
  if (!user) {
- return res.status(401).json({ error: "Invalid username or password" });
+ return res.status(401).json({ error: "Invalid email or password" });
  }
 
  // Luo tokenit
@@ -75,7 +79,11 @@ export async function login(req, res, next) {
 
         //HUOM: refreshToken taulu pitää sitten olla
  // Tallenna refresh token tietokantaan
-        await saveRefreshToken(user.username, refreshToken);
+
+
+ //tuossa alunperin username, vaihdoin id:hen
+
+        await saveRefreshToken(user.id, refreshToken);
  
 
  // Aseta refresh token HTTP-only cookieen
@@ -142,14 +150,9 @@ export async function logout(req, res, next) {
 
  // Poista refresh token tietokannasta
 
- // ⚠️ TARKISTA MODELISTA
-                //
-                // Jos clearRefreshToken etsii käyttäjän username-kentällä,
-                // tämä voi olla oikein.
-                //
-                // Mutta jos refresh token pitäisi yhdistää User.id:hen,
-                // tämä pitää muuttaa.
- await clearRefreshToken(user.username);
+ // tässä username alunperin, id oikein
+
+ await clearRefreshToken(user.id);
  }
  }
 

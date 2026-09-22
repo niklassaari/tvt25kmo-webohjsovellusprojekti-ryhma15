@@ -17,6 +17,7 @@ import { useState } from "react";
 
 const Register = () => {
 
+  const API_URL = import.meta.env.VITE_API_URL;
 
 const [newusername, setNewusername] = useState(""); 
 const [newemail, setNewemail] = useState(""); 
@@ -41,9 +42,10 @@ const [message, setMessage] = useState("");
 console.log("REGISTER DATA SENT:", 
   { username: newusername, email: newemail, password: newpassword 
 });
+
 // tuohon ip kun testaat localisti
-    //const response = await fetch("http://128.214.255.200:3001/user/register", 
-    const response = await fetch("http://backend:3001/user/register", 
+    const response = await fetch(`${API_URL}/user/register`, 
+    //const response = await fetch("http://backend:3001/user/register", 
       { 
       method: "POST", 
       headers: { "Content-Type": "application/json" }, 
