@@ -17,8 +17,13 @@ import { useState } from "react";
 
 const Register = () => {
 
-  const API_URL = import.meta.env.VITE_API_URL;
 
+  //local
+  //const API_URL = import.meta.env.VITE_API_URL;
+  
+  // vm, ei turvallista mutta toimii kuitenkin 
+  const API_URL = 'http://128.214.255.200:3001';
+  
 const [newusername, setNewusername] = useState(""); 
 const [newemail, setNewemail] = useState(""); 
 const [newpassword, setNewpassword] = useState(""); 
@@ -43,8 +48,12 @@ console.log("REGISTER DATA SENT:",
   { username: newusername, email: newemail, password: newpassword 
 });
 
-// tuohon ip kun testaat localisti
-    const response = await fetch(`${API_URL}/user/register`, 
+
+
+    //Sitten kun envissä tuo urli niin voi korvata API_URLin
+    const response = await fetch(`${API_URL}/user/register`,
+
+    // ei toimi? tutki asiaa
     //const response = await fetch("http://backend:3001/user/register", 
       { 
       method: "POST", 
