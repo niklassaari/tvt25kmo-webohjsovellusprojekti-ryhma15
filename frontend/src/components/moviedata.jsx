@@ -61,7 +61,7 @@ const MovieData = ({ movie }) => {
 </div>
 
       <div className="movie-modal-body">
-        <p>{currentMovie?.overview}</p>
+      
         <p>{currentMovie?.overview || "No overview available"}</p>
       </div>
       <div className="modal-footer">
