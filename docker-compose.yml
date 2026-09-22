@@ -27,12 +27,15 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - PORT=3001
-      - DB_HOST=db
-      - DB_USER=postgres
-      - DB_PASSWORD=mysecretpassword
-      - DB_NAME=moviedb
-      - TMDB_API_KEY=${TMDB_API_KEY}
+       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+       FRONTEND_URL: ${FRONTEND_URL}
+       PORT: 3001
+       DB_HOST: db
+       DB_USER: postgres
+       DB_PASSWORD: mysecretpassword
+       DB_NAME: moviedb
+       TMDB_API_KEY: ${TMDB_API_KEY}
     depends_on:
       - db
 
@@ -41,6 +44,8 @@ services:
     build: ./frontend
     ports:
       - "5173:5173"
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
     depends_on:
       - backend
 
@@ -49,3 +54,4 @@ services:
 # Määritellään PostgreSQL:n käyttämä pysyvä volume.
 volumes:
   postgres_data:
+
