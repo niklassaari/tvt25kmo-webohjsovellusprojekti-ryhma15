@@ -4,11 +4,11 @@
 }
 
 
-.OnTheaters{
+.OnTheaters, .TopRatedMovies, .TopRatedShows{
     margin-top: 50px;
 }
 
-.OnTheaters .movie-list{
+.OnTheaters .movie-list, .TopRatedMovies .movie-list, .TopRatedShows .movie-list{
 display: flex;
   flex-direction: row;
   overflow-x: auto;           
@@ -18,7 +18,7 @@ display: flex;
   padding: 10px 0;
 }
 
-.OnTheaters .movie {
+.OnTheaters .movie , .TopRatedMovies .movie, .TopRatedShows .movie{
     display: flex;
     flex-direction: column; 
     width: 200px;
@@ -34,13 +34,13 @@ display: flex;
     justify-content: flex-start !important;
 }
 
-.OnTheaters .movie-poster {
+.OnTheaters .movie-poster, .TopRatedMovies .movie-poster, .TopRatedShows .movie-poster {
     width: 100%;
     height: 220px; 
     flex-shrink: 0;
 }
 
-.OnTheaters .movie-card {
+.OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card{
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -53,7 +53,7 @@ gap: 0px !important;
     font-size: 16px;
     text-align: center;
 }
-.OnTheaters .movie-card .movie-modal-button {
+.OnTheaters .movie-card .movie-modal-button, .TopRatedMovies .movie-card .movie-modal-button, .TopRatedShows .movie-card .movie-modal-button {
     font-size: 20px !important; 
     text-align: left !important;
     font-weight: bold;
@@ -64,7 +64,7 @@ gap: 0px !important;
     line-height: 1.2;
 }
 
-.OnTheaters .movie-info {
+.OnTheaters .movie-info, .TopRatedMovies .movie-info, .TopRatedShows .movie-info{
  display: flex;
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -74,23 +74,23 @@ gap: 0px !important;
     margin: 0 !important;
 }
 
-.OnTheaters .movie-info p {
+.OnTheaters .movie-info p, .TopRatedMovies .movie-info p, .TopRatedShows .movie-info p{
     margin: 0 !important;       
     padding: 0 !important;
     line-height: 1.5 !important; 
-    font-size: 15px !important;
+    font-size: 17px !important;
     font-weight: bold !important; 
     color: #222222;
     text-align: left !important;
 }
 
-.OnTheaters .movie-poster img {
+.OnTheaters .movie-poster img, .TopRatedMovies .movie-poster img, .TopRatedShows .movie-poster img {
     width: 100% !important;  
     height: 100% !important; 
     object-fit: cover;
 }
 
-.OnTheaters h2{
+.OnTheaters h2, .TopRatedMovies h2, .TopRatedShows h2{
     color: black;
 }
 .movie-modal-button {
@@ -153,30 +153,30 @@ gap: 0px !important;
     justify-content: center;
     text-indent: 20px;
 }
-
+/*
 @media(max-width: 500px){
 
     .OnTheaters {
     margin-top: 5px !important;
  }
  .OnTheaters .movie {
-    width: 170px !important;    
-    min-width: 140px !important;
-    min-height: 250px !important; 
+    width: 190px !important;    
+    min-width: 160px !important;
+    min-height: 290px !important; 
   }
 
  
   .OnTheaters .movie-poster {
-    height: 120px !important; 
+    height: 150px !important; 
   }
 
   
   .OnTheaters .movie-card .movie-modal-button {
-    font-size: 17px !important; 
+    font-size: 18px !important; 
   }
 
   .OnTheaters .movie-info p {
-    font-size: 15px !important;
+    font-size: 17px !important;
     line-height: 1.2 !important;
   }
   
@@ -184,6 +184,8 @@ gap: 0px !important;
     padding: 5px !important;
   }
 }
+
+*/
 
 
 @media(max-width: 400px){
@@ -193,14 +195,14 @@ gap: 0px !important;
  }
 
  .OnTheaters .movie {
-    width: 140px !important;     
+    width: 150px !important;     
     min-width: 140px !important;
-    min-height: 220px !important;
+    min-height: 240px !important;
   }
 
   
   .OnTheaters .movie-poster {
-    height: 110px !important;
+    height: 130px !important;
   }
 
   
@@ -217,5 +219,3 @@ gap: 0px !important;
     padding: 5px !important; 
   }
 }
-
-

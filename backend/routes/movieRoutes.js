@@ -2,9 +2,11 @@
 
 import express from 'express';
 
-import { getNowPlayingMovies,searchMovies } from '../controllers/movieController.js';
+import { getNowPlayingMovies,searchMovies, TopMovies, TopShows } from '../controllers/movieController.js';
 const router=express.Router();
 router.get('/now-playing',getNowPlayingMovies);
+router.get('/topMovies',TopMovies)
+router.get('/TopShows',TopShows)
 router.get('/search', searchMovies);
 
 
