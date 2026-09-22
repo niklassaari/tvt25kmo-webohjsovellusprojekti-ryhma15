@@ -23,7 +23,7 @@ display: flex;
     flex-direction: column; 
     width: 200px;
     min-width: 200px;
-    height: 380px;
+    height: auto;
     border: 2px solid black;
     border-radius: 8px;
     background-color: #ffffff;
@@ -183,13 +183,9 @@ gap: 0px !important;
     
     font-family: "Times New Roman", Times, serif;
     display: flex;
-    
-    align-items: flex-left;
+    align-items: center;
     height: 150px;
-
- flex-direction: column;
-    
-
+    flex-direction: column;
     border: 1px solid #333;
     border-right: none;
     border-radius: 0px;
