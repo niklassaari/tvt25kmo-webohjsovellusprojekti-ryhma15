@@ -9,5 +9,4 @@ router.get('/topMovies',TopMovies)
 router.get('/TopShows',TopShows)
 router.get('/search', searchMovies);
 
-
 export default router;

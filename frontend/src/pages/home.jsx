@@ -2,11 +2,11 @@ import NowPlaying from "./nowPlaying";
 import TopMovies from "./topMovies";
 import TopShows from "./topShows";
 
-const Home = () => {
+function Home() {
    return (
-    <div id="container">
-      <h1></h1>
-      
+       <div id="container">
+
+
 <section className="OnTheaters">
   <NowPlaying/>
 </section>
@@ -19,8 +19,6 @@ const Home = () => {
 <section className="TopRatedShows">
     <TopShows/>
   </section>
-
-
 </div>
   );
 }
