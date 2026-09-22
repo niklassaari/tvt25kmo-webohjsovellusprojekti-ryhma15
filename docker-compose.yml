@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Tietokanta nää pitää sit muuttaa kun on se tietokanta tehty 
+  # Tietokanta nää pitää sit muuttaa kun on se tietokanta tehty
   db:
     image: postgres:15
     environment:
@@ -12,6 +12,14 @@ services:
       - "5432:5432"
 ## ^
 
+#testi, db.sql pitäis nyt mennä läpi
+    # Tietokannan data säilyy, vaikka kontti poistetaan.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+      # Suorittaa backend/Server/db.sql-tiedoston automaattisesti
+      # PostgreSQL:n ensimmäisen alustuksen yhteydessä.
+      - ./backend/Server/db.sql:/docker-entrypoint-initdb.d/db.sql
 
   # Node.js backend
   backend:
@@ -35,3 +43,9 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+
+##testitesti
+
+# Määritellään PostgreSQL:n käyttämä pysyvä volume.
+volumes:
+  postgres_data:
