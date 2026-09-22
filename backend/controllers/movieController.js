@@ -43,7 +43,7 @@ export async function searchMovies(req, res){
         if (!response.ok){
             throw new Error('TMDB error: ${response.status}')
         }
-        const data = awaitresponse.json()
+        const data = await response.json()
         res.json(data.results)
     }catch(error){
         console.error('Error searching movies:',error)

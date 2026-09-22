@@ -6,7 +6,7 @@ import { getNowPlayingMovies,searchMovies, TopMovies, TopShows } from '../contro
 const router=express.Router();
 router.get('/now-playing',getNowPlayingMovies);
 router.get('/topMovies',TopMovies)
-router.get('/TopShows',TopShows)
+router.get('/topShows',TopShows)
 router.get('/search', searchMovies);
 
 export default router;

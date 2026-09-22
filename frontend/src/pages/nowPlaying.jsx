@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import MovieData from '../components/moviedata';
 
 
 const NowPlaying = () => {
 
    const [movies, setMovies] = useState([]);
-
+   const listRef = useRef(null);
+   
   useEffect(() => {
   fetch('/api/movies/now-playing') 
   .then(res => res.json())

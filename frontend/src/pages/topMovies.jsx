@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import MovieData from '../components/moviedata';
 
 // hakee parhaimmat arvostelut suomessa saaneet elokuvat
 const TopMovies = () => {
 
    const [movies, setMovies] = useState([]);
-
+   const listRef = useRef(null);
   
   
   useEffect(() => {
