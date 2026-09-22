@@ -1,14 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import MovieData from '../components/moviedata';
 
-
-const NowPlaying = () => {
+// hakee parhaimmat arvostelut suomessa saaneet sarjat
+const TopMovies = () => {
 
    const [movies, setMovies] = useState([]);
    const listRef = useRef(null);
-   
+  
+  
   useEffect(() => {
-  fetch('/api/movies/now-playing') 
+  fetch('/api/movies/topShows') 
   .then(res => res.json())
   .then(res => setMovies(res))
   .catch(err => console.error(err));
@@ -33,7 +34,7 @@ useEffect(() => {
   }, [movies]);
   return (
     <div id="Playing">
-      <h2>Now in theaters</h2>
+      <h2>Highest rated shows</h2>
       <div className="movie-list">
         {movies.map(movie => ( 
             <MovieData key={movie.id}movie={movie} />
@@ -43,4 +44,4 @@ useEffect(() => {
   );
 };
 
-export default NowPlaying;
+export default TopMovies;
