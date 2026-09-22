@@ -8,7 +8,7 @@ export async function addOne(username, email, password) {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
  const result = await pool.query(
-        "INSERT INTO User (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email",
+        "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email",
 
  [username, email, hashedPassword]
  );
@@ -18,7 +18,7 @@ export async function addOne(username, email, password) {
 // Hae kaikki käyttäjät
 export async function getAll() {
 
- const result = await pool.query("SELECT id, username, email FROM User");
+ const result = await pool.query("SELECT id, username, email FROM users");
  return result.rows;
 }
 
@@ -28,7 +28,7 @@ export async function authenticateUser(email, password) {
 
     // pitää ehkä muuttaa $2 jos rakenne vastaa tarpeeks sitä ekaa draftiä, ku id on ekana enne emailia
  const result = await pool.query(
- "SELECT id, username, email, password FROM User WHERE email = $1",
+ "SELECT id, username, email, password FROM users WHERE email = $1",
  [email]
  );
  if (result.rows.length === 0) {
@@ -55,7 +55,7 @@ export async function authenticateUser(email, password) {
 export async function saveRefreshToken(id, refreshToken) {
 
  const result = await pool.query(
- "UPDATE User SET refresh_token = $1 WHERE id = $2 RETURNING id",
+ "UPDATE users SET refresh_token = $1 WHERE id = $2 RETURNING id",
  [refreshToken, id]
  );
  return result.rows[0];
@@ -65,7 +65,7 @@ export async function saveRefreshToken(id, refreshToken) {
 // Hae käyttäjä refresh tokenin perusteella
 export async function getUserByRefreshToken(refreshToken) {
  const result = await pool.query(
-        "SELECT id, username, email FROM User WHERE refresh_token = $1",
+        "SELECT id, username, email FROM users WHERE refresh_token = $1",
  [refreshToken]
  );
  return result.rows.length > 0 ? result.rows[0] : null;
@@ -75,7 +75,7 @@ export async function getUserByRefreshToken(refreshToken) {
 // Poista refresh token (logout)
 export async function clearRefreshToken(id) {
  const result = await pool.query(
- "UPDATE User SET refresh_token = NULL WHERE id = $1 RETURNING id",
+ "UPDATE users SET refresh_token = NULL WHERE id = $1 RETURNING id",
  [id]
  );
  return result.rows[0];

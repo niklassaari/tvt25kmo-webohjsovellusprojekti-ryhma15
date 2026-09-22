@@ -1,5 +1,20 @@
 import { useState } from "react";
 
+
+// HUOM!!
+
+//Even better, don't hardcode the IP in the component. Put it in frontend/.env:
+// kun userroutes jne. virtuaalikoneella:
+
+//importtaa envistä toi urli:
+//const API_URL = import.meta.env.VITE_API_URL;
+//
+//fetch(`${API_URL}/user/register`, ...)
+
+// Eli vaiha noihin kaikkiin sit tuo ${API_URL}
+
+
+
 const Register = () => {
 
 
@@ -26,7 +41,7 @@ const [message, setMessage] = useState("");
 console.log("REGISTER DATA SENT:", 
   { username: newusername, email: newemail, password: newpassword 
 });
-
+// tuohon ip kun testaat localisti
     const response = await fetch("http://localhost:3001/user/register", 
       { 
       method: "POST", 
