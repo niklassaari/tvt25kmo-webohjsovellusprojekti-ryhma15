@@ -12,7 +12,7 @@ export default defineConfig({
         //target: process.env.VITE_BACKEND_URL || 'http://128.214.255.200:3001',
         
         // tämä vm
-        target: process.env.VITE_BACKEND_URL || 'http://backend',
+        target: process.env.VITE_BACKEND_URL || 'http://backend:3001',
         changeOrigin: true,
       },
     },
