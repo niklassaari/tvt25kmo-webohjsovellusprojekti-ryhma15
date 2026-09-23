@@ -16,6 +16,10 @@ export function AuthProvider({ children }) {
 // // -> AUTHENTICATED
  const [user, setUser] = useState(null);
 
+ // DEBUG: See whenever the authentication user state changes
+useEffect(() => {
+  console.log("AUTH STATE CHANGED, LOGGED IN:", user);
+}, [user]);
  
 
  // user === null    -> loggedIn = false
