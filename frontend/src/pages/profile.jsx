@@ -27,14 +27,14 @@ const Profile = () => {
         <div className="profile-section">
           <h2>Favorites</h2>
 
-          <div className="profile-box">
+          <div className="profile-box favorites-box">
           </div>
         </div>
 
         <div className="profile-section">
           <h2>Groups</h2>
 
-          <div className="profile-box">
+          <div className="profile-box group-box">
           </div>
         </div>
 

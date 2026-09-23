@@ -8,8 +8,6 @@ import userRouter from "./routes/userRouter.js";
 import { authenticateToken } from "./middleware/auth.js";
 
 const port = process.env.PORT||3001
-
-
 const app = express()
 
 

@@ -1,7 +1,7 @@
 import './moviedata.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
@@ -11,9 +11,64 @@ import fullstar from '../assets/reviewstars/fullstar.png';
 const MovieData = ({ movie }) => {
   
   const [currentMovie, setCurrentMovie] = useState(null); // Added current movie state
-
   const starRating = movie.vote_average / 2;
   const fullStars = Math.floor(starRating);
+
+  const token = localStorage.getItem('token');
+  const [isAdded, setIsAdded] = useState(false);
+
+// tarkistaa että elokuva ei jo ole favoriteissa
+  // tässä on/oli sulkuhelvetti ne on iha päi vittua
+  useEffect(()=>{
+    if (!token) return;
+
+    const checkIfFavorite = async () => {
+      try {
+        const res = await fetch('/api/movies/favorites',{
+          headers:{
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const favoriteIds = await res.json();
+          if(favoriteIds.includes(movie.id)){
+          setIsAdded(true)
+          }
+      }
+    } catch (err) {
+      console.error('Virhe:', err);
+  }
+    };
+    checkIfFavorite();
+  }, [movie.id, token]);
+
+
+
+// lisää napin painalluksesta favoritteihin
+  const addFavorites = async () => {
+    if (!token||isAdded) return;
+
+    try {
+     const res = await fetch('/api/movies/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          movieId: movie.id,
+          title: movie.title || movie.name,
+        }),
+      });
+
+      if (res.ok) {
+     setIsAdded(true)
+    } 
+  } catch (err) {
+  console.error('error while adding favorites:', err);
+    }
+};
+  
 
 
   return (
@@ -41,6 +96,18 @@ const MovieData = ({ movie }) => {
 {/* sähköpostin ja salasanan ja napin. Kopsaa siis tuo modal koodi sinne rekisteröinti sivulle ja liitä semmoseen logout nappiin */}
 
 
+{/*
+{token && (
+          <button
+            className="favorites-btn"
+            onClick={addFavorites}
+            title="Add to favorites"
+            >
+              ❤️
+          </button>
+          )} 
+*/}
+
 
 <div className="modal fade" tabIndex="-1" id={`movieModal-${movie.id}`}>
   <div className="modal-dialog">
@@ -50,8 +117,16 @@ const MovieData = ({ movie }) => {
         <img src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`} name="logo" style={{ width: '90px', height: '150px' }} />
   
     <div className="modal-header-content">
+         {/* tähän pitää lisätä token&&()} ja laittaa tuo button objekti noitten sulkujen sisälle jotta nappi ilmestyy ainoastaan kun on kirjautunut sisälle  */}
+          <button
+            className="favorites-btn"
+            onClick={addFavorites}
+            disabled={isAdded}
+            title={isAdded ? "Added to favorites" : "Add to favorites"}
+            >
+              ❤️
+          </button>
           <h5 className="modal-title">{currentMovie?.title}</h5>
-
           <div className="modal-header-text">
       <p>Genre:{movie.genre_ids}</p>
       <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>
