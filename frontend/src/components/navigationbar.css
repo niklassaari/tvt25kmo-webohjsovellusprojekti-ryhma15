@@ -35,6 +35,11 @@
   border-color: #222;
 }
 
+.logout-button {
+  margin-left: auto;
+  margin-right: 15px;
+}
+
 @media (max-width: 480px) {
   form {
     width: 100% !important;

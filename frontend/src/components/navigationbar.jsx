@@ -16,7 +16,7 @@ const Navbar = () => {
   //login jutut
    const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const { login, logout, loggedIn } = useAuth();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -32,6 +32,15 @@ const Navbar = () => {
     }
   };
   
+  const handleLogout = async () => {
+    try {
+      await logout();
+      console.log("Logout successful");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
 
   return (
@@ -57,14 +66,17 @@ const Navbar = () => {
         Movies
       </Dropdown.Item>
 
+{!loggedIn && (
 <Dropdown.Item as={Link} to="/Register">
         Register
       </Dropdown.Item>
+)}
 
 <Dropdown.Item as={Link} to="/Moviestesti">
         Testi
       </Dropdown.Item>
-      
+       
+
       <Dropdown.Item as={Link} to="/Profile">
         Profile
       </Dropdown.Item>
@@ -74,7 +86,7 @@ const Navbar = () => {
 
     
       
-
+{!loggedIn ? (
      <form onSubmit={handleLogin}>
   <div className="form-group">
     
@@ -94,12 +106,16 @@ const Navbar = () => {
  <button type="submit">
         Login
       </button>
-
-
 </form>
-
-        
-
+) : (
+    <button
+            type="button"
+            className="logout-button"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>    
+ )}
 
   </div>
 </nav>

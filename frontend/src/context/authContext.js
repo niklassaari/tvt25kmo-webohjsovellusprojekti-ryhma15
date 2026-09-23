@@ -5,17 +5,14 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 
 export function AuthProvider({ children }) {
-// AUTHENTICATION STATE
-// null = NOT authenticated / not logged in
 
-// object = AUTHENTICATED / logged in
-// example: { username: "Nikke" }
-    // setUser(null); 
-    // // -> NOT authenticated
-// setUser({ username: "Nikke" }); 
-// // -> AUTHENTICATED
+
  const [user, setUser] = useState(null);
 
+ // DEBUG: See whenever the authentication user state changes
+useEffect(() => {
+  console.log("AUTH STATE CHANGED, LOGGED IN:", user);
+}, [user]);
  
 
  // user === null    -> loggedIn = false
@@ -49,7 +46,7 @@ export function AuthProvider({ children }) {
 
   // This changes user from null -> user object
   // Therefore loggedIn automatically changes from false -> true
- setUser({ username: data.username });
+ setUser({ username: data.username, email: data.email });
 
  setAccessToken(data.accessToken);
  return data;
@@ -66,45 +63,6 @@ export function AuthProvider({ children }) {
  // asettaa userin tilaan null = logged out
  setUser(null);
  setAccessToken(null);
- };
-
- const refreshToken = async () => {
- try {
- const res = await fetch(`${API_URL}/user/refresh`, {
- method: "POST",
- credentials: "include", // Lähetä cookie
- });
-
- if (res.ok) {
- const data = await res.json();
- setAccessToken(data.accessToken);
-
- // Dekoodaa username tokenista
- const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
- setUser({ username: payload.username });
-
- return data.accessToken; // Palauta uusi token
-
-
- } else if (res.status === 401 || res.status === 403) {
- // Käyttäjä ei ole kirjautuneena
- // user = null -> loggedIn = false
- setUser(null);
- setAccessToken(null);
- return null;
-
- } else {
- console.error("Unexpected error during token refresh:", res.status);
- return null;
- }
-
- } catch (error) {
- console.error("Token refresh failed:", error);
- return null;
-
- } finally {
- setLoading(false);
- }
  };
 
  // Authorized fetch joka automaattisesti uusii tokenin tarvittaessa
@@ -139,15 +97,73 @@ export function AuthProvider({ children }) {
  return response;
  };
 
+// PROFIILIN POISTO
+const deleteprofile = async (email, password) => {
+    const res = await authorizedFetch(`${API_URL}/user/deleteprofile`, {
+        method: "DELETE",
+         headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ email, password }),
+  });
+
+      if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Profile deletion failed");
+      }
+  setUser(null);
+  setAccessToken(null);
+};
+
+ const refreshToken = async () => {
+ try {
+ const res = await fetch(`${API_URL}/user/refresh`, {
+ method: "POST",
+ credentials: "include", // Lähetä cookie
+ });
+
+ if (res.ok) {
+ const data = await res.json();
+ setAccessToken(data.accessToken);
+
+ // Dekoodaa username tokenista
+ const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
+ setUser({ username: payload.username, email: payload.email });
+
+ return data.accessToken; // Palauta uusi token
+
+
+ } else if (res.status === 401 || res.status === 403) {
+ // Käyttäjä ei ole kirjautuneena
+ // user = null -> loggedIn = false
+ setUser(null);
+ setAccessToken(null);
+ return null;
+
+ } else {
+ console.error("Unexpected error during token refresh:", res.status);
+ return null;
+ }
+
+ } catch (error) {
+ console.error("Token refresh failed:", error);
+ return null;
+
+ } finally {
+ setLoading(false);
+ }
+ };
+
+
+
  const value = {
  user,
-
-  // NEW: Make loggedIn available to all components using useAuth()
-  // gpt sloppia, lisäsin tuon loggedIn niin authContext koodi vähän selkeämpi
  loggedIn,
  accessToken,
  login,
  logout,
+ deleteprofile,
  refreshToken,
  authorizedFetch,
  loading,

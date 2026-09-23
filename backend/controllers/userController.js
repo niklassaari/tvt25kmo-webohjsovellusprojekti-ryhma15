@@ -1,10 +1,13 @@
+// tää pitää pushaa sit, selvitä route jututki
+
 import {
  getAll,
  addOne,
  authenticateUser,
  saveRefreshToken,
  getUserByRefreshToken,
- clearRefreshToken
+ clearRefreshToken,
+ deleteUser
 } from "../models/usermodel.js";
 
 import {
@@ -54,20 +57,24 @@ export async function addUser(req, res, next) {
  next(err);
  }
 }
-// Kirjaudu sisään
+// Kirjaudu sisään 
+// 
+//tähän piti vaihtaa id
 export async function login(req, res, next) {
  try {
- const { username, password } = req.body;
- if (!username || !password) {
- return res.status(400).json({ error: "Username and password are required"
+ const { email, password } = req.body;
+ if (!email || !password) {
+ return res.status(400).json({ error: "Email and password are required"
 });
 
 }
- const user = await authenticateUser(username, password);
+ const user = await authenticateUser(email, password);
  if (!user) {
- return res.status(401).json({ error: "Invalid username or password" });
+ return res.status(401).json({ error: "Invalid email or password" });
  }
 
+
+ 
  // Luo tokenit
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
@@ -75,7 +82,11 @@ export async function login(req, res, next) {
 
         //HUOM: refreshToken taulu pitää sitten olla
  // Tallenna refresh token tietokantaan
-        await saveRefreshToken(user.username, refreshToken);
+
+
+ //tuossa alunperin username, vaihdoin id:hen
+
+        await saveRefreshToken(user.id, refreshToken);
  
 
  // Aseta refresh token HTTP-only cookieen
@@ -90,6 +101,7 @@ export async function login(req, res, next) {
  res.json({
  message: "Login successful",
  username: user.username,
+email: user.email,
  accessToken
  });
 
@@ -135,29 +147,53 @@ export async function refreshAccessToken(req, res, next) {
 // Kirjaudu ulos
 export async function logout(req, res, next) {
  try {
- const refreshToken = req.cookies.refreshToken;
+       const refreshToken = req.cookies.refreshToken;
  if (refreshToken) {
- const user = await getUserByRefreshToken(refreshToken);
- if (user) {
-
- // Poista refresh token tietokannasta
-
- // ⚠️ TARKISTA MODELISTA
-                //
-                // Jos clearRefreshToken etsii käyttäjän username-kentällä,
-                // tämä voi olla oikein.
-                //
-                // Mutta jos refresh token pitäisi yhdistää User.id:hen,
-                // tämä pitää muuttaa.
- await clearRefreshToken(user.username);
+       const user = await getUserByRefreshToken(refreshToken);
+  
+       // Poista refresh token tietokannasta
+if (user) {
+       await clearRefreshToken(user.id);
+       }
  }
- }
+
+ // Poista cookie
+       res.clearCookie("refreshToken");
+       res.json({ message: "Logout successful" });
+
+       } catch (err) {
+       next(err);
+       }
+}
+         
+
+export async function deleteprofile(req, res, next) {
+       try {
+              const { email, password } = req.body;
+
+              const user = await authenticateUser(email, password);
+
+              if (!user) {
+                     return res.status(401).json({
+                            error: "Incorrect email or password"
+                     });
+              }
+
+await deleteUser(user.id);
+
+    res.clearCookie("refreshToken");
+
+    res.json({
+      message: "Profile deleted successfully"
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 
  
- // Poista cookie
- res.clearCookie("refreshToken");
- res.json({ message: "Logout successful" });
- } catch (err) {
- next(err);
- }
-}
+
+ 
+ 
+
