@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { SearchMovies } from '../../../backend/GetMovie';
+import { SearchMovies } from '../GetMovie';
 import MovieData from '../components/moviedata';
-
+import '../components/movies.css'
 
 
 const Movies = () => {
