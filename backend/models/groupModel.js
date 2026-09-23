@@ -1,4 +1,6 @@
 const db = require('../db');
+
+
 //Ryhmän luonti tietokantaan
 const createGroup = async (groupName, ownerId) => {
     const [result] = await db.query(
@@ -25,12 +27,9 @@ const getGroupById = async (id) => {
     const [rows] = await db.query('SELECT * FROM groups WHERE id = ?', [id]);
     return rows[0];
 }
-//Päivittää ryhmän nimen ja omistajan ID:n
-const updateGroup = async (id, groupName, ownerId) => {
-    const [result] = await db.query(
-        'UPDATE groups SET group_name = ?, owner_id = ? WHERE id = ?',
-        [groupName, ownerId, id]
-    );
+//Päivittää ryhmän nimen ID:n perusteella
+const updateGroup = async (id, groupName) => {
+    const [result] = await db.query('UPDATE groups SET group_name = ? WHERE id = ?', [groupName, id]);
     return result.affectedRows > 0;
 }
 //Poistaa ryhmän ID:n perusteella
