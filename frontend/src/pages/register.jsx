@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useAuth } from "../context/authContext";
 
 // HUOM!!
 
@@ -18,6 +18,7 @@ import { useState } from "react";
 const Register = () => {
 
 
+  const { loggedIn } = useAuth();
   //local
   //const API_URL = import.meta.env.VITE_API_URL;
   
@@ -80,43 +81,52 @@ console.log("REGISTER DATA SENT:",
   };
 
 
-return (
+// Jos käyttäjä on kirjautunut sisään,
+  // Register-sivun sisältöä ei näytetä.
+  if (loggedIn) {
+    return null;
+  }
 
-<form onSubmit={handleSubmit}>
-  
-  
-  <div className="form-group">
-    
-    <input 
-    type="text"
-    className="userinput" 
-    id="exampleInputusername"  
-    value={newusername} 
-    onChange={(e) => setNewusername(e.target.value)}
-    placeholder="Enter new username"/>
-  </div>
 
-  <div className="form-group">
-    
-    <input 
-    type="email"
-    className="emailinput"
-    id="exampleInputEmail1" 
-    value={newemail} 
-    onChange={(e) => setNewemail(e.target.value)}
-    placeholder="Enter new email"/>
-  </div>
+  return (
 
-  <div className="form-group">
-  
-    <input 
-    type="password"
-    className="passwordinput"
-    id="exampleInputPassword1"
-    value={newpassword}
-    onChange={(e) => setNewpassword(e.target.value)}
-    placeholder="Enter new password"/>
-  </div>
+    <form onSubmit={handleSubmit}>
+
+      <div className="form-group">
+
+        <input
+          type="text"
+          className="userinput"
+          id="exampleInputusername"
+          value={newusername}
+          onChange={(e) => setNewusername(e.target.value)}
+          placeholder="Enter new username"
+        />
+      </div>
+
+      <div className="form-group">
+
+        <input
+          type="email"
+          className="emailinput"
+          id="exampleInputEmail1"
+          value={newemail}
+          onChange={(e) => setNewemail(e.target.value)}
+          placeholder="Enter new email"
+        />
+      </div>
+
+      <div className="form-group">
+
+        <input
+          type="password"
+          className="passwordinput"
+          id="exampleInputPassword1"
+          value={newpassword}
+          onChange={(e) => setNewpassword(e.target.value)}
+          placeholder="Enter new password"
+        />
+      </div>
 
   <button type="submit" className="register-submit">
         Register new profile

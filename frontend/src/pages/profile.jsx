@@ -1,11 +1,22 @@
-import './profile.css'
+import './profile.css';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuth } from '../context/authContext';
 
 const Profile = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { loggedIn, user, deleteprofile } = useAuth();
+
+  const handleDeleteProfile = async () => {
+  try {
+    await deleteprofile(email, password);
+  } catch (error) {
+    console.error("Profile deletion failed:", error);
+  }
+};
 
   return (
     <div className="profile-page">
@@ -14,11 +25,11 @@ const Profile = () => {
 
       <div className="profile-details">
         <p>
-          <strong>Username:</strong> User
+          <strong>Username:</strong> {user?.username}
         </p>
 
         <p>
-          <strong>Email:</strong> user@example.com
+          <strong>Email:</strong> {user?.email}
         </p>
       </div>
 
@@ -40,6 +51,8 @@ const Profile = () => {
 
       </div>
 
+{loggedIn && (
+      <>
       <button
         type="button"
         className="delete-profile-button"
@@ -95,8 +108,9 @@ const Profile = () => {
               </button>
 
               <button
-                type="button"
+                type="submit"
                 className="btn btn-danger"
+                onClick={handleDeleteProfile}
               >
                 Delete Profile
               </button>
@@ -107,15 +121,18 @@ const Profile = () => {
 
         </div>
       </div>
+      </>
+)}
 
+{!loggedIn && (
       <Link to="/register">
         <button>
           Register
         </button>
       </Link>
-
+)}
     </div>
-  )
-} 
+  );
+} ;
 
-export default Profile
+export default Profile;
