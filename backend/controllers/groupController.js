@@ -65,7 +65,7 @@ const updateGroup = async (req, res) => {
     }
 };
 
-//Hakee kaikki ryhmät
+//Hakee kaikki ryhmät nimellä tai ilman nimeä, jos nimeä ei annettu hakee kaikki ryhmät
 const getAllGroups = async (req, res) => {
     try {
         const {name} = req.query;
@@ -81,9 +81,27 @@ const getAllGroups = async (req, res) => {
     }
 };
 
+//lisätään käyttäjä ryhmään ja määritetään rooli
+const groupRole = async (req, res) => {
+    try {
+        const { groupId, userId, role ='member'} = req.body;
+        if (!groupId || !userId || !role) {
+            return res.status(400).json({ error: "Group ID, User ID, and Role are required" });
+        }
+
+        await groupModel.groupRole(groupId, userId, role);
+        res.status(201).json({ message: "User added to group successfully" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to add user to group", details: err.message });
+    }
+};
+
+
+
 module.exports = {
     addGroups,
     deleteGroup,
     updateGroup,
-    getAllGroups
+    getAllGroups,
+    groupRole
 };

@@ -37,6 +37,11 @@ const deleteGroup = async (id) => {
     const [result] = await db.query('DELETE FROM groups WHERE id = ?', [id]);
     return result.affectedRows > 0;
 }
+//Lisää käyttäjän ryhmään ja määrittää roolin
+const groupRole = async (groupId, userId, role) => {
+    const [result] = await db.query('INSERT INTO group_members (group_id, user_id, role) VALUES (?, ?, ?)', [groupId, userId, role]);
+    return result.insertId;
+};
 
 module.exports = {
     createGroup,
@@ -44,5 +49,6 @@ module.exports = {
     getAllGroups,
     getGroupById,
     updateGroup,
-    deleteGroup
+    deleteGroup,
+    groupRole
 };
