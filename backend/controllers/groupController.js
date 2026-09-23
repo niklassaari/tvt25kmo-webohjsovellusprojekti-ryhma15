@@ -1,6 +1,6 @@
 
 const groupModel = require('../models/groupModel');
-
+//Ryhmän luonti/ownerId tallennetaan tietokantaan
 const addGroups = async (req, res,) => {
     try {
         const {name}=req.body;
