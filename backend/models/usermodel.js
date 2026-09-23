@@ -71,6 +71,16 @@ export async function getUserByRefreshToken(refreshToken) {
  return result.rows.length > 0 ? result.rows[0] : null;
 }
 
+// tänne jonnekin tilinpoisto
+export async function deleteUser(id) {
+  const result = await pool.query(
+    'DELETE FROM users WHERE id = $1 RETURNING id',
+    [id]
+  );
+
+  return result.rows[0];
+}
+
 
 // Poista refresh token (logout)
 export async function clearRefreshToken(id) {
