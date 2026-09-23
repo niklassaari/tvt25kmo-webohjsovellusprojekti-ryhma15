@@ -6,12 +6,6 @@ const createGroup = async (groupName, ownerId) => {
         [groupName, ownerId]
     );
     return result.insertId;
-
-    await db.query(
-        'INSERT INTO group_members (group_id, user_id) VALUES (?, ?)',
-        [groupId, ownerId]
-    );
-    return groupId;
 }
 //Hakee ryhmän omistajan ID:n
 const getGroupOwner = async (groupId) => {
