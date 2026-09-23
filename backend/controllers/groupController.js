@@ -17,7 +17,7 @@ const addGroups = async (req, res,) => {
 };
 
 //tarkistetaan ryhmän poistoon onko pyynnön tekijä owner
-const deleteGroup = async (req, res, next) => {
+const deleteGroup = async (req, res,) => {
     try {
         const groupId = req.params.id;
         const userId = req.user.id;
@@ -38,7 +38,52 @@ const deleteGroup = async (req, res, next) => {
     }
 };
 
+//päivitetään ryhmän nimi jos pyynnön tekijä on owner
+const updateGroup = async (req, res) => {
+    try {
+        const { name } = req.body;
+        const groupId = req.params.id;
+        const userId = req.user.id;
+        const ownerId = await groupModel.getGroupOwner(groupId);
+
+        if (userId !== ownerId) {
+            return res.status(403).json({ error: "You are not the owner of this group" });
+        }
+
+        if (!name){
+            return res.status(400).json({error:"Group name is required"});
+        }
+
+        const groupUpdated = await groupModel.updateGroup(name);
+        if (!groupUpdated){
+            return res.status(404).json({error:"Group not found"});
+        }
+
+        res.status(200).json({ message: "Group updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to update group", details: err.message });
+    }
+};
+
+//Hakee kaikki ryhmät
+const getAllGroups = async (req, res) => {
+    try {
+        const {name} = req.query;
+        let groups;
+        if (name) {
+            groups = await groupModel.getGroupsByName(name);
+        } else {
+            groups = await groupModel.getAllGroups();
+        }
+        res.status(200).json({ groups });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch groups", details: err.message });
+    }
+};
+
 module.exports = {
     addGroups,
-    deleteGroup
+    deleteGroup,
+    updateGroup,
+    getAllGroups
 };

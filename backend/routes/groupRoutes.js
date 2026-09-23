@@ -7,3 +7,7 @@ import {
 const groupRouter = router.Router();
 groupRouter.post('/add', addGroups);
 groupRouter.delete('/delete/:id', deleteGroup);
+groupRouter.put('/update/:id', updateGroup);
+
+
+export default groupRouter;
