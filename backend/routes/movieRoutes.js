@@ -9,11 +9,6 @@ import { getNowPlayingMovies,searchMovies, TopMovies, TopShows } from '../contro
 
 const router=express.Router();
 
-router.get('/test', (req, res) => {
-  console.log("🔥 MOVIE ROUTES TEST OSUI");
-  res.send("MOVIE ROUTES TOIMII");
-});
-
 router.get('/now-playing',getNowPlayingMovies);
 router.get('/topMovies',TopMovies)
 router.get('/topShows',TopShows)

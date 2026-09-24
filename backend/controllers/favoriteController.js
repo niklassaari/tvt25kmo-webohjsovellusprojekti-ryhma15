@@ -4,10 +4,10 @@ import pool from '../models/database.js';
 
 // lisää suosikki elokuvan tietokantaan
 export async function addFavorite(req,res) {
-   const { movieId,  } = req.body; 
+   const { movieId  } = req.body; // nää ottaa käyttäjän id ja sit ton elokuvan id talteen
    const userId = req.user.id;
 
-
+    //sql kysely joka siis vie tykätyn elokuvan tietokantaan
    try {
     await pool.query(
         `INSERT INTO favorites (user_id, movie_id) 
@@ -26,12 +26,12 @@ export async function addFavorite(req,res) {
 
 export async function getAllFavorites(req, res) {
     const userId = req.user.id;
-
+// kysely joka hakee käyttäjän "tykkäämät elokuvat"
 try {
  const result = await pool.query(
     'SELECT movie_id FROM favorites WHERE user_id = $1', [userId]
  );
-
+//muuttaa ton tietokannan arrayksi
  const favoriteId = result.rows.map(row=>row.movie_id);
  res.json(favoriteId);
 } catch (error) {
@@ -39,6 +39,8 @@ console.error('Error while getting favorites')
 res.status(500).json({error: 'Database error '})
 }}
 
+
+// pitäs poistaa ei oo testattu vielä tulee nappi sinne fronttiin favorite sivulle
 //poistaa tykkäyksen elokuvasta
 export async function deleteFromFavorites(req,res) {
     const { movieId,  } = req.body; 
