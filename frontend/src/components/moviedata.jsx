@@ -49,8 +49,6 @@ const MovieData = ({ movie }) => {
 
 // lisää napin painalluksesta favoritteihin. tarkastaa että jos tokenia ei ole tai elokuva on jo lisätty se keskeytyy
   const addFavorites = async () => {
-  console.log("🔥 ADD FAVORITES ALKOI"); //debug
-  console.log("Token:", accessToken); //debug
   console.log("isAdded:", isAdded); //debug
   console.log("Movie ID:", movie.id); //debug
     // katsoo oletko kirjautunut sisälle
@@ -117,28 +115,6 @@ const MovieData = ({ movie }) => {
 
 {/* PATRIK, tuossa ylhäällä on koodi semmoselle modal napille (logout nappi), onClick jne. turhia. Tärkeä tuo alhaalla oleva koodi joka avaa sen näkymän. Sinne tunget sitten- */}
 {/* sähköpostin ja salasanan ja napin. Kopsaa siis tuo modal koodi sinne rekisteröinti sivulle ja liitä semmoseen logout nappiin */}
-
-
-{/*
-{token && (
-          <button
-            className="favorites-btn"
-            onClick={addFavorites}
-            title="Add to favorites"
-            >
-              ❤️
-          </button>
-          )} 
-
-            <button
-            className="favorites-btn"
-            onClick={addFavorites}
-            disabled={isAdded}
-            title={isAdded ? "Added to favorites" : "Add to favorites"}
-            >
-              ❤️
-          </button>
-*/}
 
 
 <div className="modal fade" tabIndex="-1" id={`movieModal-${movie.id}`}>
