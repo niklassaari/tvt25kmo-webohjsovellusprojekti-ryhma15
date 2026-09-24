@@ -8,14 +8,10 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-<<<<<<< HEAD
-//MUUTA IP:ksi kun alat testailemaan en tiiä miksi mutta jos on http://128.214.255.200:3001/ rikkoo etusivun ja elokuvien haun
-=======
 //MUUTA IP:ksi kun alat testailemaan
-       //target: process.env.VITE_BACKEND_URL || 'http://128.214.255.200:3001',
+      //target: process.env.VITE_BACKEND_URL || 'http://128.214.255.200:3001',
         
         // tämä vm
->>>>>>> main
         target: process.env.VITE_BACKEND_URL || 'http://backend:3001',
         changeOrigin: true,
       },

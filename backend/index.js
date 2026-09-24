@@ -18,6 +18,11 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use('/api/movies',movieRoutes);
 
+app.get('/api/movies/test2', (req, res) => {
+  console.log("🔥 TEST2 OSUI");
+  res.send("TEST2 TOIMII");
+});
+
 
 //test
 const allowedOrigins = [
@@ -33,7 +38,12 @@ app.use(cors({
 app.use(cookieParser());
 
 app.get("/", async (req, res) => {
- res.send("Postgres API esimerkki");
+ res.send("Postgres APIiiiiiiii esimerkki");
+});
+//testi
+app.get("/test", (req, res) => {
+  console.log("🔥 SERVER TEST OSUI");
+  res.send("SERVER TEST TOIMII");
 });
 
 
