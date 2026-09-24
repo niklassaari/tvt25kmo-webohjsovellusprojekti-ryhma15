@@ -74,12 +74,11 @@ const MovieData = ({ movie }) => {
           // ei ehkä tarttee tuota title
         }),
       });
-    console.log("BACKEND VASTASI");
-    console.log("Status:", res.status);
-    console.log("OK:", res.ok);
+    console.log("backend vastas");
+  
 
       if (res.ok) {
-        console.log("FAVORITE LISÄTTIIN");
+        console.log("favorite lisätttii");
      setIsAdded(true) 
      //muuttaa isAdded trueksi mikä taas tekee sen että nappia ei voi painaa enää
     } else {
