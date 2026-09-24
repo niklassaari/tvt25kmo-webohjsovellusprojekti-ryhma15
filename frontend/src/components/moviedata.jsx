@@ -1,19 +1,103 @@
 import './moviedata.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
 
-
+import { useAuth } from '../context/authContext';
 
 const MovieData = ({ movie }) => {
   
   const [currentMovie, setCurrentMovie] = useState(null); // Added current movie state
-
   const starRating = movie.vote_average / 2;
   const fullStars = Math.floor(starRating);
+
+  const [isAdded, setIsAdded] = useState(false);
+  const { loggedIn, accessToken } = useAuth();
+  
+ // const token = contextToken || localStorage.getItem('token');
+  
+
+// tarkistaa että elokuva ei jo ole favoriteissa
+  // tässä on/oli sulkuhelvetti ne on iha päi vittua
+  useEffect(()=>{
+    if (!accessToken) return;
+
+    const checkIfFavorite = async () => {
+      try {
+        const res = await fetch('/api/movies/favorites',{
+          headers:{
+            'Authorization': `Bearer ${accessToken}`
+          }
+        });
+        if (res.ok) {
+          const favoriteIds = await res.json();
+          if(favoriteIds.includes(movie.id)){
+          setIsAdded(true)
+          }
+      }
+    } catch (err) {
+      console.error('Virhe:', err);
+  }
+    };
+    checkIfFavorite();
+  }, [movie.id, accessToken]);
+
+
+
+// lisää napin painalluksesta favoritteihin. tarkastaa että jos tokenia ei ole tai elokuva on jo lisätty se keskeytyy
+  const addFavorites = async () => {
+
+     console.log("🔥 ADD FAVORITES ALKOI");
+  console.log("Token:", accessToken);
+  console.log("isAdded:", isAdded);
+  console.log("Movie ID:", movie.id);
+
+    if (!accessToken){
+      console.log("token puutttuu")
+      return;
+    } 
+
+    if (!accessToken) 
+      { console.log("Tokenia ei ole!"); return; }
+     if (isAdded) 
+      { console.log("Elokuva on jo favoriteissa!"); 
+      return; }
+    
+//tekee post pyynnön ja lähettää auth jotta tietää kenen favoritejä etitään
+    try {
+      console.log("lähettää post")
+
+
+     const res = await fetch('/api/movies/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          movieId: movie.id,
+          title: movie.title || movie.name,
+        }),
+      });
+      console.log("📥 BACKEND VASTASI");
+    console.log("Status:", res.status);
+    console.log("OK:", res.ok);
+
+      if (res.ok) {
+        console.log("✅ FAVORITE LISÄTTIIN");
+     setIsAdded(true) 
+     //jos tulee 200 ok niin asetetaan että 
+    } else {
+      console.log("favorittien lisäys ei toiminu")
+    }
+  } catch (err) {
+  console.error('error while adding favorites:', err);
+    }
+};
+  
 
 
   return (
@@ -41,6 +125,27 @@ const MovieData = ({ movie }) => {
 {/* sähköpostin ja salasanan ja napin. Kopsaa siis tuo modal koodi sinne rekisteröinti sivulle ja liitä semmoseen logout nappiin */}
 
 
+{/*
+{token && (
+          <button
+            className="favorites-btn"
+            onClick={addFavorites}
+            title="Add to favorites"
+            >
+              ❤️
+          </button>
+          )} 
+
+            <button
+            className="favorites-btn"
+            onClick={addFavorites}
+            disabled={isAdded}
+            title={isAdded ? "Added to favorites" : "Add to favorites"}
+            >
+              ❤️
+          </button>
+*/}
+
 
 <div className="modal fade" tabIndex="-1" id={`movieModal-${movie.id}`}>
   <div className="modal-dialog">
@@ -50,8 +155,20 @@ const MovieData = ({ movie }) => {
         <img src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`} name="logo" style={{ width: '90px', height: '150px' }} />
   
     <div className="modal-header-content">
+          {loggedIn && (
+          <button
+          type='button'
+            className="favorites-btn"
+            onClick={()=> {
+              console.log("❤️ NAPPIA PAINETTIIN");
+              addFavorites()
+            }}
+            title={isAdded ? "Added to favorites " : "Add to favorites"}
+            >
+              {isAdded ? "🖤" : "❤️"}
+          </button>
+          )} 
           <h5 className="modal-title">{currentMovie?.title}</h5>
-
           <div className="modal-header-text">
       <p>Genre:{movie.genre_ids}</p>
       <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>

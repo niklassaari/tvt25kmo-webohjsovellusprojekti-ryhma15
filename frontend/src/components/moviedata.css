@@ -141,6 +141,28 @@ gap: 0px !important;
     height: 150px;
 }
 
+.favorites-btn {
+  background: transparent !important; 
+  border: none !important;            
+  outline: none !important;          
+  padding: 0 !important;              
+  font-size: 1rem;                  
+  cursor: pointer;
+  line-height: 1;
+  display: inline-flex;
+}
+
+.favorites-btn:hover {
+  transform: scale(1.25);
+  background: transparent !important;
+}
+
+.favorites-btn.added, .favorites-btn:disabled {
+  filter: grayscale(100%);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .modal-header-content {
     display: flex;
     flex-direction: column;
