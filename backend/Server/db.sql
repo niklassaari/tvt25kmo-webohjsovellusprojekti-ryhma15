@@ -46,11 +46,7 @@ create table group_members (
     user_id int references users(id) on delete cascade,
     role varchar(20) default 'member',
     created_at timestamp default current_timestamp,
-<<<<<<< HEAD
-    unique (user_id, group_id) //tässä oli group_Id tilalla movie_id alunperin 
-=======
     unique (group_id, user_id)
->>>>>>> main
 );
 
 create table group_movies (
