@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import pool from '../models/database.js';
+import { response } from 'express';
 
 
 // lisää suosikki elokuvan tietokantaan
@@ -22,7 +23,7 @@ export async function addFavorite(req,res) {
    }
 }
 
-// hakee kaikki "tykätyt" elokuvat tietokannasta
+// hakee kaikki "tykätyt" elokuvat tietokannasta, tätä käytetään esim siihen napin tilan tarkastamiseen/estämiseen
 
 export async function getAllFavorites(req, res) {
     const userId = req.user.id;
@@ -55,4 +56,50 @@ export async function deleteFromFavorites(req,res) {
     console.error('error removing from favorites', error);
     res.status(500).json({error: 'database error'})
    }
+}
+// käytetään henkilön favorite elokuvien hakemiseen ja näyttämiseen favorite sivulla
+export async function getPublicFavorites(req,res) {
+    const { username  } = req.params; // tän pitäs ottaa usernamen siitä urlsta
+    // ettii sen käyttäjän tietokannasta ja ottaa sen talteen
+    try {
+        const user=await pool.query(
+            'SELECT id FROM users WHERE username = $1',
+            [username]
+        );
+        if (user.rows.length===0) {
+            return res.status(404).json({
+                error: 'user not found'
+            })
+        }
+        const userId = user.rows[0].id
+
+// hakee ne elokuvien id tietokannasta
+        const favorites = await pool.query(
+            'SELECT movie_id FROM favorites WHERE user_id = $1',
+            [userId]
+        );
+        // muuttaa listaksi
+        const favoriteIds = favorites.rows.map(row => row.movie_id)
+        // tämä hakee niitten id perusteilla infon sieltä rajapinnasta
+        const movie = await Promise.all(
+            favoriteIds.map(async (movieId)=>{
+                const response = await fetch( `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    accept: 'application/json'
+                }
+            }
+        );
+  
+        const data = await response.json();
+        return data;
+    })
+);
+    res.json(movie); // vie frontendiin 
+
+    } catch (error){
+    console.error('error getting public favorites', error);
+    res.status(500).json({error: 'database error'})
+    }
 }

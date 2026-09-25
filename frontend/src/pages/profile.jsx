@@ -62,6 +62,15 @@ const Profile = () => {
         Delete Profile
       </button>
 
+
+      {/*suosikkilista button eli tätä painamalla olisi tarkoitus viedä sille sivulle jossa näkyy se suosikki lista, sillä sivulla sitten toinen nappi joka kopioi vaikka url:in*/}
+      <button
+        type="button"
+        className="favorite-btn"
+      >
+        Favorites
+      </button>
+
       <div
         className="modal fade"
         id="deleteProfileModal"

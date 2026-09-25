@@ -2,7 +2,7 @@
 
 import express from 'express';
 
-import { addFavorite, getAllFavorites, deleteFromFavorites} from '../controllers/favoriteController.js';
+import { addFavorite, getAllFavorites, deleteFromFavorites, getPublicFavorites} from '../controllers/favoriteController.js';
 import { authenticateToken } from '../middleware/auth.js'; 
 import { getNowPlayingMovies,searchMovies, TopMovies, TopShows } from '../controllers/movieController.js';
 
@@ -17,6 +17,9 @@ router.get('/search', searchMovies);
 router.post('/favorites', authenticateToken, addFavorite);
 router.get('/favorites', authenticateToken, getAllFavorites);
 router.delete('/favorites', authenticateToken, deleteFromFavorites);
+
+// tää sitä varten että kaikki näkee sen sun favoritet
+router.get('/favorites/:username', getPublicFavorites);
 
 
 
