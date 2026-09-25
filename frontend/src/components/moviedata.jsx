@@ -14,17 +14,15 @@ const MovieData = ({ movie }) => {
   const starRating = movie.vote_average / 2;
   const fullStars = Math.floor(starRating);
 
+  // boolean
   const [isAdded, setIsAdded] = useState(false);
-  const { loggedIn, accessToken } = useAuth();
-  
- // const token = contextToken || localStorage.getItem('token');
-  
+  const { loggedIn, accessToken } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
 
 // tarkistaa että elokuva ei jo ole favoriteissa
   // tässä on/oli sulkuhelvetti ne on iha päi vittua
   useEffect(()=>{
-    if (!accessToken) return;
-
+    if (!accessToken) return;// tarkistaa onko käyttäjä kirjautunu
+    // tarkistaa favoritit accesstokenin avulla ja lähettää get pyynnön 
     const checkIfFavorite = async () => {
       try {
         const res = await fetch('/api/movies/favorites',{
@@ -32,8 +30,10 @@ const MovieData = ({ movie }) => {
             'Authorization': `Bearer ${accessToken}`
           }
         });
+        // jos backendi vastaa onnistuneesti antaa elokuvien id:t
         if (res.ok) {
           const favoriteIds = await res.json();
+          // vertaa backendistä saatujen elokuvien id siihen elokuvan id mitä klikkaa
           if(favoriteIds.includes(movie.id)){
           setIsAdded(true)
           }
@@ -43,34 +43,25 @@ const MovieData = ({ movie }) => {
   }
     };
     checkIfFavorite();
-  }, [movie.id, accessToken]);
+  }, [movie.id, accessToken]); // tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
 
 
 
 // lisää napin painalluksesta favoritteihin. tarkastaa että jos tokenia ei ole tai elokuva on jo lisätty se keskeytyy
   const addFavorites = async () => {
-
-     console.log("🔥 ADD FAVORITES ALKOI");
-  console.log("Token:", accessToken);
-  console.log("isAdded:", isAdded);
-  console.log("Movie ID:", movie.id);
-
+  console.log("isAdded:", isAdded); //debug
+  console.log("Movie ID:", movie.id); //debug
+    // katsoo oletko kirjautunut sisälle
     if (!accessToken){
       console.log("token puutttuu")
       return;
     } 
-
-    if (!accessToken) 
-      { console.log("Tokenia ei ole!"); return; }
-     if (isAdded) 
-      { console.log("Elokuva on jo favoriteissa!"); 
-      return; }
+    // tästä on poistettu yks if lause 
     
-//tekee post pyynnön ja lähettää auth jotta tietää kenen favoritejä etitään
+//tekee post pyynnön ja lähettää auth jotta tietää kenen favoritteihi lisätää
     try {
       console.log("lähettää post")
-
-
+      // post
      const res = await fetch('/api/movies/favorites', {
         method: 'POST',
         headers: {
@@ -80,16 +71,16 @@ const MovieData = ({ movie }) => {
         body: JSON.stringify({
           movieId: movie.id,
           title: movie.title || movie.name,
+          // ei ehkä tarttee tuota title
         }),
       });
-      console.log("📥 BACKEND VASTASI");
-    console.log("Status:", res.status);
-    console.log("OK:", res.ok);
+    console.log("backend vastas");
+  
 
       if (res.ok) {
-        console.log("✅ FAVORITE LISÄTTIIN");
+        console.log("favorite lisätttii");
      setIsAdded(true) 
-     //jos tulee 200 ok niin asetetaan että 
+     //muuttaa isAdded trueksi mikä taas tekee sen että nappia ei voi painaa enää
     } else {
       console.log("favorittien lisäys ei toiminu")
     }
@@ -125,28 +116,6 @@ const MovieData = ({ movie }) => {
 {/* sähköpostin ja salasanan ja napin. Kopsaa siis tuo modal koodi sinne rekisteröinti sivulle ja liitä semmoseen logout nappiin */}
 
 
-{/*
-{token && (
-          <button
-            className="favorites-btn"
-            onClick={addFavorites}
-            title="Add to favorites"
-            >
-              ❤️
-          </button>
-          )} 
-
-            <button
-            className="favorites-btn"
-            onClick={addFavorites}
-            disabled={isAdded}
-            title={isAdded ? "Added to favorites" : "Add to favorites"}
-            >
-              ❤️
-          </button>
-*/}
-
-
 <div className="modal fade" tabIndex="-1" id={`movieModal-${movie.id}`}>
   <div className="modal-dialog">
     <div className="modal-content">
@@ -163,6 +132,7 @@ const MovieData = ({ movie }) => {
               console.log("❤️ NAPPIA PAINETTIIN");
               addFavorites()
             }}
+            disabled={isAdded}
             title={isAdded ? "Added to favorites " : "Add to favorites"}
             >
               {isAdded ? "🖤" : "❤️"}

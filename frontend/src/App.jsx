@@ -9,7 +9,7 @@ import Groups from './pages/groups'
 import Movies from './pages/movies'
 import Profile from './pages/profile'
 import Register from './pages/register'
-
+import MyFavorites from './pages/favorites'
 
 import { useState } from 'react'
 
@@ -31,6 +31,7 @@ function App() {
           <Route path="/movies" element={<Movies />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/favorites/:username" element={<MyFavorites />} />
         </Routes>
       </div>
 
