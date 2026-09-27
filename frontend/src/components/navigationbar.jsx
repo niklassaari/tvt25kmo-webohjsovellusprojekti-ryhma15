@@ -53,8 +53,7 @@ const Navbar = () => {
 
   <Dropdown className="navbar-left-dropdown">
 
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
-      test
+      <Dropdown.Toggle style={{width: "180px", height: "60px"}} variant="success" id="dropdown-basic">
       </Dropdown.Toggle>
 
        <Dropdown.Menu>

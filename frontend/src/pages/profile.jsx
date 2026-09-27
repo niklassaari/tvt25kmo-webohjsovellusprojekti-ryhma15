@@ -115,12 +115,17 @@ const Profile = () => {
                 Delete Profile
               </button>
 
+
             </div>
 
           </div>
 
         </div>
       </div>
+
+    
+
+
       </>
 )}
 
@@ -132,6 +137,9 @@ const Profile = () => {
       </Link>
 )}
     </div>
+
+
+
   );
 } ;
 

@@ -30,6 +30,13 @@
   flex: 1;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+  background-image: url('./assets/tausta.png');
+}
+
 .hero {
   position: relative;
 
