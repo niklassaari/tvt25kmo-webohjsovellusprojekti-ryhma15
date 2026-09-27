@@ -8,7 +8,7 @@ import fullstar from '../assets/reviewstars/fullstar.png';
 
 import { useAuth } from '../context/authContext';
 
-const MovieData = ({ movie }) => {
+const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
   
   const [currentMovie, setCurrentMovie] = useState(null); // Added current movie state
   const starRating = movie.vote_average / 2;
@@ -41,7 +41,7 @@ const MovieData = ({ movie }) => {
     } catch (err) {
       console.error('Virhe:', err);
   }
-    };
+    }
     checkIfFavorite();
   }, [movie.id, accessToken]); // tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
 
@@ -87,7 +87,7 @@ const MovieData = ({ movie }) => {
   } catch (err) {
   console.error('error while adding favorites:', err);
     }
-};
+}
   
 
 
@@ -100,8 +100,18 @@ const MovieData = ({ movie }) => {
     
 
   <div className="movie-card">
-    
- 
+  {loggedIn && isFavoritePage && (
+<button
+  type="button"
+  className="removeFromLikes-btn"
+  onClick={() => onRemove(movie.id)}
+  title='Remove from favorites'
+>
+  Remove from favorites
+</button> 
+  )}
+
+
 <button
   type="button"
   className="movie-modal-button"
@@ -124,12 +134,12 @@ const MovieData = ({ movie }) => {
         <img src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`} name="logo" style={{ width: '90px', height: '150px' }} />
   
     <div className="modal-header-content">
-          {loggedIn && (
+          {loggedIn && !isFavoritePage && (
           <button
           type='button'
             className="favorites-btn"
             onClick={()=> {
-              console.log("❤️ NAPPIA PAINETTIIN");
+              console.log("❤️ NAPPIA PAINETTIIN")
               addFavorites()
             }}
             disabled={isAdded}
@@ -283,6 +293,6 @@ const MovieData = ({ movie }) => {
 
 
   );
-};
+}
 
 export default MovieData;

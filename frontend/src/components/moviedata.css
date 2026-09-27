@@ -152,7 +152,7 @@ gap: 0px !important;
   display: inline-flex;
 }
 
-.favorites-btn:hover {
+.favorites-btn:not(:disabled):hover {
   transform: scale(1.25);
   background: transparent !important;
 }

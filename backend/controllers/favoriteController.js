@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import pool from '../models/database.js';
-import { response } from 'express';
 
 
 // lisää suosikki elokuvan tietokantaan
@@ -16,9 +15,9 @@ export async function addFavorite(req,res) {
        ON CONFLICT (user_id, movie_id) DO NOTHING`,
       [userId, movieId]
     );
-    res.status(201).json({message: 'added to favorites'});
+    res.status(201).json({message: 'added to favorites'})
    } catch (error){
-    console.error('error adding to favorites', error);
+    console.error('error adding to favorites', error)
     res.status(500).json({error: 'database error'})
    }
 }
@@ -26,15 +25,15 @@ export async function addFavorite(req,res) {
 // hakee kaikki "tykätyt" elokuvat tietokannasta, tätä käytetään esim siihen napin tilan tarkastamiseen/estämiseen
 
 export async function getAllFavorites(req, res) {
-    const userId = req.user.id;
+    const userId = req.user.id
 // kysely joka hakee käyttäjän "tykkäämät elokuvat"
 try {
  const result = await pool.query(
     'SELECT movie_id FROM favorites WHERE user_id = $1', [userId]
  );
 //muuttaa ton tietokannan arrayksi
- const favoriteId = result.rows.map(row=>row.movie_id);
- res.json(favoriteId);
+ const favoriteId = result.rows.map(row=>row.movie_id)
+ res.json(favoriteId)
 } catch (error) {
 console.error('Error while getting favorites')
 res.status(500).json({error: 'Database error '})
@@ -51,9 +50,9 @@ export async function deleteFromFavorites(req,res) {
     await pool.query(
         'DELETE FROM favorites WHERE user_id = $1 AND movie_id=$2', [userId, movieId]
     );
-    res.json({message: 'deleted from favorites'});
+    res.json({message: 'deleted from favorites'})
    } catch (error){
-    console.error('error removing from favorites', error);
+    console.error('error removing from favorites', error)
     res.status(500).json({error: 'database error'})
    }
 }
@@ -65,7 +64,7 @@ export async function getPublicFavorites(req,res) {
         const user=await pool.query(
             'SELECT id FROM users WHERE username = $1',
             [username]
-        );
+        )
         if (user.rows.length===0) {
             return res.status(404).json({
                 error: 'user not found'
@@ -77,7 +76,7 @@ export async function getPublicFavorites(req,res) {
         const favorites = await pool.query(
             'SELECT movie_id FROM favorites WHERE user_id = $1',
             [userId]
-        );
+        )
         // muuttaa listaksi
         const favoriteIds = favorites.rows.map(row => row.movie_id)
         // tämä hakee niitten id perusteilla infon sieltä rajapinnasta
@@ -90,13 +89,13 @@ export async function getPublicFavorites(req,res) {
                     accept: 'application/json'
                 }
             }
-        );
+        )
   
         const data = await response.json();
         return data;
     })
-);
-    res.json(movie); // vie frontendiin 
+)
+    res.json(movie) // vie frontendiin 
 
     } catch (error){
     console.error('error getting public favorites', error);
