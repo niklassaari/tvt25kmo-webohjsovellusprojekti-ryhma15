@@ -42,8 +42,7 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
     } catch (err) {
       console.error('Virhe:', err);
   }
-    }
-  } // tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
+    }// tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
 
 
 
@@ -295,6 +294,6 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
 
 
   );
-}
 
+}
 export default MovieData;
