@@ -20,10 +20,11 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
 
 // tarkistaa että elokuva ei jo ole favoriteissa
   // tässä on/oli sulkuhelvetti ne on iha päi vittua
-  useEffect(()=>{
-    if (!accessToken) return;// tarkistaa onko käyttäjä kirjautunu
+  
+  // tarkistaa onko käyttäjä kirjautunu
     // tarkistaa favoritit accesstokenin avulla ja lähettää get pyynnön 
     const checkIfFavorite = async () => {
+      if (!accessToken) return;
       try {
         const res = await fetch('/api/movies/favorites',{
           headers:{
@@ -42,8 +43,7 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
       console.error('Virhe:', err);
   }
     }
-    checkIfFavorite();
-  }, [movie.id, accessToken]); // tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
+  } // tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
 
 
 
@@ -117,7 +117,9 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
   className="movie-modal-button"
   data-bs-toggle="modal"
   data-bs-target={`#movieModal-${movie.id}`}
-  onClick={() => setCurrentMovie(movie)}
+  onClick={() => {setCurrentMovie(movie)
+        checkIfFavorite()
+  }}
 >
   {movie.title}
 </button>
