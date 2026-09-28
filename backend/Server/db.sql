@@ -5,6 +5,7 @@ drop table if exists reviews cascade;
 drop table if exists favorites cascade;
 drop table if exists moviegroups cascade;
 drop table if exists users cascade;
+drop table if exists group_requests cascade;
 
 create table users (
     id serial primary key,
@@ -56,4 +57,13 @@ create table group_movies (
     movie_id int not null,
     created_at timestamp default current_timestamp,
     unique (group_id, movie_id)
+);
+
+create table group_requests (
+    id serial primary key,
+    group_id int references moviegroups(id) on delete cascade,
+    user_id int references users(id) on delete cascade,
+    status varchar(20) default 'awaiting processing',
+    created_at timestamp default current_timestamp,
+    unique (group_id, user_id)
 );
