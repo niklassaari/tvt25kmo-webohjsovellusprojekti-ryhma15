@@ -42,7 +42,7 @@ display: flex;
 
 .OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     height: 150px;
     flex-direction: column;
     padding: 10px;
@@ -50,10 +50,10 @@ display: flex;
     font-family: "Times New Roman", Times, serif;
     text-indent: 0 !important;
     height: auto;
-justify-content: flex-start !important;
-gap: 0px !important;
+    justify-content: flex-start !important;
+    gap: 0px !important;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
 }
 .OnTheaters .movie-card .movie-modal-button, .TopRatedMovies .movie-card .movie-modal-button, .TopRatedShows .movie-card .movie-modal-button {
     font-size: 20px !important; 
@@ -115,6 +115,7 @@ gap: 0px !important;
   display: inline-block;
   font-size: 30px;
   cursor: pointer;
+  
 }
 
 .movie-modal-body {
@@ -126,7 +127,12 @@ gap: 0px !important;
     margin-top: 1px;
     padding: 20px;
 
-    
+}
+
+.reviewfield textarea{
+    height: 200px,
+    width: 2000px,
+
 }
 
 .modal-dialog {
@@ -160,8 +166,12 @@ gap: 0px !important;
 }
 
 
-
-
+.movie-results {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 
 .movie-list .movie-card {
     border-bottom: 2px solid #333;

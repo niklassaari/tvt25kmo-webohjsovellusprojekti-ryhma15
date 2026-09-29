@@ -106,7 +106,7 @@ const Profile = () => {
               >
                 Cancel
               </button>
-
+{/*Tee nappi siten että se boottaa käyttäjän takaisin etusivulle*/}
               <button
                 type="submit"
                 className="btn btn-danger"

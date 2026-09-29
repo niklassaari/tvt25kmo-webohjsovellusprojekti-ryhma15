@@ -2,6 +2,28 @@ import pool from "./database.js";
 import bcrypt from "bcryptjs";
 const SALT_ROUNDS = 10;
 
+/*
+
+// lisää review
+export async function addReview(rating, comment, created_at) {
+ 
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+ const result = await pool.query(
+        "INSERT INTO reviews (rating, comment, created_at) VALUES ($1, $2, $3",
+
+ return result.rows[0];
+}
+
+
+export async function getAllReviews() {
+
+ const result = await pool.query("SELECT id, username, email FROM users");
+ return result.rows;
+}
+
+*/
+
 // Luo käyttäjä
 export async function addOne(username, email, password) {
  
@@ -26,7 +48,6 @@ export async function getAll() {
 // Validoi käyttäjä kirjautumisessa
 export async function authenticateUser(email, password) {
 
-    // pitää ehkä muuttaa $2 jos rakenne vastaa tarpeeks sitä ekaa draftiä, ku id on ekana enne emailia
  const result = await pool.query(
  "SELECT id, username, email, password FROM users WHERE email = $1",
  [email]
