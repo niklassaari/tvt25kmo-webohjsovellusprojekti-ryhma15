@@ -2,27 +2,7 @@ import pool from "./database.js";
 import bcrypt from "bcryptjs";
 const SALT_ROUNDS = 10;
 
-/*
 
-// lisää review
-export async function addReview(rating, comment, created_at) {
- 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
- const result = await pool.query(
-        "INSERT INTO reviews (rating, comment, created_at) VALUES ($1, $2, $3",
-
- return result.rows[0];
-}
-
-
-export async function getAllReviews() {
-
- const result = await pool.query("SELECT id, username, email FROM users");
- return result.rows;
-}
-
-*/
 
 // Luo käyttäjä
 export async function addOne(username, email, password) {
