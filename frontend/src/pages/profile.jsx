@@ -38,14 +38,14 @@ const Profile = () => {
         <div className="profile-section">
           <h2>Favorites</h2>
 
-          <div className="profile-box">
+          <div className="profile-box favorites-box">
           </div>
         </div>
 
         <div className="profile-section">
           <h2>Groups</h2>
 
-          <div className="profile-box">
+          <div className="profile-box group-box">
           </div>
         </div>
 
@@ -60,6 +60,15 @@ const Profile = () => {
         data-bs-target="#deleteProfileModal"
       >
         Delete Profile
+      </button>
+
+
+      {/*suosikkilista button eli tätä painamalla olisi tarkoitus viedä sille sivulle jossa näkyy se suosikki lista, sillä sivulla sitten toinen nappi joka kopioi vaikka url:in*/}
+      <button
+        type="button"
+        className="favorite-btn"
+      >
+        Favorites
       </button>
 
       <div
@@ -106,7 +115,7 @@ const Profile = () => {
               >
                 Cancel
               </button>
-{/*Tee nappi siten että se boottaa käyttäjän takaisin etusivulle*/}
+
               <button
                 type="submit"
                 className="btn btn-danger"
