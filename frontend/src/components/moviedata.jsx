@@ -1,7 +1,7 @@
 import './moviedata.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
@@ -666,4 +666,5 @@ return (
 );
 };
 
+}
 export default MovieData;

@@ -47,7 +47,7 @@ create table group_members (
     user_id int references users(id) on delete cascade,
     role varchar(20) default 'member',
     created_at timestamp default current_timestamp,
-    unique (user_id, group_id)
+    unique (group_id, user_id)
 );
 
 create table group_movies (
@@ -56,7 +56,7 @@ create table group_movies (
     user_id int references users(id) on delete cascade,
     movie_id int not null,
     created_at timestamp default current_timestamp,
-    unique (group_id, user_id)
+    unique (group_id, movie_id)
 );
 
 create table group_requests (

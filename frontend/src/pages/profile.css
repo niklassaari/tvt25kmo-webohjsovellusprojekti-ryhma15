@@ -16,7 +16,21 @@
 }
 
 .profile-box {
-  width: 200px;
-  height: 220px;
+  width: 280px;
+  height: 290px;
   border: 1px solid #777; 
+}
+
+.favorites-box {
+  width: 300px ;
+  height: 290px ;
+  border: 1px solid #777; 
+
+}
+
+.group-box {
+width: 300px ;
+  height: 290px ;
+
+
 }
