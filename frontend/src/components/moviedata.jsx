@@ -654,7 +654,7 @@ return (
               alt="Full star"
             />
           </>
-        ) : null}
+        ) : null }
 
       </div>
 
