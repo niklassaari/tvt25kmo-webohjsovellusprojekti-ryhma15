@@ -48,7 +48,23 @@ const MyFavorites = () => {
   return (
     <div id="Favorites">
       <h2>{username} Favorites</h2>
+   
+   
+   <button
+  type="button"
+  className="copyUrl-btn"
+  onClick={() => {
+    const input = document.createElement('input')
+    input.value = window.location.href
+    document.body.appendChild(input)
+    input.select()
+    document.execCommand('copy')
+    document.body.removeChild(input)
 
+    console.log('URL kopioitu!')
+   
+   
+    {/* tää ei toiminu jostain syystä niin tuossa ylhäällä on toinen tapa mikä ehkä toimii ja toi yliviivaus tarkottaa että toi komento on "vanhentunu tapa" pitäs silti toimia mutta pitää testata 
       <button
           type='button'
             className="copyUrl-btn"
@@ -60,7 +76,7 @@ const MyFavorites = () => {
     } catch (error) {
       console.error("URL:n kopiointi epäonnistui:", error);
     }
-
+*/}
   }}
           >
             Share with URL

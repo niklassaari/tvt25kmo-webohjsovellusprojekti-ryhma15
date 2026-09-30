@@ -2,16 +2,16 @@ import { useEffect, useState, useRef } from 'react';
 import MovieData from '../components/moviedata';
 
 // hakee parhaimmat arvostelut suomessa saaneet sarjat
-const TopMovies = () => {
+const TopShows = () => {
 
-   const [movies, setMovies] = useState([]);
+   const [movies, setShows] = useState([]);
    const listRef = useRef(null);
   
   
   useEffect(() => {
   fetch('/api/movies/topShows') 
   .then(res => res.json())
-  .then(res => setMovies(res))
+  .then(res => setShows(res))
   .catch(err => console.error(err));
   }, []);
 
@@ -44,4 +44,4 @@ useEffect(() => {
   );
 };
 
-export default TopMovies;
+export default TopShows;

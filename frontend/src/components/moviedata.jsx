@@ -42,7 +42,7 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
     } catch (err) {
       console.error('Virhe:', err);
   }
-    }// tää tarkistaa tuota joka kerta kun elokuvan ID tai toi accesstokeni muuttuu
+    }
 
 
 
@@ -79,7 +79,7 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
       if (res.ok) {
         console.log("favorite lisätttii");
      setIsAdded(true) 
-     //muuttaa isAdded trueksi mikä taas tekee sen että nappia ei voi painaa enää
+     //muuttaa  trueksi mikä taas tekee sen että nappia ei voi painaa enää
     } else {
       console.log("favorittien lisäys ei toiminu")
     }
@@ -120,7 +120,7 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
         checkIfFavorite()
   }}
 >
-  {movie.title}
+  {movie.title || movie.name}
 </button>
 
 {/* PATRIK, tuossa ylhäällä on koodi semmoselle modal napille (logout nappi), onClick jne. turhia. Tärkeä tuo alhaalla oleva koodi joka avaa sen näkymän. Sinne tunget sitten- */}
@@ -149,10 +149,10 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
               {isAdded ? "🖤" : "❤️"}
           </button>
           )} 
-          <h5 className="modal-title">{currentMovie?.title}</h5>
+          <h5 className="modal-title">{currentMovie?.title || currentMovie?.name}</h5>
           <div className="modal-header-text">
       <p>Genre:{movie.genre_ids}</p>
-      <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>
+      <p>Release date: {new Date(movie.release_date || movie.first_air_date).toLocaleDateString("fi-FI")}</p>
       <p>Rating: {movie.vote_average}</p>
     </div>
   </div>
@@ -174,7 +174,7 @@ const MovieData = ({ movie, isFavoritePage = false, onRemove }) => {
     
     <div className="movie-info">
       <p>Genre:{movie.genre_ids}</p>
-      <p>Release date: {new Date(movie.release_date).toLocaleDateString("fi-FI")}</p>
+      <p>Release date: {new Date(movie.release_date || movie.first_air_date).toLocaleDateString("fi-FI")}</p>
       <p>Rating: {Math.round(movie.vote_average * 2) / 2}</p>
 
 
