@@ -1,5 +1,5 @@
 
-const groupModel = require('../models/groupModel');
+import * as groupModel from '../models/groupModel.js';
 //Ryhmän luonti/ownerId tallennetaan tietokantaan
 const addGroups = async (req, res,) => {
     try {
@@ -126,15 +126,4 @@ const removeMember = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: "Failed to remove member from group", details: err.message });
     }
-};
-
-//Viedään funktiot käyttöön
-module.exports = {
-    addGroups,
-    deleteGroup,
-    updateGroup,
-    getAllGroups,
-    groupRole,
-    createGroupRequest,
-    removeMember
 };

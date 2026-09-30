@@ -1,9 +1,14 @@
 import router from 'express'
 import {
     addGroups,
-    deleteGroup
+    deleteGroup,
+    updateGroup,
+    getAllGroups,
+    groupRole,
+    createGroupRequest,
+    removeMember
 } from '../controllers/groupController'
-//Ryhmän luonti ja poisto
+//Ryhmän luonti, haku, päivitys ja poisto
 const groupRouter = router.Router()
 groupRouter.post('/add', addGroups)
 groupRouter.delete('/delete/:id', deleteGroup)
