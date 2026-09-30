@@ -1,20 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/authContext";
 
-// HUOM!!
-
-//Even better, don't hardcode the IP in the component. Put it in frontend/.env:
-// kun userroutes jne. virtuaalikoneella:
-
-//importtaa envistä toi urli:
-//const API_URL = import.meta.env.VITE_API_URL;
-//
-//fetch(`${API_URL}/user/register`, ...)
-
-// Eli vaiha noihin kaikkiin sit tuo ${API_URL}
-
-
-
 const Register = () => {
 
 
@@ -28,13 +14,11 @@ const Register = () => {
 const [newusername, setNewusername] = useState(""); 
 const [newemail, setNewemail] = useState(""); 
 const [newpassword, setNewpassword] = useState(""); 
-// error paskaa
+// errorit
 const [message, setMessage] = useState("");
 
 
 
-
-// gpt juttuja, hienosäädän sitten kun taulut jne. on pystyssä
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,11 +35,9 @@ console.log("REGISTER DATA SENT:",
 
 
 
-    //Sitten kun envissä tuo urli niin voi korvata API_URLin
+
     const response = await fetch(`${API_URL}/user/register`,
 
-    // ei toimi? tutki asiaa
-    //const response = await fetch("http://backend:3001/user/register", 
       { 
       method: "POST", 
       headers: { "Content-Type": "application/json" }, 
@@ -63,7 +45,7 @@ console.log("REGISTER DATA SENT:",
   });
 
 
-    // testi, console näyttää mitä rekisteörityminen palauttaa
+    // testi, console näyttää mitä rekisteröityminen palauttaa
     console.log("Response:", response);
     console.log("Status:", response.status);
     console.log("Content-Type:", response.headers.get("content-type"));
@@ -75,14 +57,11 @@ console.log("REGISTER DATA SENT:",
   } else {
     setMessage("Registration failed.");
   }
-
-
     console.log(data);
   };
 
 
-// Jos käyttäjä on kirjautunut sisään,
-  // Register-sivun sisältöä ei näytetä.
+// Jos käyttäjä on kirjautunut sisään, register-sivun sisältöä ei näytetä.
   if (loggedIn) {
     return null;
   }
