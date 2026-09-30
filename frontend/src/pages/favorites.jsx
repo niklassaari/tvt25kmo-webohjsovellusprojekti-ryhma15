@@ -50,35 +50,22 @@ const MyFavorites = () => {
       <h2>{username} Favorites</h2>
    
    
-   <button
-  type="button"
-  className="copyUrl-btn"
-  onClick={() => {
-    const input = document.createElement('input')
-    input.value = window.location.href
-    document.body.appendChild(input)
-    input.select()
-    document.execCommand('copy')
-    document.body.removeChild(input)
+    <button
+        type="button"
+        className="copyUrl-btn"
+        onClick={() => {
+          const input = document.createElement('input');
+          input.value = window.location.href;
+          document.body.appendChild(input);
 
-    console.log('URL kopioitu!')
-   
-   
-    {/* tää ei toiminu jostain syystä niin tuossa ylhäällä on toinen tapa mikä ehkä toimii ja toi yliviivaus tarkottaa että toi komento on "vanhentunu tapa" pitäs silti toimia mutta pitää testata 
-      <button
-          type='button'
-            className="copyUrl-btn"
-            onClick={async()=> {
-              console.log("URL KOPIO NAPPIA PAINETTIIN");
-              try {
-      await navigator.clipboard.writeText(window.location.href);
-      console.log("URL kopioitu!");
-    } catch (error) {
-      console.error("URL:n kopiointi epäonnistui:", error);
-    }
-*/}
-  }}
-          >
+          input.select();
+          document.execCommand('copy');
+
+          document.body.removeChild(input);
+
+          console.log('URL kopioitu!');
+        }}
+      >
             Share with URL
           </button>
       <div className="movie-list">
