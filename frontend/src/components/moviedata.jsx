@@ -666,5 +666,5 @@ return (
 );
 };
 
-}
+
 export default MovieData;
