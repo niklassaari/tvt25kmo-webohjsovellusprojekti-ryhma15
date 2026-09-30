@@ -62,15 +62,3 @@ export const createGroupRequest = async (groupId, userId) => {
         throw err;
     }
 };
-
-module.exports = {
-    createGroup,
-    getGroupOwner,
-    getAllGroups,
-    getGroupById,
-    updateGroup,
-    deleteGroup,
-    groupRole,
-    getGroupsByName,
-    createGroupRequest
-};

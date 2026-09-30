@@ -6,7 +6,8 @@ import {
     getAllGroups,
     groupRole,
     createGroupRequest,
-    removeMember
+    removeMember,
+    createGroup
 } from '../controllers/groupController'
 //Ryhmän luonti, haku, päivitys ja poisto
 const groupRouter = router.Router()
@@ -17,5 +18,6 @@ groupRouter.get('/all', getAllGroups)
 groupRouter.post('/role', groupRole)
 groupRouter.post('/request', createGroupRequest)
 groupRouter.delete('/member/:groupId/:userId', removeMember)
+groupRouter.post('/create', createGroup)
 
 export default groupRouter;

@@ -54,7 +54,7 @@ const updateGroup = async (req, res) => {
             return res.status(400).json({error:"Group name is required"});
         }
 
-        const groupUpdated = await groupModel.updateGroup(name);
+        const groupUpdated = await groupModel.updateGroup(groupId, name);
         if (!groupUpdated){
             return res.status(404).json({error:"Group not found"});
         }
