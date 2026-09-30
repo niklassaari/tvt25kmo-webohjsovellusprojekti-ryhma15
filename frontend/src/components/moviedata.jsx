@@ -654,7 +654,7 @@ return (
               alt="Full star"
             />
           </>
-        ) : null}
+        ) : null }
 
       </div>
 
@@ -666,5 +666,5 @@ return (
 );
 };
 
-}
+
 export default MovieData;

@@ -5,6 +5,7 @@ import movieRoutes from "./routes/movieRoutes.js"
 
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRouter.js";
+import reviewRouter from './routes/reviewRoutes.js';
 import { authenticateToken } from "./middleware/auth.js";
 
 const port = process.env.PORT||3001
@@ -49,6 +50,7 @@ app.get("/test", (req, res) => {
 
 //Suojaamattomat endpointit
 app.use("/user", userRouter);
+app.use("/reviews", reviewRouter);
 
 //Suojatut endpointit
 app.listen(port, () => {
