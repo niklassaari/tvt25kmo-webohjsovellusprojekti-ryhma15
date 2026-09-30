@@ -199,7 +199,7 @@ return (
         checkIfFavorite();
       }}
     >
-      {movie.title}
+      {movie.title || movie.name}
     </button>
 
 
@@ -245,7 +245,7 @@ return (
 
 
               <h5 className="modal-title">
-                {currentMovie?.title}
+                {currentMovie?.title || currentMovie?.name}
               </h5>
 
 
@@ -257,7 +257,7 @@ return (
 
                 <p>
                   Release date: {
-                    new Date(movie.release_date)
+                    new Date(movie.release_date || movie.first_air_date)
                       .toLocaleDateString("fi-FI")
                   }
                 </p>
@@ -389,7 +389,7 @@ return (
 
       <p>
         Release date: {
-          new Date(movie.release_date)
+          new Date(movie.release_date || movie.first_air_date)
             .toLocaleDateString("fi-FI")
         }
       </p>
@@ -665,6 +665,5 @@ return (
 
 );
 };
-
 
 export default MovieData;

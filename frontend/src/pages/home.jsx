@@ -6,7 +6,6 @@ function Home() {
    return (
        <div id="container">
 
-
 <section className="OnTheaters">
   <NowPlaying/>
 </section>
