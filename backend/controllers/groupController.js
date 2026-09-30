@@ -96,12 +96,45 @@ const groupRole = async (req, res) => {
     }
 };
 
+// Luo ryhmäpyyntö
+const createGroupRequest = async (req, res) => {
+    try {
+        const { groupId } = req.body;
+        const userId = req.user.id;
 
+        await groupModel.createGroupRequest(groupId, userId);
+        res.status(201).json({ message: "Group request created successfully" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to create group request", details: err.message });
+    }
+};
 
+//Jäsenen poisto ryhmästä, tarkistetaan onko pyynnön tekijä owner
+const removeMember = async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        const userIdToRemove = req.params.userId;
+        const userId = req.user.id;
+        const ownerId = await groupModel.getGroupOwner(groupId);
+
+        if (userId !== ownerId) {
+            return res.status(403).json({ error: "You are not the owner of this group" });
+        }
+
+        await groupModel.removeMember(groupId, userIdToRemove);
+        res.status(200).json({ message: "Member removed from group successfully" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to remove member from group", details: err.message });
+    }
+};
+
+//Viedään funktiot käyttöön
 module.exports = {
     addGroups,
     deleteGroup,
     updateGroup,
     getAllGroups,
-    groupRole
+    groupRole,
+    createGroupRequest,
+    removeMember
 };

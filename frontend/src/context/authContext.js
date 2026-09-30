@@ -9,12 +9,12 @@ export function AuthProvider({ children }) {
 
  const [user, setUser] = useState(null);
 
- // DEBUG: See whenever the authentication user state changes
+ // näyttää konsolissa milloin auth state muuttuu
 useEffect(() => {
   console.log("AUTH STATE CHANGED, LOGGED IN:", user);
 }, [user]);
  
-
+ // loggedIn muuttuja sitä varten että tilaan on helpompi viitata muualla koodissa
  // user === null    -> loggedIn = false
  // user !== null    -> loggedIn = true
     const loggedIn = user !== null;
@@ -44,8 +44,8 @@ useEffect(() => {
 
  const data = await res.json();
 
-  // This changes user from null -> user object
-  // Therefore loggedIn automatically changes from false -> true
+  // user = null -> user object
+  // eli loggedIn vaihtuu false -> true
  setUser({ username: data.username, email: data.email });
 
  setAccessToken(data.accessToken);
@@ -60,18 +60,19 @@ useEffect(() => {
     method: "POST",
     credentials: "include",
  });
+
  // asettaa userin tilaan null = logged out
  setUser(null);
  setAccessToken(null);
  };
 
- // Authorized fetch joka automaattisesti uusii tokenin tarvittaessa
+ // authorizedFetch automaattisesti uusii tokenin tarvittaessa
  const authorizedFetch = async (url, options = {}) => {
  if (!accessToken) {
  throw new Error("Not authenticated");
  }
 
- // Lisää Authorization header
+ // lisää Authorization headerin
  const headers = {
  ...options.headers,
  'Authorization': `Bearer ${accessToken}`,
@@ -80,7 +81,7 @@ useEffect(() => {
  // Tee ensimmäinen pyyntö
  let response = await fetch(url, { ...options, headers });
 
- // Jos saimme 401 (Unauthorized), yritä uusia token ja uudelleen
+ // Jos  401 (Unauthorized), yritä uusia token ja uudelleen
  if (response.status === 401) {
  const newToken = await refreshToken();
  if (!newToken) {
@@ -96,6 +97,8 @@ useEffect(() => {
 
  return response;
  };
+
+
 
 // PROFIILIN POISTO
 const deleteprofile = async (email, password) => {
@@ -127,6 +130,7 @@ const deleteprofile = async (email, password) => {
  const data = await res.json();
  setAccessToken(data.accessToken);
 
+ 
  // Dekoodaa username tokenista
  const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
  setUser({ username: payload.username, email: payload.email });

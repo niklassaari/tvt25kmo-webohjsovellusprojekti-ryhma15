@@ -41,12 +41,12 @@ const Movies = () => {
 
 
       <div className="movie-list">
-        {movies.map(movie => (
-          <div key={movie.id} className="movie-card">
-            <MovieData movie={movie} />
-          </div>
-        ))}
-      </div>
+  {movies.map(movie => (
+    <div key={movie.id} className="movie-card">
+      <MovieData movie={movie} />
+    </div>
+  ))}
+</div>
     </div>
   );
 };

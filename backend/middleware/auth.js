@@ -1,5 +1,7 @@
 import { verifyAccessToken } from "./jwt.js";
 
+
+// Varmistaa että token on vielä voimassa
 export function authenticateToken(req, res, next) {
  const authHeader = req.headers["authorization"];
  const token = authHeader && authHeader.split(" ")[1]; // "Bearer TOKEN"

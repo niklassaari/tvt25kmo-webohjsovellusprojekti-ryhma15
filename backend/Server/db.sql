@@ -36,7 +36,7 @@ create table reviews (
     id serial primary key,
     user_id int references users(id) on delete cascade,
     movie_id int not null,
-    rating int not null check (rating >= 1 and rating <= 5),
+    rating numeric(2,1) not null check (rating >= 0.5 and rating <= 5),
     comment text,
     created_at timestamp default current_timestamp
 );
