@@ -38,7 +38,7 @@ create table reviews (
     movie_id int not null,
     rating numeric(2,1) not null check (rating >= 0.5 and rating <= 5),
     comment text,
-    created_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp,
     UNIQUE (user_id, movie_id)
 );
 
