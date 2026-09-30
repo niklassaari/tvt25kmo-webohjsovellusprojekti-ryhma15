@@ -30,7 +30,7 @@ const Groups = () => {
     const createGroup = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('/api/groups/create', {
+            const response = await fetch('/api/groups/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,10 +52,28 @@ const Groups = () => {
         }
     };
 
+    const fetchGroupMovies = async (groupId) => {
+        setSelectedGroupId(groupId);
+        try {
+            const response = await fetch(`/api/groups/${groupId}/movies`);
+            const data = await response.json();
+            if (!response.ok) {
+                setMovies(data.movies || []);
+                setSelectedGroupMovies(true);
+            } else {
+                setMovies([]);
+                setSelectedGroupMovies(false);
+                setError(data.error || 'Error fetching group movies');
+            }
+        }   catch (error) {
+            console.error('Error fetching group movies:', error);
+            setError('Network error');
+        }
+    };
+
 return (
     <div id="Groups">
       <h1>Groups Page</h1>
-      {/* Add your group-related content here */}
         <form onSubmit={createGroup}>
           <input
             type="text"
@@ -65,10 +83,23 @@ return (
           />
           <button type="submit">Create Group</button>
         </form>
+
+        {selectedGroupMovies &&
+            <div>
+                <h2>Group favorite movies</h2>
+                {movies.length === 0 ? (
+                    <p>No favorite movies found.</p>
+                ) : (
+                    <ul>
+                        {movies.map((movie, index) => (
+                            <li key={index}>{movie.title}</li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        }
     </div>
   );
-
 };
-
 
 export default Groups;

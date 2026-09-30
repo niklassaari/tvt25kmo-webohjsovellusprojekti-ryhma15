@@ -6,6 +6,7 @@ import movieRoutes from "./routes/movieRoutes.js"
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRouter.js";
 import { authenticateToken } from "./middleware/auth.js";
+import groupRoutes from "./routes/groupRoutes.js";
 
 const port = process.env.PORT||3001
 const app = express()
@@ -17,6 +18,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use('/api/movies',movieRoutes);
+app.use('/api/groups',groupRoutes);
 
 app.get('/api/movies/test2', (req, res) => {
   console.log("🔥 TEST2 OSUI");
