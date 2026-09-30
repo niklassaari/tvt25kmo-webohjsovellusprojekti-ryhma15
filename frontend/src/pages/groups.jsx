@@ -4,6 +4,9 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
   const [error, setError] = useState(null);
+  const [selectedGroupMovies, setSelectedGroupMovies] = useState(null);
+  const [movies, setMovies] = useState([]);
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
 
   useEffect(() => {
     const fetchGroups = async () => {
