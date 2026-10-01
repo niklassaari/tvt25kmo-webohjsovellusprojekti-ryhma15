@@ -11,12 +11,12 @@ const Profile = () => {
   const { loggedIn, user, deleteprofile } = useAuth();
 
   const handleDeleteProfile = async () => {
-  try {
-    await deleteprofile(email, password);
-  } catch (error) {
-    console.error("Profile deletion failed:", error);
-  }
-};
+    try {
+      await deleteprofile(email, password);
+    } catch (error) {
+      console.error("Profile deletion failed:", error);
+    }
+  };
 
   return (
     <div className="profile-page">
@@ -51,97 +51,94 @@ const Profile = () => {
 
       </div>
 
-{loggedIn && (
-      <>
-      <button
-        type="button"
-        className="delete-profile-button"
-        data-bs-toggle="modal"
-        data-bs-target="#deleteProfileModal"
-      >
-        Delete Profile
-      </button>
+      {loggedIn && (
+        <>
+          <button
+            type="button"
+            className="delete-profile-button"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteProfileModal"
+          >
+            Delete Profile
+          </button>
 
+          <button
+            type="button"
+            className="favorite-btn"
+          >
+            Favorites
+          </button>
 
-      {/*suosikkilista button eli tätä painamalla olisi tarkoitus viedä sille sivulle jossa näkyy se suosikki lista, sillä sivulla sitten toinen nappi joka kopioi vaikka url:in*/}
-      <button
-        type="button"
-        className="favorite-btn"
-      >
-        Favorites
-      </button>
+          <div
+            className="modal fade"
+            id="deleteProfileModal"
+            tabIndex="-1"
+          >
+            <div className="modal-dialog">
+              <div className="modal-content">
 
-      <div
-        className="modal fade"
-        id="deleteProfileModal"
-        tabIndex="-1"
-      >
-        <div className="modal-dialog">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    Delete Profile
+                  </h5>
+                </div>
 
-          <div className="modal-content">
+                <div className="modal-body">
 
-            <div className="modal-header">
-              <h5 className="modal-title">
-                Delete Profile
-              </h5>
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    className="form-control mb-3"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    className="form-control"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+
+                </div>
+
+                <div className="modal-footer">
+
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={handleDeleteProfile}
+                  >
+                    Delete Profile
+                  </button>
+
+                </div>
+
+              </div>
             </div>
-
-            <div className="modal-body">
-
-              <input
-                type="email"
-                placeholder="Email"
-                className="form-control mb-3"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-
-              <input
-                type="password"
-                placeholder="Password"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-
-            </div>
-
-            <div className="modal-footer">
-
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                className="btn btn-danger"
-                onClick={handleDeleteProfile}
-              >
-                Delete Profile
-              </button>
-
-            </div>
-
           </div>
+        </>
+      )}
 
-        </div>
-      </div>
-      </>
-)}
+      {!loggedIn && (
+        <Link to="/register">
+          <button>
+            Register
+          </button>
+        </Link>
+      )}
 
-{!loggedIn && (
-      <Link to="/register">
-        <button>
-          Register
-        </button>
-      </Link>
-)}
     </div>
-  );
-} ;
+  ); 
+};
 
 export default Profile;

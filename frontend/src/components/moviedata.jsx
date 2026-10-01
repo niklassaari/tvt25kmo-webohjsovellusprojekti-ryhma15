@@ -656,7 +656,7 @@ return (
           </>
         ) : null }
 
-      </div>
+      </div> 
 
     </div>
   </div>
@@ -667,3 +667,4 @@ return (
 };
 
 export default MovieData;
+ 

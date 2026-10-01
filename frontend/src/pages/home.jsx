@@ -3,26 +3,24 @@ import TopMovies from "./topMovies";
 import TopShows from "./topShows";
 
 function Home() {
-   return (
-       <div id="container">
+  return (
+    <div id="container">
 
-<section className="OnTheaters">
-  <NowPlaying/>
-</section>
+      <section className="OnTheaters">
+        <NowPlaying />
+      </section>
 
-  {/*  parhaiten arvostellu saaneet elokuva */}
-  <section className="TopRatedMovies">
-    <TopMovies/>
-  </section>
+      {/* parhaiten arvostellut elokuvat */}
+      <section className="TopRatedMovies">
+        <TopMovies />
+      </section>
 
-<section className="TopRatedShows">
-    <TopShows/>
-  </section>
-</div>
+      <section className="TopRatedShows">
+        <TopShows />
+      </section>
+
+    </div>
   );
 }
 
-
-
-
-export default Home;
+export default Home; 
