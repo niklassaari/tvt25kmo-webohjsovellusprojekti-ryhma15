@@ -17,15 +17,26 @@ export async function addReview(userId, movie_id, rating, comment) {
 export async function fetchReviews(movie_id) {
     
     return await pool.query(
-        `SELECT 
-            users.username,
-            reviews.rating,
-            reviews.comment,
-            reviews.created_at
-         FROM reviews
-         JOIN users ON reviews.user_id = users.id
-         WHERE reviews.movie_id = $1
-         ORDER BY reviews.created_at DESC`,
+         `SELECT 
+        reviews.id,
+        reviews.user_id,
+        users.username,
+        reviews.rating,
+        reviews.comment,
+        reviews.created_at
+     FROM reviews
+     JOIN users ON reviews.user_id = users.id
+     WHERE reviews.movie_id = $1
+     ORDER BY reviews.created_at DESC`,
         [movie_id]
     );
+}
+
+
+export async function deleteReview(reviewId, userId) {
+  return await pool.query(
+    `DELETE FROM reviews
+     WHERE id = $1 AND user_id = $2`,
+    [reviewId, userId]
+  );
 }
