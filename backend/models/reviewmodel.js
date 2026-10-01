@@ -17,12 +17,15 @@ export async function addReview(userId, movie_id, rating, comment) {
 export async function fetchReviews(movie_id) {
     
     return await pool.query(
-            `SELECT username, rating, comment, created_at
-             FROM reviews
-             JOIN users ON reviews.user_id = users.id
-             WHERE movie_id = $1
-             ORDER BY created_at DESC`,
-            [movie_id]
-
-        );
+        `SELECT 
+            users.username,
+            reviews.rating,
+            reviews.comment,
+            reviews.created_at
+         FROM reviews
+         JOIN users ON reviews.user_id = users.id
+         WHERE reviews.movie_id = $1
+         ORDER BY reviews.created_at DESC`,
+        [movie_id]
+    );
 }
