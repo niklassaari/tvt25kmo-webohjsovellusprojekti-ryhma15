@@ -48,21 +48,24 @@ const MyFavorites = () => {
   return (
     <div id="Favorites">
       <h2>{username} Favorites</h2>
+   
+   
+    <button
+        type="button"
+        className="copyUrl-btn"
+        onClick={() => {
+          const input = document.createElement('input');
+          input.value = window.location.href;
+          document.body.appendChild(input);
 
-      <button
-          type='button'
-            className="copyUrl-btn"
-            onClick={async()=> {
-              console.log("URL KOPIO NAPPIA PAINETTIIN");
-              try {
-      await navigator.clipboard.writeText(window.location.href);
-      console.log("URL kopioitu!");
-    } catch (error) {
-      console.error("URL:n kopiointi epäonnistui:", error);
-    }
+          input.select();
+          document.execCommand('copy');
 
-  }}
-          >
+          document.body.removeChild(input);
+
+          console.log('URL kopioitu!');
+        }}
+      >
             Share with URL
           </button>
       <div className="movie-list">

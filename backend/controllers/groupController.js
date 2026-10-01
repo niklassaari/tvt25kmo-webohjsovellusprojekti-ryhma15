@@ -1,10 +1,10 @@
 
-const groupModel = require('../models/groupModel');
+import * as groupModel from '../models/groupModel.js';
 //Ryhmän luonti/ownerId tallennetaan tietokantaan
-const addGroups = async (req, res,) => {
+export const addGroups = async (req, res,) => {
     try {
-        const {name}=req.body;
-        const ownerId=req.user.id;
+        const {name} = req.body;
+        const ownerId = 1; //req.user.id;
         if(!name){
             return res.status(400).json({error:"Group name is required"});
         }
@@ -12,12 +12,13 @@ const addGroups = async (req, res,) => {
         const groupId = await groupModel.createGroup(name, ownerId);
         res.status(201).json({message:"Group created successfully", groupId});
     } catch (err) {
+        console.error('Error creating group:', err);
         res.status(500).json({error:"Failed to create group", details: err.message});
     }
 };
 
 //tarkistetaan ryhmän poistoon onko pyynnön tekijä owner
-const deleteGroup = async (req, res,) => {
+export const deleteGroup = async (req, res,) => {
     try {
         const groupId = req.params.id;
         const userId = req.user.id;
@@ -39,7 +40,7 @@ const deleteGroup = async (req, res,) => {
 };
 
 //päivitetään ryhmän nimi jos pyynnön tekijä on owner
-const updateGroup = async (req, res) => {
+export const updateGroup = async (req, res) => {
     try {
         const { name } = req.body;
         const groupId = req.params.id;
@@ -54,7 +55,7 @@ const updateGroup = async (req, res) => {
             return res.status(400).json({error:"Group name is required"});
         }
 
-        const groupUpdated = await groupModel.updateGroup(name);
+        const groupUpdated = await groupModel.updateGroup(groupId, name);
         if (!groupUpdated){
             return res.status(404).json({error:"Group not found"});
         }
@@ -66,7 +67,7 @@ const updateGroup = async (req, res) => {
 };
 
 //Hakee kaikki ryhmät nimellä tai ilman nimeä, jos nimeä ei annettu hakee kaikki ryhmät
-const getAllGroups = async (req, res) => {
+export const getAllGroups = async (req, res) => {
     try {
         const {name} = req.query;
         let groups;
@@ -82,7 +83,7 @@ const getAllGroups = async (req, res) => {
 };
 
 //lisätään käyttäjä ryhmään ja määritetään rooli
-const groupRole = async (req, res) => {
+export const groupRole = async (req, res) => {
     try {
         const { groupId, userId, role ='member'} = req.body;
         if (!groupId || !userId || !role) {
@@ -97,7 +98,7 @@ const groupRole = async (req, res) => {
 };
 
 // Luo ryhmäpyyntö
-const createGroupRequest = async (req, res) => {
+export const createGroupRequest = async (req, res) => {
     try {
         const { groupId } = req.body;
         const userId = req.user.id;
@@ -110,7 +111,7 @@ const createGroupRequest = async (req, res) => {
 };
 
 //Jäsenen poisto ryhmästä, tarkistetaan onko pyynnön tekijä owner
-const removeMember = async (req, res) => {
+export const removeMember = async (req, res) => {
     try {
         const groupId = req.params.groupId;
         const userIdToRemove = req.params.userId;
@@ -126,15 +127,4 @@ const removeMember = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: "Failed to remove member from group", details: err.message });
     }
-};
-
-//Viedään funktiot käyttöön
-module.exports = {
-    addGroups,
-    deleteGroup,
-    updateGroup,
-    getAllGroups,
-    groupRole,
-    createGroupRequest,
-    removeMember
 };
