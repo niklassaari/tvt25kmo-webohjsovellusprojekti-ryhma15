@@ -1,5 +1,15 @@
 import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({path: path.resolve(__dirname, '../Server/.env')});
+
 /* tänne tulee kaikki logiikka ja eri "skenaariot"/tapahtumat */
+
 
 // hakee kaikki elokuvat jotka ovat nyt nähtävillä elokuvateattereissa
 export async function getNowPlayingMovies(req, res) {
@@ -8,7 +18,7 @@ export async function getNowPlayingMovies(req, res) {
             'https://api.themoviedb.org/3/movie/now_playing?language=en-US&region=FI&page=1',
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    Authorization: `Bearer ${process.env.VITE_TMDB_TOKEN}`,
                     accept: 'application/json'
                 }
             }
@@ -50,7 +60,7 @@ export async function searchMovies(req, res) {
             `https://api.themoviedb.org/3/search/${searchType}?query=${encodeURIComponent(searchTerm)}&language=en-US`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    Authorization: `Bearer ${process.env.VITE_TMDB_TOKEN}`,
                     accept: 'application/json'
                 }
             }
@@ -104,7 +114,7 @@ export async function TopMovies(req, res) {
             `https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&vote_count.gte=200&watch_region=FI&language=en-US`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    Authorization: `Bearer ${process.env.VITE_TMDB_TOKEN}`,
                     accept: 'application/json'
                 }
             }
@@ -131,7 +141,7 @@ export async function TopShows(req, res) {
             `https://api.themoviedb.org/3/discover/tv?sort_by=vote_average.desc&vote_count.gte=200&watch_region=FI&language=en-US`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    Authorization: `Bearer ${process.env.VITE_TMDB_TOKEN}`,
                     accept: 'application/json'
                 }
             }
