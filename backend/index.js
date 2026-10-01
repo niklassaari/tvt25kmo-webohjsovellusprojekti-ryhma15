@@ -5,11 +5,11 @@ import movieRoutes from "./routes/movieRoutes.js"
 
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/userRouter.js";
+import reviewRouter from './routes/reviewRoutes.js';
 import { authenticateToken } from "./middleware/auth.js";
+import groupRoutes from "./routes/groupRoutes.js";
 
 const port = process.env.PORT||3001
-
-
 const app = express()
 
 
@@ -19,23 +19,40 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use('/api/movies',movieRoutes);
+app.use('/api/groups',groupRoutes);
+
+app.get('/api/movies/test2', (req, res) => {
+  console.log("🔥 TEST2 OSUI");
+  res.send("TEST2 TOIMII");
+});
 
 
-// jwt esim
+//test
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://128.214.255.200:5173"
+];
+
 app.use(cors({
- origin: process.env.FRONTEND_URL || "http://localhost:5173",
- credentials: true // Allow cookies
+    origin: allowedOrigins,
+    credentials: true
 }));
 
 app.use(cookieParser());
 
 app.get("/", async (req, res) => {
- res.send("Postgres API esimerkki");
+ res.send("Postgres APIiiiiiiii esimerkki");
+});
+//testi
+app.get("/test", (req, res) => {
+  console.log("🔥 SERVER TEST OSUI");
+  res.send("SERVER TEST TOIMII");
 });
 
 
 //Suojaamattomat endpointit
 app.use("/user", userRouter);
+app.use("/reviews", reviewRouter);
 
 //Suojatut endpointit
 app.listen(port, () => {
@@ -50,6 +67,4 @@ app.use((err,req,res,next)=>{
             status:statusCode
         }
     })
-    
 })
-

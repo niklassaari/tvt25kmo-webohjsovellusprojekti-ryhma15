@@ -1,24 +1,24 @@
-import NowPlaying from './NowPlaying';
+import NowPlaying from "./nowPlaying";
+import TopMovies from "./topMovies";
+import TopShows from "./topShows";
 
 function Home() {
   return (
     <div id="container">
+
       <section className="OnTheaters">
         <NowPlaying />
       </section>
 
-      {/* 2. UUSI OSIO: Top 3 */}
-      <section className="TopRated">
-        <h2>Top 3 Movies</h2>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
-        <div className="movie-list">...</div>
+      {/* parhaiten arvostellut elokuvat */}
+      <section className="TopRatedMovies">
+        <TopMovies />
       </section>
+
+      <section className="TopRatedShows">
+        <TopShows />
+      </section>
+
     </div>
   );
 }

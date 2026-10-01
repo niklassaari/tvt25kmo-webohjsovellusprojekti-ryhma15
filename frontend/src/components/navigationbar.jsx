@@ -10,7 +10,7 @@ const Navbar = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { login, logout, loggedIn } = useAuth();
+  const { login, logout, loggedIn, user } = useAuth();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -57,6 +57,15 @@ const Navbar = () => {
             {!loggedIn && (
               <Dropdown.Item as={Link} to="/Register">
                 Register
+              </Dropdown.Item>
+            )}
+
+            {loggedIn && user && (
+              <Dropdown.Item
+                as={Link}
+                to={`/favorites/${user.username}`}
+              >
+                My favorites
               </Dropdown.Item>
             )}
 
@@ -111,7 +120,7 @@ const Navbar = () => {
           </button>
         )}
 
-      </div>
+      </div> 
     </nav>
   );
 };

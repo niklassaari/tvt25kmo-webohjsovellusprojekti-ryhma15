@@ -1,33 +1,17 @@
 import { useState } from "react";
 import { useAuth } from "../context/authContext";
 
-
-// HUOM!!
-
-//Even better, don't hardcode the IP in the component. Put it in frontend/.env:
-// kun userroutes jne. virtuaalikoneella:
-
-//importtaa envistä toi urli:
-//const API_URL = import.meta.env.VITE_API_URL;
-//
-//fetch(`${API_URL}/user/register`, ...)
-
-// Eli vaiha noihin kaikkiin sit tuo ${API_URL}
-
-
 const Register = () => {
 
   const { loggedIn } = useAuth();
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [newusername, setNewusername] = useState("");
   const [newemail, setNewemail] = useState("");
   const [newpassword, setNewpassword] = useState("");
-
-  // error paskaa
   const [message, setMessage] = useState("");
 
-
-  // gpt juttuja, hienosäädän sitten kun taulut jne. on pystyssä
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,22 +21,18 @@ const Register = () => {
       password: newpassword
     };
 
-    // TESTI KOODI, palauttaa datan mikä rekisteröinnistä lähtee
     console.log("REGISTER DATA SENT:", {
       username: newusername,
       email: newemail,
       password: newpassword
     });
 
-    // tuohon ip kun testaat localisti
-    const response = await fetch("http://localhost:3001/user/register", {
+    const response = await fetch(`${API_URL}/user/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newUser)
     });
 
-
-    // testi, console näyttää mitä rekisteörityminen palauttaa
     console.log("Response:", response);
     console.log("Status:", response.status);
     console.log("Content-Type:", response.headers.get("content-type"));
@@ -65,10 +45,8 @@ const Register = () => {
       setMessage("Registration failed.");
     }
 
-
     console.log(data);
   };
-
 
   // Jos käyttäjä on kirjautunut sisään,
   // Register-sivun sisältöä ei näytetä.
@@ -76,13 +54,10 @@ const Register = () => {
     return null;
   }
 
-
   return (
-
     <form onSubmit={handleSubmit}>
 
       <div className="form-group">
-
         <input
           type="text"
           className="userinput"
@@ -94,7 +69,6 @@ const Register = () => {
       </div>
 
       <div className="form-group">
-
         <input
           type="email"
           className="emailinput"
@@ -106,7 +80,6 @@ const Register = () => {
       </div>
 
       <div className="form-group">
-
         <input
           type="password"
           className="passwordinput"
@@ -124,8 +97,7 @@ const Register = () => {
       {message && <p>{message}</p>}
 
     </form>
-  ); 
+  );
 };
-
-
+ 
 export default Register;

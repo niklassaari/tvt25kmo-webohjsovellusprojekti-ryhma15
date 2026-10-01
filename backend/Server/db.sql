@@ -1,16 +1,18 @@
 
-drop table if exists group_movies;
-drop table if exists group_members;
-drop table if exists reviews;
-drop table if exists favorites;
-drop table if exists moviegroups;
-drop table if exists users;
+drop table if exists group_movies cascade;
+drop table if exists group_members cascade;
+drop table if exists reviews cascade;
+drop table if exists favorites cascade;
+drop table if exists moviegroups cascade;
+drop table if exists users cascade;
+drop table if exists group_requests cascade;
 
 create table users (
     id serial primary key,
     username varchar(50) not null unique,
     email varchar(100) not null unique,
     password varchar(255) not null,
+    refresh_token text,
     created_at timestamp default current_timestamp
 );
 
@@ -34,9 +36,10 @@ create table reviews (
     id serial primary key,
     user_id int references users(id) on delete cascade,
     movie_id int not null,
-    rating int not null check (rating >= 1 and rating <= 5),
+    rating numeric(2,1) not null check (rating >= 0.5 and rating <= 5),
     comment text,
-    created_at timestamp default current_timestamp
+    created_at timestamp default current_timestamp,
+    UNIQUE (user_id, movie_id)
 );
 
 create table group_members (
@@ -45,7 +48,7 @@ create table group_members (
     user_id int references users(id) on delete cascade,
     role varchar(20) default 'member',
     created_at timestamp default current_timestamp,
-    unique (user_id, movie_id)
+    unique (group_id, user_id)
 );
 
 create table group_movies (
@@ -54,6 +57,14 @@ create table group_movies (
     user_id int references users(id) on delete cascade,
     movie_id int not null,
     created_at timestamp default current_timestamp,
-    unique (group_id, user_id)
+    unique (group_id, movie_id)
 );
 
+create table group_requests (
+    id serial primary key,
+    group_id int references moviegroups(id) on delete cascade,
+    user_id int references users(id) on delete cascade,
+    status varchar(20) default 'awaiting processing',
+    created_at timestamp default current_timestamp,
+    unique (group_id, user_id)
+);

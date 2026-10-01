@@ -1,6 +1,8 @@
-import pool from "../database.js";
+import pool from "./database.js";
 import bcrypt from "bcryptjs";
 const SALT_ROUNDS = 10;
+
+
 
 // Luo käyttäjä
 export async function addOne(username, email, password) {
@@ -26,7 +28,6 @@ export async function getAll() {
 // Validoi käyttäjä kirjautumisessa
 export async function authenticateUser(email, password) {
 
-    // pitää ehkä muuttaa $2 jos rakenne vastaa tarpeeks sitä ekaa draftiä, ku id on ekana enne emailia
  const result = await pool.query(
  "SELECT id, username, email, password FROM users WHERE email = $1",
  [email]
@@ -69,6 +70,16 @@ export async function getUserByRefreshToken(refreshToken) {
  [refreshToken]
  );
  return result.rows.length > 0 ? result.rows[0] : null;
+}
+
+// tänne jonnekin tilinpoisto
+export async function deleteUser(id) {
+  const result = await pool.query(
+    'DELETE FROM users WHERE id = $1 RETURNING id',
+    [id]
+  );
+
+  return result.rows[0];
 }
 
 

@@ -8,7 +8,15 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { loggedIn } = useAuth();
+  const { loggedIn, user, deleteprofile } = useAuth();
+
+  const handleDeleteProfile = async () => {
+    try {
+      await deleteprofile(email, password);
+    } catch (error) {
+      console.error("Profile deletion failed:", error);
+    }
+  };
 
   return (
     <div className="profile-page">
@@ -17,11 +25,11 @@ const Profile = () => {
 
       <div className="profile-details">
         <p>
-          <strong>Username:</strong> User
+          <strong>Username:</strong> {user?.username}
         </p>
 
         <p>
-          <strong>Email:</strong> user@example.com
+          <strong>Email:</strong> {user?.email}
         </p>
       </div>
 
@@ -30,14 +38,14 @@ const Profile = () => {
         <div className="profile-section">
           <h2>Favorites</h2>
 
-          <div className="profile-box">
+          <div className="profile-box favorites-box">
           </div>
         </div>
 
         <div className="profile-section">
           <h2>Groups</h2>
 
-          <div className="profile-box">
+          <div className="profile-box group-box">
           </div>
         </div>
 
@@ -52,6 +60,13 @@ const Profile = () => {
             data-bs-target="#deleteProfileModal"
           >
             Delete Profile
+          </button>
+
+          <button
+            type="button"
+            className="favorite-btn"
+          >
+            Favorites
           </button>
 
           <div
@@ -101,6 +116,7 @@ const Profile = () => {
                   <button
                     type="button"
                     className="btn btn-danger"
+                    onClick={handleDeleteProfile}
                   >
                     Delete Profile
                   </button>
@@ -122,7 +138,7 @@ const Profile = () => {
       )}
 
     </div>
-  );
+  ); 
 };
 
-export default Profile; 
+export default Profile;
