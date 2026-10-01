@@ -30,7 +30,7 @@ const [hoverRating, setHoverRating] = useState(0); // tähtien state
 
 // boolean
 const [isAdded, setIsAdded] = useState(false);
-const { login, logout, loggedIn, accessToken } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
+const { login, logout, loggedIn, accessToken, user } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
 
 const makeReview = async () => {
 
@@ -69,18 +69,41 @@ try {
 
 };
 
+// poistaa arvostelun
+const deleteReview = async (reviewId) => {
+  try {
+    const response = await fetch(`${API_URL}/reviews/deleteReview/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to delete review");
+    }
+
+    console.log("Review deleted successfully");
+
+    setReviews((currentReviews) =>
+    currentReviews.filter((review) => review.id !== reviewId)
+    );
+
+  } catch (error) {
+    console.error("Error deleting review:", error);
+  }
+};
+
 const loadReviews = async () => {
 try {
   
 const response = await fetch(`${API_URL}/reviews/getReviews/${movie.id}`,
-{
-method: "GET",
-headers: {
-          "Authorization": `Bearer ${accessToken}`
-        },
-credentials: "include"
-}
-);
+      {
+        method: "GET"
+      }
+    );
 
   const data = await response.json();
   // TEST: näyttää palauttaako mitään arvosteluja
@@ -300,6 +323,7 @@ return (
                 onSubmit={(e) => {
                   e.preventDefault();
                   makeReview();
+                  loadReviews();
                 }}
               >
 
@@ -360,21 +384,45 @@ return (
                 reviews.map((review, index) => (
                   <div key={index} className="review">
 
-                    <p>
-                      <strong>{review.username}</strong>
-                    </p>
+<div className="reviewinfo"> 
+  <span> 
+    <strong>From: {review.username}
+      </strong> 
+  </span> 
 
-                    <p>
-                      Rating: {review.rating}
-                    </p>
+      <span> Rating: 
+        <span className="review-rating"> 
+          {[1, 2, 3, 4, 5].map((star) => ( 
+            <i key={star} 
+            className={`bi ${ star <= review.rating ? "bi-star-fill" : "bi-star" }`} 
+          /> 
+            ))} 
+          </span> 
+        </span> 
+
+            <span> 
+              Posted at: {review.created_at} 
+            </span> 
+          </div>
+
+    {/*Poistonappi, vain jos käyttäjä on kirjautunut ja on arvostelun tekijä */}
+{loggedIn && review.user_id === user?.id && (
+<button
+    type="button"
+    onClick={() => 
+      deleteReview(review.id)
+    }
+  >
+    Delete review
+  </button>
+  )}
+
 
                     <p>
                       {review.comment}
                     </p>
 
-                    <p>
-                      {review.created_at}
-                    </p>
+                    
 
                   </div>
                 ))

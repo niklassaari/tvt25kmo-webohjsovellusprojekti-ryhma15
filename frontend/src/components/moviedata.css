@@ -154,8 +154,24 @@
 
 .reviewfield textarea {
     height: 200px;
-    width: 2000px;
+    width: 100%;
 }
+
+.reviewfield .starrating .star-button {
+    font-size: 20px;
+    color: #ffe346;
+    cursor: pointer;
+}
+
+.review .reviewinfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 
 .modal-dialog {
     max-width: 1000px !important;

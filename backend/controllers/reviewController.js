@@ -1,6 +1,7 @@
 import {
     addReview,
-    fetchReviews
+    fetchReviews,
+    deleteReview
 } from "../models/reviewmodel.js";
 
 export async function postReview(req, res) {
@@ -39,5 +40,30 @@ export async function getReviews(req, res) {
             error: 'database error'
         });
     }
+}
+
+export async function removeReview(req, res) {
+  try {
+    const { reviewId } = req.params;
+    const userId = req.user.id;
+
+    const result = await deleteReview(reviewId, userId);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        error: "Review not found or insufficient permissions"
+      });
+    }
+
+    res.json({
+      message: "Review deleted successfully"
+    });
+
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    res.status(500).json({
+      error: "Failed to delete review"
+    });
+  }
 }
 
