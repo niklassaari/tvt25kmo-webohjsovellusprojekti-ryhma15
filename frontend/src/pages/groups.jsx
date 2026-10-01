@@ -4,7 +4,7 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
   const [error, setError] = useState(null);
-  const [selectedGroupMovies, setSelectedGroupMovies] = useState(null);
+  const [getGroupMovies, setSelectedGroupMovies] = useState(false);
   const [movies, setMovies] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
 
@@ -51,8 +51,8 @@ const Groups = () => {
             setError('Network error');
         }
     };
-
-    const fetchGroupMovies = async (groupId) => {
+// Get groups favorite movie list, if the user is a member of the group
+    const getGroupMovies = async (groupId) => {
         setSelectedGroupId(groupId);
         try {
             const response = await fetch(`/api/groups/${groupId}/movies`);
