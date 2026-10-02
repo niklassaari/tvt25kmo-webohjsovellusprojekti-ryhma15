@@ -56,6 +56,7 @@ create table group_movies (
     group_id int references moviegroups(id) on delete cascade,
     user_id int references users(id) on delete cascade,
     movie_id int not null,
+    movie_title varchar(255) not null,
     created_at timestamp default current_timestamp,
     unique (group_id, movie_id)
 );
