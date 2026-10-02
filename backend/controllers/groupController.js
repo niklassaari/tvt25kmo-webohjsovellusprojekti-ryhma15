@@ -128,3 +128,13 @@ export const removeMember = async (req, res) => {
         res.status(500).json({ error: "Failed to remove member from group", details: err.message });
     }
 };
+
+export const getGroupMovies = async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        const movies = await groupModel.getGroupMovies(groupId);
+        res.status(200).json({ movies });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch group movies", details: err.message });
+    }
+};

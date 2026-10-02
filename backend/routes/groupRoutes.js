@@ -7,7 +7,8 @@ import {
     getAllGroups,
     groupRole,
     createGroupRequest,
-    removeMember
+    removeMember,
+    getGroupMovies
 } from '../controllers/groupController.js';
 
 const groupRouter = express.Router();
@@ -19,5 +20,6 @@ groupRouter.get('/all', getAllGroups);
 groupRouter.post('/role', authenticateToken, groupRole);
 groupRouter.post('/request', authenticateToken, createGroupRequest);
 groupRouter.delete('/member/:groupId/:userId', authenticateToken, removeMember);
+groupRouter.get('/movies/:groupId', authenticateToken, getGroupMovies);
 
 export default groupRouter;

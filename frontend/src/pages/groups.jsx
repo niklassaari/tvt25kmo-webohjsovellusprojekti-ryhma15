@@ -4,7 +4,7 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState('');
   const [error, setError] = useState(null);
-  const [selectedGroupMovies, setSelectedGroupMovies] = useState(null);
+  const [groupMoviesVisible, setGroupMoviesVisible] = useState(false);
   const [movies, setMovies] = useState([]);
   const [selectedGroupId, setSelectedGroupId] = useState(null);
 
@@ -51,29 +51,33 @@ const Groups = () => {
             setError('Network error');
         }
     };
-
-    const fetchGroupMovies = async (groupId) => {
-        setSelectedGroupId(groupId);
-        try {
-            const response = await fetch(`/api/groups/${groupId}/movies`);
-            const data = await response.json();
-            if (!response.ok) {
-                setMovies(data.movies || []);
-                setSelectedGroupMovies(true);
-            } else {
-                setMovies([]);
-                setSelectedGroupMovies(false);
-                setError(data.error || 'Error fetching group movies');
-            }
-        }   catch (error) {
-            console.error('Error fetching group movies:', error);
-            setError('Network error');
-        }
-    };
+// Get groups favorite movie list, if the user is a member of the group
+const showGroupMovies = async (groupId) => {
+      setSelectedGroupId(groupId);
+      setError(null);
+      try {
+          const response = await fetch(`/api/groups/${groupId}/movies`);
+          const data = await response.json();
+          
+          if (response.ok) {
+              setMovies(data.movies || []);
+              setGroupMoviesVisible(true);
+          } else {
+              setMovies([]);
+              setGroupMoviesVisible(false);
+              setError(data.error || 'Error fetching group movies');
+          }
+      } catch (error) {
+          console.error('Error fetching group movies:', error);
+          setError('Network error');
+      }
+  };
 
 return (
     <div id="Groups">
       <h1>Groups Page</h1>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {/* <p>Enter a group name to create a new group.</p> */}
         <form onSubmit={createGroup}>
           <input
             type="text"
@@ -84,7 +88,26 @@ return (
           <button type="submit">Create Group</button>
         </form>
 
-        {selectedGroupMovies &&
+        {/* Display the list of groups */}
+        <div style={{ marginTop: '20px' }}>
+        <h2>All Groups</h2>
+        {groups.length === 0 ? (
+          <p>No groups found.</p>
+        ) : (
+          <ul>
+            {groups.map((group) => (
+              <li key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
+                <span>{group.name}</span>{' '}
+                <button onClick={() => showGroupMovies(group.id || group.group_id)}>
+                  Show Movies
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+        {/* Display the list of group favorite movies */}
+        {groupMoviesVisible &&
             <div>
                 <h2>Group favorite movies</h2>
                 {movies.length === 0 ? (
@@ -101,5 +124,6 @@ return (
     </div>
   );
 };
+
 
 export default Groups;
