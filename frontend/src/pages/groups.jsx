@@ -71,7 +71,29 @@ const showGroupMovies = async (groupId) => {
           console.error('Error fetching group movies:', error);
           setError('Network error');
       }
-  };
+    };
+
+const addMovieToGroup = async (groupId, movieId, movieTitle) => {
+    try {
+        const response = await fetch(`/api/groups/${groupId}/movies`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                //Authentication header should be added here so that the backend can identify the user adding the movie
+            },
+            body: JSON.stringify({ movieId, movieTitle })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Movie added to group successfully');
+        } else {
+            setError(data.error || 'Error adding movie to group');
+        }
+    } catch (error) {
+        console.error('Error adding movie to group:', error);
+        setError('Network error');
+    }
+};
 
 return (
     <div id="Groups">
@@ -106,6 +128,26 @@ return (
           </ul>
         )}
       </div>
+
+      {/*button to add a movie to the selected group */}
+      {selectedGroupId && (
+        <div style={{ marginTop: '20px' }}>
+          <h2>Add Movie to Group</h2>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            addMovieToGroup(selectedGroup, newMovieId, newMovieTitle);
+          }}>
+            <input
+              type="text"
+              value={newMovieTitle}
+              onChange={(e) => setNewMovieTitle(e.target.value)}
+              placeholder="Enter movie title"
+            />
+            <button type="submit">Add Movie</button>
+          </form>
+        </div>
+      )}
+
         {/* Display the list of group favorite movies */}
         {groupMoviesVisible &&
             <div>

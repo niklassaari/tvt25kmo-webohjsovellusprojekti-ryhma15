@@ -129,12 +129,22 @@ export const removeMember = async (req, res) => {
     }
 };
 
+// lisätään ryhmään elokuva
 export const getGroupMovies = async (req, res) => {
     try {
         const groupId = req.params.groupId;
-        const movies = await groupModel.getGroupMovies(groupId);
-        res.status(200).json({ movies });
+        const {movie_id, movie_title} = req.body;
+
+        if (!movie_title) {
+            return res.status(400).json({ error: "Title is required" });
+        }
+
+        const groupMovies = await groupModel.getGroupMovies(groupId);
+        res.status(200).json({ message: "movie added successfully", groupMovies });
     } catch (err) {
+        if (err.code === '23505') {
+            return res.status(400).json({ error: "Movie already exists in the group" });
+        }
         res.status(500).json({ error: "Failed to fetch group movies", details: err.message });
     }
 };
