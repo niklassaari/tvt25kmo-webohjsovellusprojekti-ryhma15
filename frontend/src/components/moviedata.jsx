@@ -208,7 +208,7 @@ return (
     <img
       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
       name="logo"
-      style={{ width: '90px', height: '150px' }}
+      style={{ width: '90px', height: '100%', objectFit: 'cover' }}
     />
   </div>
 
@@ -259,7 +259,7 @@ return (
             <img
               src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`}
               name="logo"
-              style={{ width: '90px', height: '150px' }}
+              style={{ width: '90px', height: '150px', objectFit: 'cover' }}
             />
 
 
@@ -468,7 +468,7 @@ return (
     </div>
 
 
-    <div className="movie-info">
+<div className="movie-info">
 
       <p>
         Genre: {convertGenreIds(movie).join(', ')}
