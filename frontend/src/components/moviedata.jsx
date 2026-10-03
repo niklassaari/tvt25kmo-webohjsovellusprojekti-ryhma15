@@ -310,20 +310,22 @@ return (
             </p>
 
 
-            
+            <div className="reviewfield">
 
 
             {loggedIn && (
               <form
-                className="reviewfield"
 
                 // GPT TESTI:
                 // Estetään formin normaali sivun uudelleenlataus
                 // ja kutsutaan omaa makeReview-funktiota.
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  makeReview();
-                  loadReviews();
+                  await makeReview();
+                  await loadReviews();
+
+                  setRating(0);
+                  setComment("");
                 }}
               >
 
@@ -354,7 +356,7 @@ return (
 
                 <textarea
                   type="userReview"
-                  placeholder="Enter email"
+                  placeholder="Enter review"
                   rows="4"
                   cols="90"
                   value={comment}
@@ -364,7 +366,7 @@ return (
                 />
 
 
-                <button type="submit">
+                <button type="submit" className="submit-review-button">
                   Submit review
                 </button>
 
@@ -374,6 +376,7 @@ return (
           </div>
 
 {/* GPT NÄYTTÄÄ OLEMASSA OLEVAT REVIEWT */}
+{/*Tee silleen että reviews alignas tuohon keskelle niinku muutki elementit */}
             <div className="review-list">
 
               <h5>Reviews:</h5>
@@ -401,9 +404,15 @@ return (
         </span> 
 
             <span> 
-              Posted at: {review.created_at} 
+              Posted at: {new Date(review.created_at).toLocaleString("fi-FI", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })} 
             </span> 
-          </div>
+          
 
     {/*Poistonappi, vain jos käyttäjä on kirjautunut ja on arvostelun tekijä */}
 {loggedIn && review.user_id === user?.id && (
@@ -416,7 +425,7 @@ return (
     Delete review
   </button>
   )}
-
+</div>
 
                     <p>
                       {review.comment}
@@ -429,7 +438,7 @@ return (
               )}
 
             </div>
-
+</div>
           <div className="modal-footer">
 
             <button
