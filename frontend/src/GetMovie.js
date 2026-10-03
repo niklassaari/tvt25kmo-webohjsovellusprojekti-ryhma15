@@ -1,12 +1,10 @@
 export async function SearchMovies(searchTerm, genre, year, type) {
-    if (!searchTerm || searchTerm.trim() === '') {
-        return [];
-    }
-
     try {
         const params = new URLSearchParams();
 
-        params.append('q', searchTerm);
+        if (searchTerm && searchTerm.trim() !== '') {
+            params.append('q', searchTerm.trim());
+        }
 
         if (genre) {
             params.append('genre', genre);
@@ -35,4 +33,4 @@ export async function SearchMovies(searchTerm, genre, year, type) {
         console.error('Error searching movies:', error);
         throw error;
     } 
-}
+} 
