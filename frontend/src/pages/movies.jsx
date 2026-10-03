@@ -10,12 +10,10 @@ const Movies = () => {
 
   const [genre, setGenre] = useState('');
   const [year, setYear] = useState('');
-  const [type, setType] = useState('movie');
+  const [type, setType] = useState('');
 
   const handleSearch = async (e) => {
     e.preventDefault();
-
-    if (!searchTerm.trim()) return;
 
     try {
       const results = await SearchMovies(
@@ -53,6 +51,7 @@ const Movies = () => {
           value={type}
           onChange={(e) => setType(e.target.value)}
         >
+          <option value="">Any</option>
           <option value="movie">Movie</option>
           <option value="tv">TV series</option>
         </select>
@@ -94,7 +93,7 @@ const Movies = () => {
 
       <div className="movie-list">
         {movies.map(movie => (
-          <div key={movie.id} className="movie-card">
+          <div key={`${movie.media_type || type}-${movie.id}`} className="movie-card">
             <MovieData movie={movie} />
           </div>
         ))}
@@ -104,4 +103,4 @@ const Movies = () => {
   );
 };
 
-export default Movies; 
+export default Movies;
