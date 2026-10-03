@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useEffect, useState } from 'react';
+import { genreNames } from '../Genres';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
@@ -190,6 +191,16 @@ try {
 
 };
 
+
+// muuttaa genre_id:t genren nimiksi Genres.js tiedoston avulla
+const convertGenreIds = (movie) => {
+
+  const genreName = movie.genre_ids.map(genre => genreNames[genre] || "Unknown Genre");
+  return genreName;
+};
+
+
+
 return (
 <div className="movie">
 
@@ -283,7 +294,7 @@ return (
               <div className="modal-header-text">
 
                 <p>
-                  Genre:{movie.genre_ids}
+                  Genre: {convertGenreIds(movie).join(', ')}
                 </p>
 
                 <p>
@@ -460,7 +471,7 @@ return (
     <div className="movie-info">
 
       <p>
-        Genre:{movie.genre_ids}
+        Genre: {convertGenreIds(movie).join(', ')}
       </p>
 
       <p>
