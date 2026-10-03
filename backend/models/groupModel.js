@@ -64,4 +64,12 @@ export const createGroupRequest = async (groupId, userId) => {
         }
         throw err;
     }
+}
+// Hakee ryhmään tallennetut elokuvat 
+export const getGroupMovies = async (groupId) => {
+    const result = await db.query(
+        'SELECT movie_id, user_id, movie_title, created_at FROM group_movies WHERE group_id = $1',
+        [groupId]
+    );
+    return result.rows;
 };
