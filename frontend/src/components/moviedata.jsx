@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useEffect, useState } from 'react';
+import { genreNames } from '../Genres';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
@@ -190,6 +191,16 @@ try {
 
 };
 
+
+// muuttaa genre_id:t genren nimiksi Genres.js tiedoston avulla
+const convertGenreIds = (movie) => {
+
+  const genreName = movie.genre_ids.map(genre => genreNames[genre] || "Unknown Genre");
+  return genreName;
+};
+
+
+
 return (
 <div className="movie">
 
@@ -283,7 +294,7 @@ return (
               <div className="modal-header-text">
 
                 <p>
-                  Genre:{movie.genre_ids}
+                  Genre: {convertGenreIds(movie).join(', ')}
                 </p>
 
                 <p>
@@ -310,20 +321,22 @@ return (
             </p>
 
 
-            
+            <div className="reviewfield">
 
 
             {loggedIn && (
               <form
-                className="reviewfield"
 
                 // GPT TESTI:
                 // Estetään formin normaali sivun uudelleenlataus
                 // ja kutsutaan omaa makeReview-funktiota.
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  makeReview();
-                  loadReviews();
+                  await makeReview();
+                  await loadReviews();
+
+                  setRating(0);
+                  setComment("");
                 }}
               >
 
@@ -354,7 +367,7 @@ return (
 
                 <textarea
                   type="userReview"
-                  placeholder="Enter email"
+                  placeholder="Enter review"
                   rows="4"
                   cols="90"
                   value={comment}
@@ -364,7 +377,7 @@ return (
                 />
 
 
-                <button type="submit">
+                <button type="submit" className="submit-review-button">
                   Submit review
                 </button>
 
@@ -374,6 +387,7 @@ return (
           </div>
 
 {/* GPT NÄYTTÄÄ OLEMASSA OLEVAT REVIEWT */}
+{/*Tee silleen että reviews alignas tuohon keskelle niinku muutki elementit */}
             <div className="review-list">
 
               <h5>Reviews:</h5>
@@ -401,9 +415,15 @@ return (
         </span> 
 
             <span> 
-              Posted at: {review.created_at} 
+              Posted at: {new Date(review.created_at).toLocaleString("fi-FI", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })} 
             </span> 
-          </div>
+          
 
     {/*Poistonappi, vain jos käyttäjä on kirjautunut ja on arvostelun tekijä */}
 {loggedIn && review.user_id === user?.id && (
@@ -416,7 +436,7 @@ return (
     Delete review
   </button>
   )}
-
+</div>
 
                     <p>
                       {review.comment}
@@ -429,7 +449,7 @@ return (
               )}
 
             </div>
-
+</div>
           <div className="modal-footer">
 
             <button
@@ -451,7 +471,7 @@ return (
     <div className="movie-info">
 
       <p>
-        Genre:{movie.genre_ids}
+        Genre: {convertGenreIds(movie).join(', ')}
       </p>
 
       <p>
