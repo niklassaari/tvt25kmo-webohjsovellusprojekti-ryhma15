@@ -1,9 +1,35 @@
 #search-form {
-  max-width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 #search-input {
-  width: 100%;
+  width: 300px;
   text-align: left;
 }
+
+#search-form select,
+#search-form input[type="number"],
+#search-form button {
+  height: 38px;
+}
+
+#search-form input[type="number"] {
+  width: 90px;
+}
+
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.movie-list .movie-card {
+  width: 100%;
+} 
