@@ -1,6 +1,29 @@
 .movie {
     display: flex;
-    height: 150px;
+    flex-direction: row;
+    width: 100%;
+    max-width: none;
+    min-height: 150px;
+    height: auto;
+    border: 3px solid black !important;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .movie {
+        height: auto;
+        min-height: 100px;
+        flex-direction: column;
+    }
+}
+
+.movie-list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .OnTheaters,
@@ -134,7 +157,7 @@
     background-color: #FFFFFF;
     border: none;
     color: #222222;
-    padding: 15px 20px;
+    padding: 2px 2px;
     text-align: left;
     text-decoration: none;
     display: inline-block;
@@ -245,35 +268,44 @@
     align-items: flex-start;
 }
 
-.movie-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
+
 
 .movie-card {
+    margin-top: 10px;
     font-family: "Times New Roman", Times, serif;
     display: flex;
-    align-items: center;
-    height: 150px;
+    align-items: flex-start;
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: 100%;
+    min-height: 150px;
+    height: auto;
     flex-direction: column;
-    border: 1px solid #333;
-    border-right: none;
-    border-radius: 5px;
-    gap: 10px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 15px;
+    gap: 5px;
+    color: #222222;
+    padding-bottom: 10px;
     margin-bottom: 15px;
-    width: 100%;
+    box-sizing: border-box;
 }
+
 
 .movie-info {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    text-indent: 20px;
-    gap: 5px;
+    text-indent: 10px;
+    
+}
+
+@media (max-width: 768px) {
+    .movie-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+        flex-grow: 1;
+        height: auto;
+    }
 }
 
 .review-star {
