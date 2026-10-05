@@ -9,13 +9,7 @@
     box-sizing: border-box;
 }
 
-@media (max-width: 768px) {
-    .movie {
-        height: auto;
-        min-height: 100px;
-        flex-direction: column;
-    }
-}
+
 
 .movie-list {
     display: flex;
@@ -297,6 +291,12 @@
     
 }
 
+.review-star {
+    margin-top: -3px;
+    width: 30px;
+    height: 30px;
+}
+
 @media (max-width: 768px) {
     .movie-info {
         display: flex;
@@ -306,68 +306,67 @@
         flex-grow: 1;
         height: auto;
     }
-}
-
-.review-star {
-    margin-top: -3px;
-    width: 30px;
-    height: 30px;
+    .movie {
+        height: auto;
+        min-height: 100px;
+        flex-direction: column;
+    }
 }
 
 @media(max-width: 500px) {
-    .OnTheaters {
+    .OnTheaters, .TopRatedMovies, .TopRatedShows {
         margin-top: 5px !important;
     }
 
-    .OnTheaters .movie {
+    .OnTheaters .movie, .TopRatedMovies .movie, .TopRatedShows .movie {
         width: 170px !important;
         min-width: 140px !important;
         min-height: 250px !important;
     }
 
-    .OnTheaters .movie-poster {
+    .OnTheaters .movie-poster, .TopRatedMovies .movie-poster, .TopRatedShows .movie-poster {
         height: 120px !important;
     }
 
-    .OnTheaters .movie-card .movie-modal-button {
+    .OnTheaters .movie-card .movie-modal-button, .TopRatedMovies .movie-card .movie-modal-button, .TopRatedShows .movie-card .movie-modal-button {
         font-size: 17px !important;
     }
 
-    .OnTheaters .movie-info p {
+    .OnTheaters .movie-info p, .TopRatedMovies .movie-info p, .TopRatedShows .movie-info p {
         font-size: 15px !important;
         line-height: 1.2 !important;
     }
 
-    .OnTheaters .movie-card {
+    .OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card {
         padding: 5px !important;
     }
 }
 
 @media(max-width: 400px) {
-    .OnTheaters {
+    .OnTheaters, .TopRatedMovies, .TopRatedShows {
         margin-top: 5px !important;
     }
 
-    .OnTheaters .movie {
+    .OnTheaters .movie, .TopRatedMovies .movie, .TopRatedShows .movie {
         width: 140px !important;
         min-width: 140px !important;
         min-height: 220px !important;
     }
 
-    .OnTheaters .movie-poster {
+    .OnTheaters .movie-poster, .TopRatedMovies .movie-poster, .TopRatedShows .movie-poster {
         height: 110px !important;
     }
 
-    .OnTheaters .movie-card .movie-modal-button {
+    .OnTheaters .movie-card .movie-modal-button, .TopRatedMovies .movie-card .movie-modal-button, .TopRatedShows .movie-card .movie-modal-button {
         font-size: 15px !important;
     }
 
-    .OnTheaters .movie-info p {
+    .OnTheaters .movie-info p, .TopRatedMovies .movie-info p, .TopRatedShows .movie-info p {
         font-size: 13px !important;
         line-height: 1.2 !important;
     }
 
-    .OnTheaters .movie-card {
+    .OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card {
         padding: 5px !important;
     } 
 }
