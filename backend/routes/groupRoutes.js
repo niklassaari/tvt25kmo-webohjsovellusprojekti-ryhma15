@@ -1,5 +1,5 @@
-import express from 'express';
-import { authenticateToken } from '../middleware/auth.js';
+import express from 'express'
+import { authenticateToken } from '../middleware/auth.js'
 import {
     addGroups,
     deleteGroup,
@@ -8,18 +8,20 @@ import {
     groupRole,
     createGroupRequest,
     removeMember,
-    getGroupMovies
-} from '../controllers/groupController.js';
+    getGroupMovies,
+    addMovieToGroup
+} from '../controllers/groupController.js'
 
-const groupRouter = express.Router();
+const groupRouter = express.Router()
 
-groupRouter.post('/add', addGroups);
-groupRouter.delete('/delete/:id', authenticateToken, deleteGroup);
-groupRouter.put('/update/:id', authenticateToken, updateGroup);
-groupRouter.get('/all', getAllGroups);
-groupRouter.post('/role', authenticateToken, groupRole);
-groupRouter.post('/request', authenticateToken, createGroupRequest);
-groupRouter.delete('/member/:groupId/:userId', authenticateToken, removeMember);
-groupRouter.get('/movies/:groupId', authenticateToken, getGroupMovies);
+groupRouter.post('/add', addGroups)
+groupRouter.delete('/delete/:id', authenticateToken, deleteGroup)
+groupRouter.put('/update/:id', authenticateToken, updateGroup)
+groupRouter.get('/all', getAllGroups)
+groupRouter.post('/role', authenticateToken, groupRole)
+groupRouter.post('/request', authenticateToken, createGroupRequest)
+groupRouter.delete('/member/:groupId/:userId', authenticateToken, removeMember)
+groupRouter.get('/movies/:groupId', authenticateToken, getGroupMovies)
+groupRouter.post('/movies/:groupId', authenticateToken, addMovieToGroup)
 
-export default groupRouter;
+export default groupRouter

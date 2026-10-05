@@ -73,3 +73,11 @@ export const getGroupMovies = async (groupId) => {
     );
     return result.rows;
 };
+// Poistaa jäsenen
+export const removeMember = async (groupId, userId) => {
+    const result = await db.query(
+        'DELETE FROM group_members WHERE group_id = $1 AND user_id = $2',
+        [groupId, userId]
+    );
+    return result.rowCount > 0;
+};
