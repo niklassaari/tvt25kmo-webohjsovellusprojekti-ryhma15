@@ -1,105 +1,128 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect} from 'react'
+import { useAuth } from '../context/authContext';
 
 const Groups = () => {
-  const [groups, setGroups] = useState([]);
-  const [newGroupName, setNewGroupName] = useState('');
-  const [error, setError] = useState(null);
-  const [groupMoviesVisible, setGroupMoviesVisible] = useState(false);
-  const [movies, setMovies] = useState([]);
-  const [selectedGroupId, setSelectedGroupId] = useState(null);
+  const { auth } = useAuth();
+  const [groups, setGroups] = useState([])
+  const [newGroupName, setNewGroupName] = useState('')
+  const [error, setError] = useState(null)
+  const [groupMoviesVisible, setGroupMoviesVisible] = useState(false)
+  const [movies, setMovies] = useState([])
+  const [selectedGroupId, setSelectedGroupId] = useState(null)
 
   useEffect(() => {
     const fetchGroups = async () => {
         try {
-            const response = await fetch('/api/groups/all');
-            const data = await response.json();
+            const response = await fetch('/api/groups/all')
+            const data = await response.json()
             if (response.ok) {
-                setGroups(data.groups || []);
+                setGroups(data.groups || [])
             } else {
-                setError(data.error || 'Error fetching groups');
+                setError(data.error || 'Error fetching groups')
             }
         } catch (error) {
-            console.error('Error fetching groups:', error);
-            setError('Network error');
+            console.error('Error fetching groups:', error)
+            setError('Network error')
         }
-    };
+    }
 
-    fetchGroups();
-  }, []);
-
+    fetchGroups()
+  }, [])
+// Create a new group
     const createGroup = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         try {
             const response = await fetch('/api/groups/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    //Authentication header should be added here so that the backend can identify the user creating the group
+                    'Authorization': `Bearer ${auth.getToken()}`
                 },
                 body: JSON.stringify({ name: newGroupName })
-            });
-            const data = await response.json();
+            })
+            const data = await response.json()
             if (response.ok) {
-                alert('Group created successfully');
-                setGroups([...groups, data.group]);
-                setNewGroupName('');
+                alert('Group created successfully')
+                setGroups([...groups, data.group])
+                setNewGroupName('')
             } else {
-                setError(data.error || 'Error creating group');
+                setError(data.error || 'Error creating group')
             }
         } catch (error) {
-            console.error('Error creating group:', error);
-            setError('Network error');
+            console.error('Error creating group:', error)
+            setError('Network error')
         }
-    };
+    }
 // Get groups favorite movie list, if the user is a member of the group
 const showGroupMovies = async (groupId) => {
       setSelectedGroupId(groupId);
       setError(null);
       try {
-          const response = await fetch(`/api/groups/${groupId}/movies`);
-          const data = await response.json();
+          const response = await fetch(`/api/groups/${groupId}/movies`)
+          const data = await response.json()
           
           if (response.ok) {
-              setMovies(data.movies || []);
-              setGroupMoviesVisible(true);
+              setMovies(data.movies || [])
+              setGroupMoviesVisible(true)
           } else {
-              setMovies([]);
-              setGroupMoviesVisible(false);
-              setError(data.error || 'Error fetching group movies');
+              setMovies([])
+              setGroupMoviesVisible(false)
+              setError(data.error || 'Error fetching group movies')
           }
       } catch (error) {
-          console.error('Error fetching group movies:', error);
+          console.error('Error fetching group movies:', error)
           setError('Network error');
       }
-    };
-
+    }
+// Add a movie to the selected group
 const addMovieToGroup = async (groupId, movieId, movieTitle) => {
     try {
         const response = await fetch(`/api/groups/${groupId}/movies`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                //Authentication header should be added here so that the backend can identify the user adding the movie
+                'Authorization': `Bearer ${auth.getToken()}`
             },
             body: JSON.stringify({ movieId, movieTitle })
         });
         const data = await response.json();
         if (response.ok) {
-            alert('Movie added to group successfully');
+            alert('Movie added to group successfully')
         } else {
-            setError(data.error || 'Error adding movie to group');
+            setError(data.error || 'Error adding movie to group')
         }
     } catch (error) {
-        console.error('Error adding movie to group:', error);
+        console.error('Error adding movie to group:', error)
         setError('Network error');
     }
-};
+}
+// Send a request to join a group
+const joinGroup = async (groupId) => {
+    try {
+        const response = await fetch(`/api/groups/request`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ groupId })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Request to join group submitted successfully')
+        } else {
+            setError(data.error || 'Error submitting join request')
+        }
+    } catch (error) {
+        console.error('Error submitting join request:', error)
+        setError('Network error');
+    }
+}
 
 return (
     <div id="Groups">
       <h1>Groups Page</h1>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        {/* <p>Enter a group name to create a new group.</p> */}
+        {<p>Enter a group name to create a new group.</p>}
         <form onSubmit={createGroup}>
           <input
             type="text"
@@ -110,7 +133,7 @@ return (
           <button type="submit">Create Group</button>
         </form>
 
-        {/* Display the list of groups */}
+        {/* Display the list of groups and join request buttons */}
         <div style={{ marginTop: '20px' }}>
         <h2>All Groups</h2>
         {groups.length === 0 ? (
@@ -122,6 +145,9 @@ return (
                 <span>{group.name}</span>{' '}
                 <button onClick={() => showGroupMovies(group.id || group.group_id)}>
                   Show Movies
+                </button>
+                <button onClick={() => joinGroup(group.id || group.group_id)}>
+                  Join Group
                 </button>
               </li>
             ))}
@@ -135,7 +161,7 @@ return (
           <h2>Add Movie to Group</h2>
           <form onSubmit={(e) => {
             e.preventDefault();
-            addMovieToGroup(selectedGroup, newMovieId, newMovieTitle);
+            addMovieToGroup(selectedGroupId, newMovieId, newMovieTitle);
           }}>
             <input
               type="text"
@@ -162,10 +188,13 @@ return (
                     </ul>
                 )}
             </div>
-        }
+    }
+    
+        
+    
     </div>
-  );
-};
+  )
+}
 
 
-export default Groups;
+export default Groups
