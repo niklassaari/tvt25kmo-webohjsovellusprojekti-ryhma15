@@ -3,13 +3,27 @@ import { useAuth } from '../context/authContext'
 import './groups.css'
 
 const Groups = () => {
-  const { auth } = useAuth();
+  const { auth } = useAuth ? useAuth() : { auth: null };
   const [groups, setGroups] = useState([])
   const [newGroupName, setNewGroupName] = useState('')
   const [error, setError] = useState(null)
   const [groupMoviesVisible, setGroupMoviesVisible] = useState(false)
   const [movies, setMovies] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(null)
+  const [newMovieId, setNewMovieId] = useState('')
+  const [newMovieTitle, setNewMovieTitle] = useState('')
+
+  const getToken = () => {
+    if (!auth) return '';
+    if (typeof auth.getToken === 'function') return auth.getToken();
+    return auth.Token;
+    };
+
+  const getUser = () => {
+    if (!auth) return null;
+    if (typeof auth.getUser === 'function') return auth.getUser();
+    return auth.User || auth
+  }
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -37,7 +51,7 @@ const Groups = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.getToken()}`
+                    'Authorization': `Bearer ${getToken()}`
                 },
                 body: JSON.stringify({ name: newGroupName })
             })
@@ -82,7 +96,7 @@ const addMovieToGroup = async (groupId, movieId, movieTitle) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${auth.getToken()}`
+                'Authorization': `Bearer ${getToken()}`
             },
             body: JSON.stringify({ movieId, movieTitle })
         });
@@ -124,7 +138,7 @@ const removeMember = async (groupId, userId) => {
         const response = await fetch(`/api/groups/member/${groupId}/${userId}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${auth.getToken()}`
+                'Authorization': `Bearer ${getToken()}`
             }
         });
         const data = await response.json();
@@ -141,10 +155,10 @@ const removeMember = async (groupId, userId) => {
 // Leave the group
 const leaveGroup = async (groupId) => {
     try {
-        const response = await fetch(`/api/groups/member/${groupId}/${auth.getUser().id}`, {
+        const response = await fetch(`/api/groups/member/${groupId}/${getUser().id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${auth.getToken()}`
+                'Authorization': `Bearer ${getToken()}`
             }
         });
         const data = await response.json();
@@ -164,7 +178,7 @@ const deleteGroup = async (groupId) => {
         const response = await fetch(`/api/groups/delete/${groupId}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${auth.getToken()}`
+                'Authorization': `Bearer ${getToken()}`
             }
         });
         const data = await response.json();
