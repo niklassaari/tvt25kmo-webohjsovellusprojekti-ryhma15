@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/authContext'
+import './groups.css'
 
 const Groups = () => {
   const { auth } = useAuth();
@@ -118,6 +119,46 @@ const joinGroup = async (groupId) => {
     }
 }
 
+const removeMember = async (groupId, userId) => {
+    try {
+        const response = await fetch(`/api/groups/member/${groupId}/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${auth.getToken()}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Member removed from group successfully')
+        } else {
+            setError(data.error || 'Error removing member from group')
+        }
+    } catch (error) {
+        console.error('Error removing member from group:', error)
+        setError('Network error');
+    }
+}
+
+const leaveGroup = async (groupId) => {
+    try {
+        const response = await fetch(`/api/groups/member/${groupId}/${auth.getUser().id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${auth.getToken()}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Left group successfully')
+        } else {
+            setError(data.error || 'Error leaving group')
+        }
+    } catch (error) {
+        console.error('Error leaving group:', error)
+        setError('Network error');
+    }
+}
+
 return (
     <div id="Groups">
       <h1>Groups Page</h1>
@@ -190,8 +231,19 @@ return (
             </div>
     }
     
-        
-    
+        {/*Remove member button if remover is owner*/}
+        {auth.getUser() && (
+            <button onClick={() => removeMember(selectedGroupId, auth.getUser().id)}>
+                Remove Member
+            </button>
+        )}
+        {/*Leave group button if user is a member*/}
+        {auth.getUser() && (
+            <button onClick={() => leaveGroup(selectedGroupId)}>
+                Leave Group
+            </button>
+        )}
+
     </div>
   )
 }
