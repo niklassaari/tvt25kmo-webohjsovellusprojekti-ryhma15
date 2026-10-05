@@ -2,16 +2,28 @@
 
 import express from 'express';
 
-import { addFavorite, getAllFavorites, deleteFromFavorites, getPublicFavorites} from '../controllers/favoriteController.js';
-import { authenticateToken } from '../middleware/auth.js'; 
-import { getNowPlayingMovies,searchMovies, TopMovies, TopShows } from '../controllers/movieController.js';
+import {
+    getNowPlayingMovies,
+    searchMovies,
+    TopMovies,
+    TopShows
+} from '../controllers/movieController.js';
+
+import {
+    addFavorite,
+    getAllFavorites,
+    deleteFromFavorites,
+    getPublicFavorites
+} from '../controllers/favoriteController.js';
+
+import { authenticateToken } from '../middleware/auth.js';
 
 
-const router=express.Router();
+const router = express.Router();
 
-router.get('/now-playing',getNowPlayingMovies);
-router.get('/topMovies',TopMovies)
-router.get('/topShows',TopShows)
+router.get('/now-playing', getNowPlayingMovies);
+router.get('/topMovies', TopMovies);
+router.get('/topShows', TopShows);
 router.get('/search', searchMovies);
 
 router.post('/favorites', authenticateToken, addFavorite);
@@ -22,5 +34,4 @@ router.delete('/favorites', authenticateToken, deleteFromFavorites);
 router.get('/favorites/:username', getPublicFavorites);
 
 
-
-export default router;
+export default router; 

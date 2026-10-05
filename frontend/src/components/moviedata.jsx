@@ -1,7 +1,9 @@
 import './moviedata.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useEffect, useState } from 'react';
+import { genreNames } from '../Genres';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
@@ -25,9 +27,11 @@ const [rating, setRating] = useState(0); // rating tallennetaan
 const [comment, setComment] = useState(""); // review tallennus
 const [reviews, setReviews] = useState([]); // reviewt
 
+const [hoverRating, setHoverRating] = useState(0); // tähtien state
+
 // boolean
 const [isAdded, setIsAdded] = useState(false);
-const { login, logout, loggedIn, accessToken } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
+const { login, logout, loggedIn, accessToken, user } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
 
 const makeReview = async () => {
 
@@ -66,27 +70,55 @@ try {
 
 };
 
+// poistaa arvostelun
+const deleteReview = async (reviewId) => {
+  try {
+    const response = await fetch(`${API_URL}/reviews/deleteReview/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to delete review");
+    }
+
+    console.log("Review deleted successfully");
+
+    setReviews((currentReviews) =>
+    currentReviews.filter((review) => review.id !== reviewId)
+    );
+
+  } catch (error) {
+    console.error("Error deleting review:", error);
+  }
+};
+
 const loadReviews = async () => {
 try {
+  
 const response = await fetch(`${API_URL}/reviews/getReviews/${movie.id}`,
-{
-method: "GET",
-credentials: "include"
-}
-);
+      {
+        method: "GET"
+      }
+    );
 
   const data = await response.json();
-
+  // TEST: näyttää palauttaako mitään arvosteluja
+  console.log("Reviews data:", data);
   if (!response.ok) {
     throw new Error(data.error || "Failed to get reviews");
   }
 
   console.log("Reviews fetched succesfully");
+  
   setReviews(data); // tallennetaan haetut reviewt stateen
 } catch (error) {
   console.error(error);
 }
-
 };
 
 // tarkistaa että elokuva ei jo ole favoriteissa
@@ -159,6 +191,16 @@ try {
 
 };
 
+
+// muuttaa genre_id:t genren nimiksi Genres.js tiedoston avulla
+const convertGenreIds = (movie) => {
+
+  const genreName = movie.genre_ids.map(genre => genreNames[genre] || "Unknown Genre");
+  return genreName;
+};
+
+
+
 return (
 <div className="movie">
 
@@ -166,7 +208,7 @@ return (
     <img
       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
       name="logo"
-      style={{ width: '90px', height: '150px' }}
+      style={{ width: '90px', height: '100%', objectFit: 'cover' }}
     />
   </div>
 
@@ -217,7 +259,7 @@ return (
             <img
               src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`}
               name="logo"
-              style={{ width: '90px', height: '150px' }}
+              style={{ width: '90px', height: '150px', objectFit: 'cover' }}
             />
 
 
@@ -252,7 +294,7 @@ return (
               <div className="modal-header-text">
 
                 <p>
-                  Genre:{movie.genre_ids}
+                  Genre: {convertGenreIds(movie).join(', ')}
                 </p>
 
                 <p>
@@ -279,7 +321,73 @@ return (
             </p>
 
 
-            {/* GPT NÄYTTÄÄ OLEMASSA OLEVAT REVIEWT */}
+            <div className="reviewfield">
+
+
+            {loggedIn && (
+              <form
+
+                // GPT TESTI:
+                // Estetään formin normaali sivun uudelleenlataus
+                // ja kutsutaan omaa makeReview-funktiota.
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  await makeReview();
+                  await loadReviews();
+
+                  setRating(0);
+                  setComment("");
+                }}
+              >
+
+                <h5>Write a review:</h5>
+
+                {/* gpt paskaa tähtiä varten, testin vuoksi */}
+                <div className="starrating" onMouseLeave={() => setHoverRating(0)}>
+  {[1, 2, 3, 4, 5].map((star) => (
+    <button
+      key={star}
+      type="button"
+      className="star-button"
+      onMouseEnter={() => setHoverRating(star)}
+      onClick={() => setRating(star)}
+      aria-label={`${star} / 5 stars`}
+    >
+      <i
+        className={`bi ${
+          star <= (hoverRating || rating)
+            ? "bi-star-fill"
+            : "bi-star"
+        }`}
+      />
+    </button>
+  ))}
+</div>
+
+
+                <textarea
+                  type="userReview"
+                  placeholder="Enter review"
+                  rows="4"
+                  cols="90"
+                  value={comment}
+                  onChange={(e) =>
+                    setComment(e.target.value)
+                  }
+                />
+
+
+                <button type="submit" className="submit-review-button">
+                  Submit review
+                </button>
+
+              </form>
+            )}
+
+          </div>
+
+{/* GPT NÄYTTÄÄ OLEMASSA OLEVAT REVIEWT */}
+{/*Tee silleen että reviews alignas tuohon keskelle niinku muutki elementit */}
             <div className="review-list">
 
               <h5>Reviews:</h5>
@@ -290,79 +398,58 @@ return (
                 reviews.map((review, index) => (
                   <div key={index} className="review">
 
-                    <p>
-                      <strong>{review.username}</strong>
-                    </p>
+<div className="reviewinfo"> 
+  <span> 
+    <strong>From: {review.username}
+      </strong> 
+  </span> 
 
-                    <p>
-                      Rating: {review.rating}
-                    </p>
+      <span> Rating: 
+        <span className="review-rating"> 
+          {[1, 2, 3, 4, 5].map((star) => ( 
+            <i key={star} 
+            className={`bi ${ star <= review.rating ? "bi-star-fill" : "bi-star" }`} 
+          /> 
+            ))} 
+          </span> 
+        </span> 
+
+            <span> 
+              Posted at: {new Date(review.created_at).toLocaleString("fi-FI", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })} 
+            </span> 
+          
+
+    {/*Poistonappi, vain jos käyttäjä on kirjautunut ja on arvostelun tekijä */}
+{loggedIn && review.user_id === user?.id && (
+<button
+    type="button"
+    onClick={() => 
+      deleteReview(review.id)
+    }
+  >
+    Delete review
+  </button>
+  )}
+</div>
 
                     <p>
                       {review.comment}
                     </p>
 
-                    <p>
-                      {review.created_at}
-                    </p>
+                    
 
                   </div>
                 ))
               )}
 
             </div>
-
-
-            {loggedIn && (
-              <form
-                className="reviewfield"
-
-                // GPT TESTI:
-                // Estetään formin normaali sivun uudelleenlataus
-                // ja kutsutaan omaa makeReview-funktiota.
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  makeReview();
-                }}
-              >
-
-                <h5>Write a review:</h5>
-
-                {/* gpt paskaa tähtiä varten, testin vuoksi */}
-                <input
-                  type="number"
-                  min="0.5"
-                  max="5"
-                  step="0.5"
-                  value={rating}
-                  onChange={(e) =>
-                    setRating(Number(e.target.value))
-                  }
-                />
-
-
-                <textarea
-                  type="userReview"
-                  placeholder="Enter email"
-                  rows="4"
-                  cols="90"
-                  value={comment}
-                  onChange={(e) =>
-                    setComment(e.target.value)
-                  }
-                />
-
-
-                <button type="submit">
-                  Submit review
-                </button>
-
-              </form>
-            )}
-
-          </div>
-
-
+</div>
           <div className="modal-footer">
 
             <button
@@ -381,10 +468,10 @@ return (
     </div>
 
 
-    <div className="movie-info">
+<div className="movie-info">
 
       <p>
-        Genre:{movie.genre_ids}
+        Genre: {convertGenreIds(movie).join(', ')}
       </p>
 
       <p>
@@ -400,263 +487,26 @@ return (
 
 
       <div className="review-stars">
+  {[1, 2, 3, 4, 5].map((star) => {
+    let icon;
 
-        {/* Todella kömpelö tapa, pitää keksiä vielä jokin järkevämpi tapa toteuttaa tämä*/}
+    if (starRating >= star) {
+      icon = "bi-star-fill";
+    } else if (starRating >= star - 0.5) {
+      icon = "bi-star-half";
+    } else {
+      icon = "bi-star";
+    }
 
-        {/* 0 - 0.5 stars */}
-        {starRating < 0.5 ? (
-          <img
-            src={halfstar}
-            className="review-star"
-            alt="Half star"
-          />
-        ) : null}
-
-
-        {/* 0.5 - 1 star */}
-        {starRating >= 0.5 && starRating < 1 ? (
-          <>
-            <img
-              src={halfstar}
-              className="review-star"
-              alt="Half star"
-            />
-
-            <img
-              src={halfstar}
-              className="review-star"
-              alt="Half star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 1 - 1.5 stars */}
-        {starRating >= 1 && starRating < 1.5 ? (
-          <img
-            src={fullstar}
-            className="review-star"
-            alt="Full star"
-          />
-        ) : null}
-
-
-        {/* 1.5 - 2 stars */}
-        {starRating >= 1.5 && starRating < 2 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={halfstar}
-              className="review-star"
-              alt="Half star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 2 - 2.5 stars */}
-        {starRating >= 2 && starRating < 2.5 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 2.5 - 3 stars */}
-        {starRating >= 2.5 && starRating < 3 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={halfstar}
-              className="review-star"
-              alt="Half star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 3 - 3.5 stars */}
-        {starRating >= 3 && starRating < 3.5 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 3.5 - 4 stars */}
-        {starRating >= 3.5 && starRating < 4 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={halfstar}
-              className="review-star"
-              alt="Half star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 4 - 4.5 stars */}
-        {starRating >= 4 && starRating < 4.5 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 4.5 stars */}
-        {starRating >= 4.5 && starRating < 5 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={halfstar}
-              className="review-star"
-              alt="Half star"
-            />
-          </>
-        ) : null}
-
-
-        {/* 5 stars */}
-        {starRating == 5 ? (
-          <>
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-
-            <img
-              src={fullstar}
-              className="review-star"
-              alt="Full star"
-            />
-          </>
-        ) : null }
-
-      </div>
+    return (
+      <i
+        key={star}
+        className={`bi ${icon} review-star`}
+        aria-hidden="true"
+      />
+    );
+  })}
+</div>
 
     </div>
   </div>
@@ -667,3 +517,4 @@ return (
 };
 
 export default MovieData;
+ 

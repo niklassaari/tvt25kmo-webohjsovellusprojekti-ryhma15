@@ -3,21 +3,14 @@ import { useAuth } from "../context/authContext";
 
 const Register = () => {
 
-
   const { loggedIn } = useAuth();
-  //local
-  //const API_URL = import.meta.env.VITE_API_URL;
-  
-  // vm, ei turvallista mutta toimii kuitenkin 
-  const API_URL = 'http://128.214.255.200:3001';
-  
-const [newusername, setNewusername] = useState(""); 
-const [newemail, setNewemail] = useState(""); 
-const [newpassword, setNewpassword] = useState(""); 
-// errorit
-const [message, setMessage] = useState("");
 
+  const API_URL = import.meta.env.VITE_API_URL;
 
+  const [newusername, setNewusername] = useState("");
+  const [newemail, setNewemail] = useState("");
+  const [newpassword, setNewpassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,51 +21,43 @@ const [message, setMessage] = useState("");
       password: newpassword
     };
 
-//TESTI KOODI, palauttaa datan mikä rekisteröinnistä lähtee
-console.log("REGISTER DATA SENT:", 
-  { username: newusername, email: newemail, password: newpassword 
-});
+    console.log("REGISTER DATA SENT:", {
+      username: newusername,
+      email: newemail,
+      password: newpassword
+    });
 
+    const response = await fetch(`${API_URL}/user/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newUser)
+    });
 
-
-
-    const response = await fetch(`${API_URL}/user/register`,
-
-      { 
-      method: "POST", 
-      headers: { "Content-Type": "application/json" }, 
-      body: JSON.stringify(newUser) 
-  });
-
-
-    // testi, console näyttää mitä rekisteröityminen palauttaa
     console.log("Response:", response);
     console.log("Status:", response.status);
     console.log("Content-Type:", response.headers.get("content-type"));
 
     const data = await response.json();
 
- if (response.ok) {
-    setMessage("Registration successful!");
-  } else {
-    setMessage("Registration failed.");
-  }
+    if (response.ok) {
+      setMessage("Registration successful!");
+    } else {
+      setMessage("Registration failed.");
+    }
+
     console.log(data);
   };
 
-
-// Jos käyttäjä on kirjautunut sisään, register-sivun sisältöä ei näytetä.
+  // Jos käyttäjä on kirjautunut sisään,
+  // Register-sivun sisältöä ei näytetä.
   if (loggedIn) {
     return null;
   }
 
-
   return (
-
     <form onSubmit={handleSubmit}>
 
       <div className="form-group">
-
         <input
           type="text"
           className="userinput"
@@ -84,7 +69,6 @@ console.log("REGISTER DATA SENT:",
       </div>
 
       <div className="form-group">
-
         <input
           type="email"
           className="emailinput"
@@ -96,7 +80,6 @@ console.log("REGISTER DATA SENT:",
       </div>
 
       <div className="form-group">
-
         <input
           type="password"
           className="passwordinput"
@@ -107,16 +90,14 @@ console.log("REGISTER DATA SENT:",
         />
       </div>
 
-  <button type="submit" className="register-submit">
+      <button type="submit" className="register-submit">
         Register new profile
       </button>
 
-  {message && <p>{message}</p>}
+      {message && <p>{message}</p>}
 
-
-</form>
-);
+    </form>
+  );
 };
-
-
+ 
 export default Register;

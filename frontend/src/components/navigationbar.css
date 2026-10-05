@@ -7,11 +7,10 @@
   padding: 1rem;
 }
 
-
 .navbar-left {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .navbar-left img {
@@ -20,14 +19,14 @@
 }
 
 .navbar-left .dropdown {
-    margin-left: 15px;
-     top: 6px;
-     color: #333
+  margin-left: 15px;
+  top: 6px;
+  color: #333;
 }
 
 .navbar-left form {
-    margin-left: auto;
-    margin-right: 15px;
+  margin-left: auto;
+  margin-right: 15px;
 }
 
 .navbar-left-dropdown .dropdown-toggle {
@@ -43,8 +42,7 @@
 @media (max-width: 480px) {
   form {
     width: 100% !important;
-    max-width: 160px !important; 
-
+    max-width: 160px !important;
   }
 
   .form-control {
@@ -52,5 +50,5 @@
     padding: 5px 8px !important;
     font-size: 11px !important;
     height: auto !important;
-  }
+  } 
 }
