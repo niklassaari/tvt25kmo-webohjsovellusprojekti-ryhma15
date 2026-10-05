@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import React,{useState, useEffect} from 'react';
-import './groups.css';
-=======
 import React,{useState, useEffect} from 'react'
 import { useAuth } from '../context/authContext'
 import './groups.css'
->>>>>>> main
 
 const Groups = () => {
   const { auth } = useAuth ? useAuth() : { auth: null };
