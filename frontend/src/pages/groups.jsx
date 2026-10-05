@@ -10,7 +10,7 @@ const Groups = () => {
   const [groupMoviesVisible, setGroupMoviesVisible] = useState(false)
   const [movies, setMovies] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(null)
-  const [newMovieId, setNewMovieId] = useState('')
+  const [newMovieId] = useState('')
   const [newMovieTitle, setNewMovieTitle] = useState('')
 
   const getToken = () => {
@@ -211,11 +211,11 @@ return (
         {/* Display the list of groups and join request buttons */}
         <div style={{ marginTop: '20px' }}>
         <h2>All Groups</h2>
-        {groups.length === 0 ? (
+        {(!groups || groups.filter(Boolean).length === 0) ? (
           <p>No groups found.</p>
         ) : (
           <ul>
-            {groups.map((group) => (
+            {groups.filter(Boolean).map((group) => (
               <li key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
                 <span>{group.name}</span>{' '}
                 <button onClick={() => showGroupMovies(group.id || group.group_id)}>
@@ -244,7 +244,8 @@ return (
               onChange={(e) => setNewMovieTitle(e.target.value)}
               placeholder="Enter movie title"
             />
-            <button type="submit">Add Movie</button>
+            <button onClick={() => addMovieToGroup(selectedGroupId, movie.id, movie.title)}>
+            Add to Group</button>
           </form>
         </div>
       )}

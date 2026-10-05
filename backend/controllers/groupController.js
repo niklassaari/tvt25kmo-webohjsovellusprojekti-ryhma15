@@ -1,150 +1,173 @@
 
-import * as groupModel from '../models/groupModel.js';
+import * as groupModel from '../models/groupModel.js'
 //Ryhmän luonti/ownerId tallennetaan tietokantaan
 export const addGroups = async (req, res,) => {
     try {
-        const {name} = req.body;
-        const ownerId = 1; //req.user.id;
+        const {name} = req.body
+        const ownerId = req.user.id
         if(!name){
-            return res.status(400).json({error:"Group name is required"});
+            return res.status(400).json({error:"Group name is required"})
         }
 
-        const groupId = await groupModel.createGroup(name, ownerId);
-        res.status(201).json({message:"Group created successfully", groupId});
+        const groupId = await groupModel.createGroup(name, ownerId)
+
+        await groupModel.groupRole(groupId, ownerId, 'owner')
+
+        res.status(201).json({message:"Group created successfully", groupId})
     } catch (err) {
-        console.error('Error creating group:', err);
-        res.status(500).json({error:"Failed to create group", details: err.message});
+        console.error('Error creating group:', err)
+        res.status(500).json({error:"Failed to create group", details: err.message})
     }
 };
 
 //tarkistetaan ryhmän poistoon onko pyynnön tekijä owner
 export const deleteGroup = async (req, res,) => {
     try {
-        const groupId = req.params.id;
-        const userId = req.user.id;
-        const ownerId = await groupModel.getGroupOwner(groupId);
+        const groupId = req.params.id
+        const userId = req.user.id
+        const ownerId = await groupModel.getGroupOwner(groupId)
 
         if (!ownerId) {
-            return res.status(404).json({ error: "Group not found" });
+            return res.status(404).json({ error: "Group not found" })
         }
 
         if (userId !== ownerId) {
-            return res.status(403).json({ error: "You are not the owner of this group" });
+            return res.status(403).json({ error: "You are not the owner of this group" })
         }
 
-        await groupModel.deleteGroup(groupId);
-        res.status(200).json({ message: "Group deleted successfully" });
+        await groupModel.deleteGroup(groupId)
+        res.status(200).json({ message: "Group deleted successfully" })
     } catch (err) {
-        res.status(500).json({ error: "Failed to delete group", details: err.message });
+        res.status(500).json({ error: "Failed to delete group", details: err.message })
     }
 };
 
 //päivitetään ryhmän nimi jos pyynnön tekijä on owner
 export const updateGroup = async (req, res) => {
     try {
-        const { name } = req.body;
-        const groupId = req.params.id;
-        const userId = req.user.id;
-        const ownerId = await groupModel.getGroupOwner(groupId);
+        const { name } = req.body
+        const groupId = req.params.id
+        const userId = req.user.id
+        const ownerId = await groupModel.getGroupOwner(groupId)
 
         if (userId !== ownerId) {
-            return res.status(403).json({ error: "You are not the owner of this group" });
+            return res.status(403).json({ error: "You are not the owner of this group" })
         }
 
         if (!name){
-            return res.status(400).json({error:"Group name is required"});
+            return res.status(400).json({error:"Group name is required"})
         }
 
-        const groupUpdated = await groupModel.updateGroup(groupId, name);
+        const groupUpdated = await groupModel.updateGroup(groupId, name)
         if (!groupUpdated){
-            return res.status(404).json({error:"Group not found"});
+            return res.status(404).json({error:"Group not found"})
         }
 
-        res.status(200).json({ message: "Group updated successfully" });
+        res.status(200).json({ message: "Group updated successfully" })
     } catch (err) {
-        res.status(500).json({ error: "Failed to update group", details: err.message });
+        res.status(500).json({ error: "Failed to update group", details: err.message })
     }
 };
 
 //Hakee kaikki ryhmät nimellä tai ilman nimeä, jos nimeä ei annettu hakee kaikki ryhmät
 export const getAllGroups = async (req, res) => {
     try {
-        const {name} = req.query;
-        let groups;
+        const {name} = req.query
+        let groups
         if (name) {
-            groups = await groupModel.getGroupsByName(name);
+            groups = await groupModel.getGroupsByName(name)
         } else {
-            groups = await groupModel.getAllGroups();
+            groups = await groupModel.getAllGroups()
         }
-        res.status(200).json({ groups });
+        res.status(200).json({ groups })
     } catch (err) {
-        res.status(500).json({ error: "Failed to fetch groups", details: err.message });
+        res.status(500).json({ error: "Failed to fetch groups", details: err.message })
     }
 };
 
 //lisätään käyttäjä ryhmään ja määritetään rooli
 export const groupRole = async (req, res) => {
     try {
-        const { groupId, userId, role ='member'} = req.body;
+        const { groupId, userId, role ='member'} = req.body
         if (!groupId || !userId || !role) {
-            return res.status(400).json({ error: "Group ID, User ID, and Role are required" });
+            return res.status(400).json({ error: "Group ID, User ID, and Role are required" })
         }
 
-        await groupModel.groupRole(groupId, userId, role);
-        res.status(201).json({ message: "User added to group successfully" });
+        await groupModel.groupRole(groupId, userId, role)
+        res.status(201).json({ message: "User added to group successfully" })
     } catch (err) {
-        res.status(500).json({ error: "Failed to add user to group", details: err.message });
+        res.status(500).json({ error: "Failed to add user to group", details: err.message })
     }
 };
 
-// Luo ryhmäpyyntö
+// Luo ryhmään liittymis pyyntö
 export const createGroupRequest = async (req, res) => {
     try {
-        const { groupId } = req.body;
-        const userId = req.user.id;
+        const { groupId } = req.body
+        const userId = req.user.id
 
-        await groupModel.createGroupRequest(groupId, userId);
-        res.status(201).json({ message: "Group request created successfully" });
+        await groupModel.createGroupRequest(groupId, userId)
+        res.status(201).json({ message: "Group request created successfully" })
     } catch (err) {
-        res.status(500).json({ error: "Failed to create group request", details: err.message });
+        if (err.message === 'Group request already exists') {
+            return res.status(400).json({ error: err.message })
+        }
+        res.status(500).json({ error: "Failed to create group request", details: err.message })
     }
 };
 
 //Jäsenen poisto ryhmästä, tarkistetaan onko pyynnön tekijä owner
 export const removeMember = async (req, res) => {
     try {
-        const groupId = req.params.groupId;
-        const userIdToRemove = req.params.userId;
-        const userId = req.user.id;
-        const ownerId = await groupModel.getGroupOwner(groupId);
+        const groupId = req.params.groupId
+        const userIdToRemove = req.params.userId
+        const userId = req.user.id
+        const ownerId = await groupModel.getGroupOwner(groupId)
 
-        if (userId !== ownerId) {
-            return res.status(403).json({ error: "You are not the owner of this group" });
+        if (userId !== ownerId && userId !== parseInt(userIdToRemove)) {
+            return res.status(403).json({ error: "You are not the owner of this group" })
+        }
+        const removed = await groupModel.removeMember(groupId, userIdToRemove)
+        if (!removed) {
+            return res.status(404).json({ error: "Member not found in the group" })
         }
 
-        await groupModel.removeMember(groupId, userIdToRemove);
-        res.status(200).json({ message: "Member removed from group successfully" });
+        res.status(200).json({ message: "Member removed from group successfully" })
     } catch (err) {
-        res.status(500).json({ error: "Failed to remove member from group", details: err.message });
+        res.status(500).json({ error: "Failed to remove member from group", details: err.message })
     }
 };
 
-// lisätään ryhmään elokuva
+// Hakee ryhmän elokuvat
 export const getGroupMovies = async (req, res) => {
     try {
         const groupId = req.params.groupId;
-        const {movie_id, movie_title} = req.body;
-
-        if (!movie_title) {
-            return res.status(400).json({ error: "Title is required" });
-        }
-
-        const groupMovies = await groupModel.getGroupMovies(groupId);
-        res.status(200).json({ message: "movie added successfully", groupMovies });
+        const movies = await groupModel.getGroupMovies(groupId);
+        res.status(200).json({ movies });
     } catch (err) {
-        if (err.code === '23505') {
-            return res.status(400).json({ error: "Movie already exists in the group" });
-        }
         res.status(500).json({ error: "Failed to fetch group movies", details: err.message });
     }
 };
+
+// Lisää elokuva ryhmään
+export const addMovieToGroup = async (req, res) => {
+    try {
+        const groupId = req.params.groupId
+        const userId = req.user.id
+        const { movieTitle } = req.body
+
+        if (!movieTitle) {
+            return res.status(400).json({ error: "Movie title is required" })
+        }
+
+        const newMovie =await groupModel.addMovieToGroup(groupId, userId, movieTitle)
+        res.status(201).json({ message: "Movie added to group successfully", movie: newMovie })
+    } catch (err) {
+        if (err.code === '23505') {
+            return res.status(400).json({ error: "Movie already exists in the group" })
+        }
+        res.status(500).json({ error: "Failed to add movie to group", details: err.message })
+    }
+};
+
+
