@@ -10,7 +10,7 @@ const Groups = () => {
   const [groupMoviesVisible, setGroupMoviesVisible] = useState(false)
   const [movies, setMovies] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(null)
-  const [newMovieId, setNewMovieId] = useState('')
+  const [newMovieId] = useState('')
   const [newMovieTitle, setNewMovieTitle] = useState('')
 
   const getToken = () => {
@@ -244,7 +244,8 @@ return (
               onChange={(e) => setNewMovieTitle(e.target.value)}
               placeholder="Enter movie title"
             />
-            <button type="submit">Add Movie</button>
+            <button onClick={() => addMovieToGroup(selectedGroupId, movie.id, movie.title)}>
+            Add to Group</button>
           </form>
         </div>
       )}
