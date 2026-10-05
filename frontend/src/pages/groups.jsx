@@ -232,13 +232,13 @@ return (
     }
     
         {/*Remove member button if remover is owner*/}
-        {auth.getUser() && (
+        {auth?.getUser() && (
             <button onClick={() => removeMember(selectedGroupId, auth.getUser().id)}>
                 Remove Member
             </button>
         )}
         {/*Leave group button if user is a member*/}
-        {auth.getUser() && (
+        {auth?.getUser() && (
             <button onClick={() => leaveGroup(selectedGroupId)}>
                 Leave Group
             </button>
