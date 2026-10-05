@@ -118,7 +118,7 @@ const joinGroup = async (groupId) => {
         setError('Network error');
     }
 }
-
+// Remove a member from the group
 const removeMember = async (groupId, userId) => {
     try {
         const response = await fetch(`/api/groups/member/${groupId}/${userId}`, {
@@ -138,7 +138,7 @@ const removeMember = async (groupId, userId) => {
         setError('Network error');
     }
 }
-
+// Leave the group
 const leaveGroup = async (groupId) => {
     try {
         const response = await fetch(`/api/groups/member/${groupId}/${auth.getUser().id}`, {
@@ -158,9 +158,29 @@ const leaveGroup = async (groupId) => {
         setError('Network error');
     }
 }
-
+// Remove the group, only the owner can do this
+const deleteGroup = async (groupId) => {
+    try {
+        const response = await fetch(`/api/groups/delete/${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${auth.getToken()}`
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            alert('Group deleted successfully')
+        } else {
+            setError(data.error || 'Error deleting group')
+        }
+    } catch (error) {
+        console.error('Error deleting group:', error)
+        setError('Network error');
+    }
+}
+ 
 return (
-    <div id="Groups">
+    <div id="Groups"> {/*create a new group*/}
       <h1>Groups Page</h1>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         {<p>Enter a group name to create a new group.</p>}
@@ -237,6 +257,14 @@ return (
                 Remove Member
             </button>
         )}
+
+        {/*Delete group button if user is owner*/}
+        {auth?.getUser() && auth.getUser().is_owner && (
+            <button onClick={() => deleteGroup(selectedGroupId)}>
+                Delete Group
+            </button>
+        )}
+
         {/*Leave group button if user is a member*/}
         {auth?.getUser() && (
             <button onClick={() => leaveGroup(selectedGroupId)}>
