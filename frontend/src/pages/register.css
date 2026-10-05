@@ -1,0 +1,76 @@
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+
+.register-form .form-group {
+  width: 100%;
+  max-width: 320px; /* Säiliön leveys */
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2px; /* Hyvin pieni rako kenttien välillä */
+}
+
+.register-form .userinput,
+.register-form .emailinput,
+.register-form .passwordinput {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 12px;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+
+.register-form .register-submit {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 0px;
+    padding-top: 0;
+    box-sizing: border-box;
+  }
+
+  
+ .register-form .form-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3px;
+  }
+
+  
+  .register-form .userinput,
+  .register-form .emailinput,
+  .register-form .passwordinput {
+    width: 100%;
+    max-width: 290px;
+    box-sizing: border-box;
+    font-size: 13px;
+  }
+
+  
+  .register-form .register-submit {
+    width: 100%;
+    max-width: 280px;
+    cursor: pointer;
+  }
+
+}

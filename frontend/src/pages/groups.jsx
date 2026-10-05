@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import './groups.css';
 
 const Groups = () => {
   const [groups, setGroups] = useState([]);
