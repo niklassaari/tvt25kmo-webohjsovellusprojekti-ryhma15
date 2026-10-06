@@ -327,7 +327,7 @@ return (
             {loggedIn && (
               <form
 
-                // GPT TESTI:
+                
                 // Estetään formin normaali sivun uudelleenlataus
                 // ja kutsutaan omaa makeReview-funktiota.
                 onSubmit={async (e) => {
@@ -342,7 +342,7 @@ return (
 
                 <h5>Write a review:</h5>
 
-                {/* gpt paskaa tähtiä varten, testin vuoksi */}
+                {/* testi */}
                 <div className="starrating" onMouseLeave={() => setHoverRating(0)}>
   {[1, 2, 3, 4, 5].map((star) => (
     <button
@@ -386,7 +386,7 @@ return (
 
           </div>
 
-{/* GPT NÄYTTÄÄ OLEMASSA OLEVAT REVIEWT */}
+
 {/*Tee silleen että reviews alignas tuohon keskelle niinku muutki elementit */}
             <div className="review-list">
 

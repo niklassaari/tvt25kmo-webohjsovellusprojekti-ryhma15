@@ -2,8 +2,18 @@ import './profile.css';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/authContext';
+import { useEffect } from 'react';
+import MovieData from '../components/moviedata';
 
 const Profile = () => {
+
+  // hakee ryhmät
+  const [groups, setGroups] = useState([])
+
+
+  // hakee lempielokuvat
+  const [movies, setMovies] = useState([]);
+
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +27,39 @@ const Profile = () => {
       console.error("Profile deletion failed:", error);
     }
   };
+
+useEffect(() => {
+    const fetchGroups = async () => {
+        try {
+            const response = await fetch('/api/groups/all')
+            const data = await response.json()
+            if (response.ok) {
+                setGroups(data.groups || [])
+            } else {
+                setError(data.error || 'Error fetching groups')
+            }
+        } catch (error) {
+            console.error('Error fetching groups:', error)
+            setError('Network error')
+        }
+    };
+
+    fetchGroups();
+}, []);
+
+useEffect(() => {
+  if (!user?.username) return;
+
+  fetch(`/api/movies/favorites/${user.username}`)
+    .then(res => res.json())
+    .then(res => {
+      console.log("Favorites:", res);
+      setMovies(res);
+    })
+    .catch(err => console.error(err));
+}, [user]);
+
+
 
   return (
     <div className="profile-page">
@@ -36,16 +79,32 @@ const Profile = () => {
       <div className="profile-content">
 
         <div className="profile-section">
-          <h2>Favorites</h2>
+          <h2><strong>Favourites</strong></h2>
 
           <div className="profile-box favorites-box">
-          </div>
+            <div className="favscroll">
+  {movies.map(movie => (
+    <div key={movie.id}>
+      {movie.title}
+      </div>
+    
+  ))}
+</div>
+
         </div>
+  </div>
 
         <div className="profile-section">
-          <h2>Groups</h2>
+          <h2><strong>Groups</strong></h2>
 
           <div className="profile-box group-box">
+            <div className="groupcroll">
+{groups.map(group => (
+    <div key={group.id}>
+      {group.name}
+    </div>
+  ))}
+            </div>
           </div>
         </div>
 
