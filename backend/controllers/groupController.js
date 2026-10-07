@@ -192,7 +192,8 @@ export const getGroupRequests = async (req, res) => {
 export const updateRequestStatus = async (req, res) => {
     try {
         const requestId = req.params.requestId
-        const { status } = req.body
+        const { action, status } = req.body
+        const desicion = action || status
         const userId = req.user.id
 
         const request = await groupModel.getGroupRequestById(requestId)
