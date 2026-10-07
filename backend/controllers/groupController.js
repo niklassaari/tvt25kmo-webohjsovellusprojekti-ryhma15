@@ -155,13 +155,13 @@ export const addMovieToGroup = async (req, res) => {
     try {
         const groupId = req.params.groupId
         const userId = req.user.id
-        const { movieTitle } = req.body
+        const {movieId, movieTitle } = req.body
 
         if (!movieTitle) {
             return res.status(400).json({ error: "Movie title is required" })
         }
 
-        const newMovie =await groupModel.addMovieToGroup(groupId, userId, movieTitle)
+        const newMovie =await groupModel.addMovieToGroup(groupId, userId, movieId, movieTitle)
         res.status(201).json({ message: "Movie added to group successfully", movie: newMovie })
     } catch (err) {
         if (err.code === '23505') {
