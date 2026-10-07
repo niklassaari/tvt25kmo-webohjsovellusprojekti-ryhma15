@@ -12,6 +12,8 @@ const Movies = () => {
   const [year, setYear] = useState('');
   const [type, setType] = useState('');
 
+  const [page, setPage] = useState(1);
+
   const handleSearch = async (e) => {
     e.preventDefault();
 
@@ -20,17 +22,44 @@ const Movies = () => {
         searchTerm,
         genre,
         year,
-        type
+        type,
+        1
       );
 
       console.log("Search results:", results);
 
       setMovies(results);
+      setPage(1); // Resettaa tulokset sivu 1:een kun tekee uuden haun
 
     } catch (err) {
       console.error('Error while searching a movie', err);
     }
   };
+
+  // Hakee lisää elokuvia kun scrollaa sivun loppuun 
+const LoadMore = async () => {
+  try {
+    const nextPage = page + 1;
+
+    const results = await SearchMovies(
+      searchTerm,
+      genre,
+      year,
+      type,
+      nextPage
+    );
+
+    setMovies(prevMovies => [
+      ...prevMovies,
+      ...results
+    ]);
+
+    setPage(nextPage);
+
+  } catch (err) {
+    console.error('Error while loading more movies', err);
+  }
+};
 
   return (
     <div id="container">
@@ -98,6 +127,12 @@ const Movies = () => {
           </div>
         ))}
       </div>
+
+{movies.length > 0 && (
+  <button onClick={LoadMore} className="loadMore-button" style={{ marginBottom: '20px' }}>
+    Load more
+  </button>
+)}
 
     </div>
   );
