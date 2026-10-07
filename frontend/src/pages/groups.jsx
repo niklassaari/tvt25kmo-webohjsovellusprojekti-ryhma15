@@ -18,9 +18,9 @@ const Groups = () => {
   const [searchResults, setSearchResults] = useState([])
 
 const getToken = () => {
-    if (!auth) return localStorage.getItem('token') || ''
-    if (typeof auth.getToken === 'function') return auth.getToken()
-    return auth.Token || auth.token || localStorage.getItem('token') || ''
+    const token = auth?.token || localStorage.getItem('token') || localStorage.getItem('accessToken') || ''
+    console.log('Retrieved token:', token ? `${token.substring(0, 10)}...` : 'No token found')
+    return token
   }
 
   const getUser = () => {
@@ -144,7 +144,7 @@ const getToken = () => {
       }
   }
 
-  // Get movie search results from TMDB API (Korjattu oikea nimi funktiolle)
+  // Get movie search results from TMDB API
   const handleMovieSearch = async (e) => {
       e.preventDefault()
       if (!movieSearchTerm.trim()) {
@@ -161,9 +161,13 @@ const getToken = () => {
       }
   }
 
-  // Add a movie to the selected group (Välitetään groupId automaattisesti selectedGroupId:stä)
+  // Add a movie to the selected group
   const addMovieToGroup = async (movieId, movieTitle) => {
-      if (!selectedGroupId) return;
+      if (!selectedGroupId) return
+
+      const token = getToken()
+      console.log('sendable token:', token)
+
       try {
           const response = await fetch(`/api/groups/${selectedGroupId}/movies`, {
               method: 'POST',
