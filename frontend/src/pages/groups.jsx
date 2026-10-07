@@ -122,6 +122,12 @@ const Groups = () => {
 
   // Function for request accept or reject, only the owner can do this
   const handleRequest = async (requestId, action) => {
+
+    const token = localStorage.getItem('token')
+    if (!token) {
+        setError('You must be logged in to join a group')
+        return
+    }
       try {
           const response = await fetch(`/api/groups/requests/${requestId}`, {
               method: 'POST',
@@ -189,7 +195,7 @@ const Groups = () => {
   }
 
   // Send a request to join a group
-  const joinGroup = async (groupId) => {
+const joinGroup = async (groupId) => {
       try {
           const response = await fetch(`/api/groups/request`, {
               method: 'POST',
