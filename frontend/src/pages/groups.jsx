@@ -176,9 +176,9 @@ const Groups = () => {
           const data = await response.json();
           if (response.ok) {
               alert(`"${movieTitle}" added to group successfully`)
-              showGroupMovies(selectedGroupId, groups.find(g => (g.id || g.group_id) === selectedGroupId)?.owner_id) 
-              setSearchResults([]) 
-              setMovieSearchTerm('') 
+              showGroupMovies(selectedGroupId, groups.find(g => (g.id || g.group_id) === selectedGroupId)?.owner_id ?? null)
+              setSearchResults([])
+              setMovieSearchTerm('')
           } else {
               setError(data.error || 'Error adding movie to group')
           }
@@ -345,7 +345,6 @@ const Groups = () => {
       {selectedGroupId && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
           <h2>Search and Add Movie to Selected Group</h2>
-          {/* Korjattu onSubmit vastaamaan luotua funktiota */}
           <form onSubmit={handleMovieSearch}>
             <input
               type="text"
