@@ -46,7 +46,7 @@ useEffect(() => {
 
   // user = null -> user object
   // eli loggedIn vaihtuu false -> true
- setUser({ username: data.username, email: data.email });
+ setUser({ id: data.id, username: data.username, email: data.email });
 
  setAccessToken(data.accessToken);
  return data;
@@ -133,7 +133,7 @@ const deleteprofile = async (email, password) => {
  
  // Dekoodaa username tokenista
  const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
- setUser({ username: payload.username, email: payload.email });
+ setUser({ id: payload.id, username: payload.username, email: payload.email });
 
  return data.accessToken; // Palauta uusi token
 

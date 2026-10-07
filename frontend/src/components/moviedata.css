@@ -1,6 +1,23 @@
 .movie {
     display: flex;
-    height: 150px;
+    flex-direction: row;
+    width: 100%;
+    max-width: none;
+    min-height: 150px;
+    height: auto;
+    border: 3px solid black !important;
+    box-sizing: border-box;
+}
+
+
+
+.movie-list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
 }
 
 .OnTheaters,
@@ -134,7 +151,7 @@
     background-color: #FFFFFF;
     border: none;
     color: #222222;
-    padding: 15px 20px;
+    padding: 2px 2px;
     text-align: left;
     text-decoration: none;
     display: inline-block;
@@ -154,8 +171,36 @@
 
 .reviewfield textarea {
     height: 200px;
-    width: 2000px;
+    width: 100%;
 }
+
+.reviewfield .starrating .star-button {
+    font-size: 20px;
+    color: #ffe346;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.submit-review-button {
+    
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+
+.review .reviewinfo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
 
 .modal-dialog {
     max-width: 1000px !important;
@@ -217,35 +262,33 @@
     align-items: flex-start;
 }
 
-.movie-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
+
 
 .movie-card {
+    margin-top: 10px;
     font-family: "Times New Roman", Times, serif;
     display: flex;
-    align-items: center;
-    height: 150px;
+    align-items: flex-start;
+    margin-left: 10px;
+    margin-right: 10px;
+    max-width: 100%;
+    min-height: 150px;
+    height: auto;
     flex-direction: column;
-    border: 1px solid #333;
-    border-right: none;
-    border-radius: 5px;
-    gap: 10px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 15px;
+    gap: 5px;
+    color: #222222;
+    padding-bottom: 10px;
     margin-bottom: 15px;
-    width: 100%;
+    box-sizing: border-box;
 }
+
 
 .movie-info {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    text-indent: 20px;
-    gap: 5px;
+    text-indent: 10px;
+    
 }
 
 .review-star {
@@ -254,60 +297,76 @@
     height: 30px;
 }
 
+@media (max-width: 768px) {
+    .movie-info {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+        flex-grow: 1;
+        height: auto;
+    }
+    .movie {
+        height: auto;
+        min-height: 100px;
+        flex-direction: column;
+    }
+}
+
 @media(max-width: 500px) {
-    .OnTheaters {
+    .OnTheaters, .TopRatedMovies, .TopRatedShows {
         margin-top: 5px !important;
     }
 
-    .OnTheaters .movie {
+    .OnTheaters .movie, .TopRatedMovies .movie, .TopRatedShows .movie {
         width: 170px !important;
         min-width: 140px !important;
         min-height: 250px !important;
     }
 
-    .OnTheaters .movie-poster {
+    .OnTheaters .movie-poster, .TopRatedMovies .movie-poster, .TopRatedShows .movie-poster {
         height: 120px !important;
     }
 
-    .OnTheaters .movie-card .movie-modal-button {
+    .OnTheaters .movie-card .movie-modal-button, .TopRatedMovies .movie-card .movie-modal-button, .TopRatedShows .movie-card .movie-modal-button {
         font-size: 17px !important;
     }
 
-    .OnTheaters .movie-info p {
+    .OnTheaters .movie-info p, .TopRatedMovies .movie-info p, .TopRatedShows .movie-info p {
         font-size: 15px !important;
         line-height: 1.2 !important;
     }
 
-    .OnTheaters .movie-card {
+    .OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card {
         padding: 5px !important;
     }
 }
 
 @media(max-width: 400px) {
-    .OnTheaters {
+    .OnTheaters, .TopRatedMovies, .TopRatedShows {
         margin-top: 5px !important;
     }
 
-    .OnTheaters .movie {
+    .OnTheaters .movie, .TopRatedMovies .movie, .TopRatedShows .movie {
         width: 140px !important;
         min-width: 140px !important;
         min-height: 220px !important;
     }
 
-    .OnTheaters .movie-poster {
+    .OnTheaters .movie-poster, .TopRatedMovies .movie-poster, .TopRatedShows .movie-poster {
         height: 110px !important;
     }
 
-    .OnTheaters .movie-card .movie-modal-button {
+    .OnTheaters .movie-card .movie-modal-button, .TopRatedMovies .movie-card .movie-modal-button, .TopRatedShows .movie-card .movie-modal-button {
         font-size: 15px !important;
     }
 
-    .OnTheaters .movie-info p {
+    .OnTheaters .movie-info p, .TopRatedMovies .movie-info p, .TopRatedShows .movie-info p {
         font-size: 13px !important;
         line-height: 1.2 !important;
     }
 
-    .OnTheaters .movie-card {
+    .OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card {
         padding: 5px !important;
     } 
 }

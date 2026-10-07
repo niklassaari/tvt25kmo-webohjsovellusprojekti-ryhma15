@@ -1,3 +1,4 @@
+import './register.css';
 import { useState } from "react";
 import { useAuth } from "../context/authContext";
 
@@ -55,7 +56,7 @@ const Register = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="register-form"onSubmit={handleSubmit}>
 
       <div className="form-group">
         <input

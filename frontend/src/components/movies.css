@@ -1,9 +1,88 @@
 #search-form {
-  max-width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 #search-input {
-  width: 100%;
+  width: 300px;
   text-align: left;
+  height: 50px;
+}
+
+#search-form select,
+#search-form input[type="number"]
+{
+  height: 50px;
+}
+
+
+#search-form button {
+  height: 50px;
+  width: 100px;
+}
+
+#search-form input[type="number"] {
+  width: 90px;
+}
+
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.movie-list .movie-card {
+  width: 100%;
+} 
+
+
+
+@media (max-width: 480px) {
+
+#search-form {
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 6px;              
+    width: calc(100% - 10px) !important;       
+    max-width: 100% !important;
+    padding: 0 3px !important;      
+    box-sizing: border-box;
+  }
+
+  #search-input, #search-form select, #search-form input[type="number"] {
+    width: calc(50% - 4px) !important;     
+    height: 42px;
+    font-size: 12px;
+    padding: 4px 6px;
+    box-sizing: border-box;
+  }
+
+  
+  #search-form button {
+    width: 100%;                
+    height: 44px;
+    font-size: 14px;
+    margin-top: 4px;
+    box-sizing: border-box;
+  }
+
+  
+  .movie-list {
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+  .movie-list .movie-card {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
 }

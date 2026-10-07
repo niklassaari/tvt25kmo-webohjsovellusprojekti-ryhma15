@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useEffect, useState } from 'react';
+import { genreNames } from '../Genres';
 
 import halfstar from '../assets/reviewstars/halfstar.png';
 import fullstar from '../assets/reviewstars/fullstar.png';
@@ -30,7 +31,7 @@ const [hoverRating, setHoverRating] = useState(0); // tähtien state
 
 // boolean
 const [isAdded, setIsAdded] = useState(false);
-const { login, logout, loggedIn, accessToken } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
+const { login, logout, loggedIn, accessToken, user } = useAuth();// hakee sen kirjautuneen henkoht tokenin ja "tilan"
 
 const makeReview = async () => {
 
@@ -69,18 +70,41 @@ try {
 
 };
 
+// poistaa arvostelun
+const deleteReview = async (reviewId) => {
+  try {
+    const response = await fetch(`${API_URL}/reviews/deleteReview/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Failed to delete review");
+    }
+
+    console.log("Review deleted successfully");
+
+    setReviews((currentReviews) =>
+    currentReviews.filter((review) => review.id !== reviewId)
+    );
+
+  } catch (error) {
+    console.error("Error deleting review:", error);
+  }
+};
+
 const loadReviews = async () => {
 try {
   
 const response = await fetch(`${API_URL}/reviews/getReviews/${movie.id}`,
-{
-method: "GET",
-headers: {
-          "Authorization": `Bearer ${accessToken}`
-        },
-credentials: "include"
-}
-);
+      {
+        method: "GET"
+      }
+    );
 
   const data = await response.json();
   // TEST: näyttää palauttaako mitään arvosteluja
@@ -167,6 +191,16 @@ try {
 
 };
 
+
+// muuttaa genre_id:t genren nimiksi Genres.js tiedoston avulla
+const convertGenreIds = (movie) => {
+
+  const genreName = movie.genre_ids.map(genre => genreNames[genre] || "Unknown Genre");
+  return genreName;
+};
+
+
+
 return (
 <div className="movie">
 
@@ -174,7 +208,7 @@ return (
     <img
       src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
       name="logo"
-      style={{ width: '90px', height: '150px' }}
+      style={{ width: '90px', height: '100%', objectFit: 'cover' }}
     />
   </div>
 
@@ -225,7 +259,7 @@ return (
             <img
               src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`}
               name="logo"
-              style={{ width: '90px', height: '150px' }}
+              style={{ width: '90px', height: '150px', objectFit: 'cover' }}
             />
 
 
@@ -260,7 +294,7 @@ return (
               <div className="modal-header-text">
 
                 <p>
-                  Genre:{movie.genre_ids}
+                  Genre: {convertGenreIds(movie).join(', ')}
                 </p>
 
                 <p>
@@ -287,25 +321,28 @@ return (
             </p>
 
 
-            
+            <div className="reviewfield">
 
 
             {loggedIn && (
               <form
-                className="reviewfield"
 
-                // GPT TESTI:
+                
                 // Estetään formin normaali sivun uudelleenlataus
                 // ja kutsutaan omaa makeReview-funktiota.
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  makeReview();
+                  await makeReview();
+                  await loadReviews();
+
+                  setRating(0);
+                  setComment("");
                 }}
               >
 
                 <h5>Write a review:</h5>
 
-                {/* gpt paskaa tähtiä varten, testin vuoksi */}
+                {/* testi */}
                 <div className="starrating" onMouseLeave={() => setHoverRating(0)}>
   {[1, 2, 3, 4, 5].map((star) => (
     <button
@@ -330,7 +367,7 @@ return (
 
                 <textarea
                   type="userReview"
-                  placeholder="Enter email"
+                  placeholder="Enter review"
                   rows="4"
                   cols="90"
                   value={comment}
@@ -340,7 +377,7 @@ return (
                 />
 
 
-                <button type="submit">
+                <button type="submit" className="submit-review-button">
                   Submit review
                 </button>
 
@@ -349,7 +386,8 @@ return (
 
           </div>
 
-{/* GPT NÄYTTÄÄ OLEMASSA OLEVAT REVIEWT */}
+
+{/*Tee silleen että reviews alignas tuohon keskelle niinku muutki elementit */}
             <div className="review-list">
 
               <h5>Reviews:</h5>
@@ -360,28 +398,58 @@ return (
                 reviews.map((review, index) => (
                   <div key={index} className="review">
 
-                    <p>
-                      <strong>{review.username}</strong>
-                    </p>
+<div className="reviewinfo"> 
+  <span> 
+    <strong>From: {review.username}
+      </strong> 
+  </span> 
 
-                    <p>
-                      Rating: {review.rating}
-                    </p>
+      <span> Rating: 
+        <span className="review-rating"> 
+          {[1, 2, 3, 4, 5].map((star) => ( 
+            <i key={star} 
+            className={`bi ${ star <= review.rating ? "bi-star-fill" : "bi-star" }`} 
+          /> 
+            ))} 
+          </span> 
+        </span> 
+
+            <span> 
+              Posted at: {new Date(review.created_at).toLocaleString("fi-FI", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  })} 
+            </span> 
+          
+
+    {/*Poistonappi, vain jos käyttäjä on kirjautunut ja on arvostelun tekijä */}
+{loggedIn && review.user_id === user?.id && (
+<button
+    type="button"
+    onClick={() => 
+      deleteReview(review.id)
+    }
+  >
+    Delete review
+  </button>
+  )}
+</div>
 
                     <p>
                       {review.comment}
                     </p>
 
-                    <p>
-                      {review.created_at}
-                    </p>
+                    
 
                   </div>
                 ))
               )}
 
             </div>
-
+</div>
           <div className="modal-footer">
 
             <button
@@ -400,10 +468,10 @@ return (
     </div>
 
 
-    <div className="movie-info">
+<div className="movie-info">
 
       <p>
-        Genre:{movie.genre_ids}
+        Genre: {convertGenreIds(movie).join(', ')}
       </p>
 
       <p>
