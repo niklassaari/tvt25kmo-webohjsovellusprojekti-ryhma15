@@ -104,4 +104,12 @@ export const removeMember = async (groupId, userId) => {
         [groupId, userId]
     );
     return result.rowCount > 0;
-};
+}
+//lisää elokuvan ryhmään
+export const addMovieToGroup = async (groupId, userId, movieId, movieTitle) => {
+    const result = await db.query(
+        'INSERT INTO group_movies (group_id, user_id, movie_id, movie_title) VALUES ($1, $2, $3, $4) RETURNING *',
+        [groupId, userId, movieId, movieTitle]
+    )
+    return result.rows[0];
+}
