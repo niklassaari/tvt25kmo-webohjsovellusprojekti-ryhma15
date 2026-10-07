@@ -171,4 +171,51 @@ export const addMovieToGroup = async (req, res) => {
     }
 };
 
+// Hakee ryhmän hakemukset
+export const getGroupRequests = async (req, res) => {
+    try {
+        const groupId = req.params.groupId
+        const userId = req.user.id
+        const ownerId = await groupModel.getGroupOwner(groupId)
 
+        if (userId !== ownerId) {
+            return res.status(403).json({ error: "You are not the owner of this group" })
+        }
+        const requests = await groupModel.getGroupRequests(groupId)
+        res.status(200).json({ requests })
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch group requests", details: err.message })
+    }
+};
+
+// käsittelee ryhmän hakemuksen tilan päivityksen
+export const updateRequestStatus = async (req, res) => {
+    try {
+        const requestId = req.params.requestId
+        const { status } = req.body
+        const userId = req.user.id
+
+        const request = await groupModel.getGroupRequestById(requestId)
+        if (!request) {
+            return res.status(404).json({ error: "Request not found" })
+        }
+
+        const ownerId = await groupModel.getGroupOwner(request.group_id)
+        if (userId !== ownerId) {
+            return res.status(403).json({ error: "You are not the owner of this group" })
+        }
+
+        if (action === 'accept') {
+            await groupModel.updateGroupRequestStatus(requestId, 'Approved')
+            await groupModel.groupRole(request.group_id, request.user_id, 'member')
+            res.status(200).json({ message: "Request accepted and user added to group" })
+        } else if (action === 'reject') {
+            await groupModel.updateGroupRequestStatus(requestId, 'Rejected')
+            res.status(200).json({ message: "Request rejected" })
+        } else {
+            res.status(400).json({ error: 'Invalid action.' })
+        }
+    } catch (err) {
+        res.status(500).json({ error: "Failed to update request status", details: err.message })
+    }
+};

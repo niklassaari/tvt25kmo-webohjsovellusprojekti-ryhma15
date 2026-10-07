@@ -21,7 +21,9 @@ groupRouter.get('/all', getAllGroups)
 groupRouter.post('/role', authenticateToken, groupRole)
 groupRouter.post('/request', authenticateToken, createGroupRequest)
 groupRouter.delete('/member/:groupId/:userId', authenticateToken, removeMember)
-groupRouter.get('/:groupId/movies', authenticateToken, getGroupMovies);
-groupRouter.post('/:groupId/movies', authenticateToken, addMovieToGroup);
+groupRouter.get('/:groupId/movies', authenticateToken, getGroupMovies)
+groupRouter.post('/:groupId/movies', authenticateToken, addMovieToGroup)
+groupRouter.get('/:groupId/requests', authenticateToken, getRequestsForGroup)
+groupRouter.post('/requests/:requestId', authenticateToken, handleGroupRequest)
 
 export default groupRouter
