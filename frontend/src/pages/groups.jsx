@@ -1,29 +1,33 @@
 import React,{useState, useEffect} from 'react'
 import { useAuth } from '../context/authContext'
+import { SearchMovies } from '../GetMovie'
 import './groups.css'
 
 const Groups = () => {
-  const { auth } = useAuth ? useAuth() : { auth: null };
+  const { auth } = useAuth ? useAuth() : { auth: null }
   const [groups, setGroups] = useState([])
   const [newGroupName, setNewGroupName] = useState('')
   const [error, setError] = useState(null)
   const [groupMoviesVisible, setGroupMoviesVisible] = useState(false)
   const [movies, setMovies] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(null)
-  const [newMovieId] = useState('')
-  const [newMovieTitle, setNewMovieTitle] = useState('')
+  const [joinRequests, setJoinRequests] = useState([])
+  // State for movie search
+  const [movieSearchTerm, setMovieSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
 
   const getToken = () => {
-    if (!auth) return '';
-    if (typeof auth.getToken === 'function') return auth.getToken();
-    return auth.Token;
-    };
+    if (!auth) return ''
+    if (typeof auth.getToken === 'function') return auth.getToken()
+    return auth.Token
+    }
 
   const getUser = () => {
-    if (!auth) return null;
-    if (typeof auth.getUser === 'function') return auth.getUser();
+    if (!auth) return null
+    if (typeof auth.getUser === 'function') return auth.getUser()
     return auth.User || auth
-  }
+    }
+
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -69,16 +73,41 @@ const Groups = () => {
         }
     }
 // Get groups favorite movie list, if the user is a member of the group
-const showGroupMovies = async (groupId) => {
+const showGroupMovies = async (groupId, groupOwnerId) => {
       setSelectedGroupId(groupId);
       setError(null);
+      setSearchResults([]);
       try {
-          const response = await fetch(`/api/groups/${groupId}/movies`)
+          const response = await fetch(`/api/groups/${groupId}/movies`, {
+            headers: {
+                'Authorization': `Bearer ${getToken()}`}
+          })
           const data = await response.json()
-          
           if (response.ok) {
               setMovies(data.movies || [])
               setGroupMoviesVisible(true)
+          
+          const curretUser = getUser()
+          if (curretUser && curretUser.id === groupOwnerId) {
+              try {
+              const requestsResponse = await fetch(`/api/groups/${groupId}/requests`, {
+                  headers: {'Authorization': `Bearer ${getToken()}`}
+              })
+              
+              const requestsData = await requestsResponse.json()
+                if (requestsResponse.ok) {
+                    setJoinRequests(requestsData.requests || [])
+                } else {
+                    setJoinRequests([])
+                }
+            } catch (reqErr) {
+                console.error('Error fetching join requests:', reqErr)
+                setJoinRequests([])
+              }
+          } else {
+                setJoinRequests([])
+            }
+
           } else {
               setMovies([])
               setGroupMoviesVisible(false)
@@ -89,6 +118,48 @@ const showGroupMovies = async (groupId) => {
           setError('Network error');
       }
     }
+
+//Function for request accept or reject, only the owner can do this
+const handleRequest = async (requestId, action) => {
+    try {
+        const response = await fetch(`/api/groups/requests/${requestId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ action })
+        })
+        if (response.ok) {
+            setJoinRequests(joinRequests.filter(request => request.id !== requestId))
+            alert(`Request ${action === 'accept' ? 'accepted' : 'rejected'} successfully`)
+        } else {
+            const data = await response.json()
+            setError(data.error || 'Failed to handle request')
+        }
+    } catch (error) {
+        console.error('Error handling request:', error)
+        setError('Network error')
+    }
+}
+
+//Get movie search results from TMDB API
+const handleMovieSearch = async (e) => {
+    e.preventDefault()
+    if (!movieSearchTerm.trim()) {
+        setSearchResults([])
+        return
+    }
+
+    try {
+        const response = await SearchMovies(movieSearchTerm)
+        setSearchResults(response.movies || [])
+    } catch (err) {
+        console.error('Error searching movies:', err)
+        setError('Failed to search movies')
+    }
+}
+
 // Add a movie to the selected group
 const addMovieToGroup = async (groupId, movieId, movieTitle) => {
     try {
@@ -102,7 +173,10 @@ const addMovieToGroup = async (groupId, movieId, movieTitle) => {
         });
         const data = await response.json();
         if (response.ok) {
-            alert('Movie added to group successfully')
+            alert(`"${movieTitle}" added to group successfully`)
+            showGroupMovies(groupId) // Refresh the group movies list after adding
+            setSearchResults([]) // Clear search results after adding
+            setMovieSearchTerm('') // Clear search term after adding
         } else {
             setError(data.error || 'Error adding movie to group')
         }
@@ -218,7 +292,7 @@ return (
             {groups.filter(Boolean).map((group) => (
               <li key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
                 <span>{group.name}</span>{' '}
-                <button onClick={() => showGroupMovies(group.id || group.group_id)}>
+                <button onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id)}>
                   Show Movies
                 </button>
                 <button onClick={() => joinGroup(group.id || group.group_id)}>
@@ -230,41 +304,82 @@ return (
         )}
       </div>
 
+      {/* Display join requests if the user is the owner of the selected group */}
+      {selectedGroupId && joinRequests.length > 0 && (
+        <div style ={{ marginTop: '20px', borderTop: '1px solid orange', paddingTop: '10px' }}>
+            <h3>Join Requests</h3>
+            <ul>
+              {joinRequests.map((request) => (
+                <li key={request.id} style={{ marginBottom: '8px' }}>
+                  <span>{request.username}</span>
+                  <button
+                    onClick={() => handleRequest(request.id, 'accept')}
+                    style={{ marginLeft: '10px', backgroundColor: 'green', color: 'white' }}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleRequest(request.id, 'reject')}
+                    style={{ marginLeft: '10px', backgroundColor: 'red', color: 'white' }}
+                  >
+                    Reject
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
       {/*button to add a movie to the selected group */}
       {selectedGroupId && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>Add Movie to Group</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            addMovieToGroup(selectedGroupId, newMovieId, newMovieTitle);
-          }}>
+        <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+          <h2>Search and Add Movie to Selected Group</h2>
+          <form onSubmit={handleSearchTMDB}>
             <input
               type="text"
-              value={newMovieTitle}
-              onChange={(e) => setNewMovieTitle(e.target.value)}
-              placeholder="Enter movie title"
+              value={movieSearchTerm}
+              onChange={(e) => setMovieSearchTerm(e.target.value)}
+              placeholder="Search movie title from TMDB..."
             />
-            <button onClick={() => addMovieToGroup(selectedGroupId, movie.id, movie.title)}>
-            Add to Group</button>
+            <button type="submit">Search TMDB</button>
           </form>
+
+          {/* TMDB search results */}
+          {searchResults.length > 0 && (
+            <div style={{ marginTop: '10px' }}>
+              <h3>Search Results:</h3>
+              <ul>
+                {searchResults.map((movie) => (
+                  <li key={movie.id} style={{ marginBottom: '5px' }}>
+                    {movie.title} ({movie.release_date?.slice(0, 4) || 'N/A'}){' '}
+                    <button onClick={() => addMovieToGroup(movie.title, movie.id)}>
+                      + Add to Group
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
 
         {/* Display the list of group favorite movies */}
-        {groupMoviesVisible &&
-            <div>
-                <h2>Group favorite movies</h2>
-                {movies.length === 0 ? (
-                    <p>No favorite movies found.</p>
-                ) : (
-                    <ul>
-                        {movies.map((movie, index) => (
-                            <li key={index}>{movie.title}</li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-    }
+        {groupMoviesVisible && (
+        <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+            <h2>Group Favorite Movies</h2>
+            {movies.length === 0 ? (
+                <p>No favorite movies found in this group.</p>
+            ) : (
+                <ul>
+                    {movies.map((movie, index) => (
+                        <li key={index}>
+                            {movie.movie_title || movie.title}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+      )}
     
         {/*Remove member button if remover is owner*/}
         {auth?.getUser() && (
