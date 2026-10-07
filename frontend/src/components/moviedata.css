@@ -1,7 +1,7 @@
 .movie {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: calc(100% - 20px);
     max-width: none;
     min-height: 150px;
     height: auto;
@@ -148,7 +148,7 @@
 }
 
 .movie-modal-button {
-    background-color: #FFFFFF;
+    background-color: transparent;
     border: none;
     color: #222222;
     padding: 2px 2px;

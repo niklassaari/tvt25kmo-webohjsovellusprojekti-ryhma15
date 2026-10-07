@@ -1,4 +1,4 @@
-export async function SearchMovies(searchTerm, genre, year, type) {
+export async function SearchMovies(searchTerm, genre, year, type, page = 1) {
     try {
         const params = new URLSearchParams();
 
@@ -17,6 +17,9 @@ export async function SearchMovies(searchTerm, genre, year, type) {
         if (type) {
             params.append('type', type);
         }
+        // page parametri hakee ns. seuraavan "sivun" hakutuloksia    
+        params.append('page', page);
+        
 
         const response = await fetch(
             `/api/movies/search?${params.toString()}`
