@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import { useAuth } from '../context/authContext'
+import { SearchMovies } from '../GetMovie';
 import './groups.css'
 
 const Groups = () => {
@@ -12,6 +13,9 @@ const Groups = () => {
   const [selectedGroupId, setSelectedGroupId] = useState(null)
   const [newMovieId] = useState('')
   const [newMovieTitle, setNewMovieTitle] = useState('')
+
+  const [movieSearchTerm, setMovieSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
 
   const getToken = () => {
     if (!auth) return '';
@@ -72,6 +76,7 @@ const Groups = () => {
 const showGroupMovies = async (groupId) => {
       setSelectedGroupId(groupId);
       setError(null);
+      setSearchResults([]);
       try {
           const response = await fetch(`/api/groups/${groupId}/movies`)
           const data = await response.json()
@@ -89,6 +94,23 @@ const showGroupMovies = async (groupId) => {
           setError('Network error');
       }
     }
+//Get movie search results from TMDB API
+const handleMovieSearch = async (e) => {
+    e.preventDefault()
+    if (!movieSearchTerm.trim()) {
+        setSearchResults([])
+        return
+    }
+
+    try {
+        const response = await SearchMovies(movieSearchTerm)
+        setSearchResults(response.movies || [])
+    } catch (err) {
+        console.error('Error searching movies:', err)
+        setError('Failed to search movies')
+    }
+}
+
 // Add a movie to the selected group
 const addMovieToGroup = async (groupId, movieId, movieTitle) => {
     try {
@@ -102,7 +124,10 @@ const addMovieToGroup = async (groupId, movieId, movieTitle) => {
         });
         const data = await response.json();
         if (response.ok) {
-            alert('Movie added to group successfully')
+            alert(`"${movieTitle}" added to group successfully`)
+            showGroupMovies(groupId) // Refresh the group movies list after adding
+            setSearchResults([]) // Clear search results after adding
+            setMovieSearchTerm('') // Clear search term after adding
         } else {
             setError(data.error || 'Error adding movie to group')
         }
@@ -232,39 +257,54 @@ return (
 
       {/*button to add a movie to the selected group */}
       {selectedGroupId && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>Add Movie to Group</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            addMovieToGroup(selectedGroupId, newMovieId, newMovieTitle);
-          }}>
+        <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+          <h2>Search and Add Movie to Selected Group</h2>
+          <form onSubmit={handleSearchTMDB}>
             <input
               type="text"
-              value={newMovieTitle}
-              onChange={(e) => setNewMovieTitle(e.target.value)}
-              placeholder="Enter movie title"
+              value={movieSearchTerm}
+              onChange={(e) => setMovieSearchTerm(e.target.value)}
+              placeholder="Search movie title from TMDB..."
             />
-            <button onClick={() => addMovieToGroup(selectedGroupId, movie.id, movie.title)}>
-            Add to Group</button>
+            <button type="submit">Search TMDB</button>
           </form>
+
+          {/* TMDB search results */}
+          {searchResults.length > 0 && (
+            <div style={{ marginTop: '10px' }}>
+              <h3>Search Results:</h3>
+              <ul>
+                {searchResults.map((movie) => (
+                  <li key={movie.id} style={{ marginBottom: '5px' }}>
+                    {movie.title} ({movie.release_date?.slice(0, 4) || 'N/A'}){' '}
+                    <button onClick={() => addMovieToGroup(movie.title, movie.id)}>
+                      + Add to Group
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
 
         {/* Display the list of group favorite movies */}
-        {groupMoviesVisible &&
-            <div>
-                <h2>Group favorite movies</h2>
-                {movies.length === 0 ? (
-                    <p>No favorite movies found.</p>
-                ) : (
-                    <ul>
-                        {movies.map((movie, index) => (
-                            <li key={index}>{movie.title}</li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-    }
+        {groupMoviesVisible && (
+        <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+            <h2>Group Favorite Movies</h2>
+            {movies.length === 0 ? (
+                <p>No favorite movies found in this group.</p>
+            ) : (
+                <ul>
+                    {movies.map((movie, index) => (
+                        <li key={index}>
+                            {movie.movie_title || movie.title}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+      )}
     
         {/*Remove member button if remover is owner*/}
         {auth?.getUser() && (

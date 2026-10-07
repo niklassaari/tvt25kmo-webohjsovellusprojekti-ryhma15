@@ -1,5 +1,6 @@
 
 import * as groupModel from '../models/groupModel.js'
+
 //Ryhmän luonti/ownerId tallennetaan tietokantaan
 export const addGroups = async (req, res,) => {
     try {
