@@ -17,10 +17,10 @@ const Groups = () => {
   const [movieSearchTerm, setMovieSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
 
-  const getToken = () => {
-    if (!auth) return ''
+const getToken = () => {
+    if (!auth) return localStorage.getItem('token') || ''
     if (typeof auth.getToken === 'function') return auth.getToken()
-    return auth.Token
+    return auth.Token || auth.token || localStorage.getItem('token') || ''
   }
 
   const getUser = () => {
