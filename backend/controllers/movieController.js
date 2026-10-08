@@ -46,6 +46,7 @@ export async function searchMovies(req, res) {
     const genre = req.query.genre;
     const year = req.query.year;
     const type = req.query.type;
+    const page = Number(req.query.page) || 1;
 
     try {
 
@@ -58,7 +59,8 @@ export async function searchMovies(req, res) {
                 url =
                     `https://api.themoviedb.org/3/search/${searchType}` +
                     `?query=${encodeURIComponent(searchTerm)}` +
-                    `&language=en-US`;
+                    `&language=en-US` +
+                    `&page=${page}`;
             }
 
             // Jos hakusanaa ei ole, käytetään discover-endpointia
@@ -67,6 +69,7 @@ export async function searchMovies(req, res) {
 
                 params.append('language', 'en-US');
                 params.append('sort_by', 'popularity.desc');
+                params.append('page', page);
 
                 if (genre) {
                     params.append('with_genres', genre);
