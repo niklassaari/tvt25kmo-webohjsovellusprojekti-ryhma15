@@ -86,7 +86,9 @@ const Groups = () => {
             const requestsResponse = await authorizedFetch(`/api/groups/${groupId}/requests`)
             const requestsData = await requestsResponse.json()
             if (requestsResponse.ok) {
-              const fetchedRequests = Array.isArray(requestsData.requests) ? requestsData.requests : (requestsData.requests || [])
+              const fetchedRequests = Array.isArray(requestsData.requests)
+               ? requestsData.requests 
+               : (Array.isArray(requestsData) ? requestsData : [])
               setJoinRequests(fetchedRequests)
             } else {
               setJoinRequests([])
