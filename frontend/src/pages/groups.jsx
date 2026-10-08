@@ -12,6 +12,7 @@ const Groups = () => {
   const [movies, setMovies] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(null)
   const [joinRequests, setJoinRequests] = useState([])
+  const [members, setMembers] = useState([])
   
   // State for movie search
   const [movieSearchTerm, setMovieSearchTerm] = useState('')
@@ -70,6 +71,7 @@ const Groups = () => {
     setError(null)
     setSearchResults([])
     setJoinRequests([])
+    setMembers([])
 
     try {
       const response = await authorizedFetch(`/api/groups/${groupId}/movies`)
@@ -84,6 +86,20 @@ const Groups = () => {
       }
     } catch (error) {
       console.error('Error fetching group movies:', error)
+      setError('Network error')
+    }
+
+    // Fetch group members
+    try {
+      const response = await authorizedFetch(`/api/groups/${groupId}/members`)
+      const data = await response.json()
+      if (response.ok) {
+        setMembers(data.members || [])
+      } else {
+        setError(data.error || 'Error fetching group members')
+      }
+    } catch (error) {
+      console.error('Error fetching group members:', error)
       setError('Network error')
     }
   }
@@ -104,6 +120,14 @@ const Groups = () => {
             return String(currentReqId) !== String(requestId)
           })
         )
+
+        // Update the members list if the request was accepted
+        if (action === 'accept'&& selectedGroupId) {
+          const memResponse = await authorizedFetch(`/api/groups/${selectedGroupId}/members`)
+          const memData = await memResponse.json()
+          if (memResponse.ok) setMembers(memData.members || [])
+        }
+
         alert(`Request ${action === 'accept' ? 'accepted' : 'rejected'} successfully`)
       } else {
         const data = await response.json()
@@ -262,6 +286,13 @@ const Groups = () => {
     }
   }
 
+  // Check if the current user is the owner of the selected group
+  const currentUser = getUser()
+  const currentUserId = currentUser?.id ?? currentUser?.user_id ?? currentUser?.sub
+  const selectedGroup = groups.find(g => String(g.id || g.group_id) === String(selectedGroupId))
+  const ownerId = selectedGroup?.owner_id ?? selectedGroup?.group_owner_id ?? selectedGroup?.ownerId ?? selectedGroup?.user_id ?? selectedGroup?.created_by
+  const isOwner = Boolean(currentUserId && ownerId && String(currentUserId) === String(ownerId))
+
   return (
     <div id="Groups">
       <h1>Groups Page</h1>
@@ -358,6 +389,28 @@ const Groups = () => {
         </div>
       )}
 
+      {/* Display the list of group members */}
+      {selectedGroupId && members.length > 0 && (
+        <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+          <h2>Group Members</h2>
+          <ul>
+            {members.map((member) => (
+              <li key={member.user_id} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span>{member.username} ({member.role})</span>
+                {isOwner && String(member.user_id) !== String(currentUserId) && (
+                  <button 
+                    onClick={() => removeMember(selectedGroupId, member.user_id)}
+                    style={{ backgroundColor: '#c0392b', color: 'white', border: 'none', padding: '4px 8px', cursor: 'pointer' }}
+                  >
+                    Remove Member
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Display the list of group favorite movies */}
       {groupMoviesVisible && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
@@ -377,47 +430,30 @@ const Groups = () => {
       )}
 
       {/* Group management buttons */}
-      {selectedGroupId && (() => {
-        const currentUser = getUser()
-        const selectedGroup = groups.find(g => String(g.id || g.group_id) === String(selectedGroupId))
-        const ownerId = selectedGroup?.owner_id ?? selectedGroup?.group_owner_id ?? selectedGroup?.ownerId ?? selectedGroup?.user_id ?? selectedGroup?.created_by
-        const currentUserId = currentUser?.id ?? currentUser?.user_id ?? currentUser?.sub
+      {selectedGroupId && (
+        <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+          {/* Show View Requests button ONLY if the current user is the owner */}
+          {isOwner && (
+            <button
+              onClick={() => fetchJoinRequests(selectedGroupId)}
+              style={{ backgroundColor: '#e67e22', color: 'white', marginRight: '10px', padding: '6px 12px', cursor: 'pointer' }}>
+              View Join Requests
+            </button>
+          )}
 
-        const isOwner = Boolean(currentUserId && ownerId && String(currentUserId) === String(ownerId))
+          {isOwner && (
+            <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
+              Delete Group
+            </button>
+          )}
 
-        console.log('DEBUG OMISTAJUUS:', { selectedGroup, currentUser, ownerId, currentUserId, isOwner })
-
-        return (
-          <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
-            {/* Show View Requests button ONLY if the current user is the owner of the selected group */}
-            {isOwner && (
-              <button
-                onClick={() => fetchJoinRequests(selectedGroupId)}
-                style={{ backgroundColor: '#e67e22', color: 'white', marginRight: '10px', padding: '6px 12px', cursor: 'pointer' }}>
-                View Join Requests
-              </button>
-            )}
-
-            {currentUser && (
-              <button onClick={() => removeMember(selectedGroupId, currentUserId)}>
-                Remove Member
-              </button>
-            )}
-
-            {isOwner && (
-              <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
-                Delete Group
-              </button>
-            )}
-
-            {currentUser && (
-              <button onClick={() => leaveGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
-                Leave Group
-              </button>
-            )}
-          </div>
-        )
-      })()}
+          {currentUser && !isOwner && (
+            <button onClick={() => leaveGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
+              Leave Group
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

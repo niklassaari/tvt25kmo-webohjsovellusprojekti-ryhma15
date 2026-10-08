@@ -225,3 +225,14 @@ export const updateRequestStatus = async (req, res) => {
         res.status(500).json({ error: "Failed to update request status", details: err.message })
     }
 };
+
+// Hakee ryhmän jäsenet
+export const getGroupMembers = async (req, res) => {
+    try {
+        const groupId = req.params.groupId
+        const members = await groupModel.getGroupMembers(groupId)
+        res.status(200).json({ members });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch group members", details: err.message })
+    }
+};
