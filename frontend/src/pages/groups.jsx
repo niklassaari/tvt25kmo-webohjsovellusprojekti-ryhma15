@@ -65,13 +65,11 @@ const Groups = () => {
   }
 
   // Get groups favorite movie list, and requests if the user is the owner
-  const showGroupMovies = async (groupId, groupOwnerId) => {
+ const showGroupMovies = async (groupId) => {
     setSelectedGroupId(groupId)
     setError(null)
     setSearchResults([])
-    
-    const currentGroup = groups.find(g => String(g.id || g.group_id) === String(groupId))
-    const actualOwnerId = groupOwnerId ?? currentGroup?.owner_id ?? currentGroup?.group_owner_id ?? currentGroup?.ownerId ?? currentGroup?.user_id
+    setJoinRequests([])
 
     try {
       const response = await authorizedFetch(`/api/groups/${groupId}/movies`)
@@ -79,27 +77,6 @@ const Groups = () => {
       if (response.ok) {
         setMovies(data.movies || [])
         setGroupMoviesVisible(true)
-        
-        const currentUser = getUser()
-        if (currentUser && Number(currentUser.id) === Number(groupOwnerId)) {
-          try {
-            const requestsResponse = await authorizedFetch(`/api/groups/${groupId}/requests`)
-            const requestsData = await requestsResponse.json()
-            if (requestsResponse.ok) {
-              const fetchedRequests = Array.isArray(requestsData.requests)
-               ? requestsData.requests 
-               : (Array.isArray(requestsData) ? requestsData : [])
-              setJoinRequests(fetchedRequests)
-            } else {
-              setJoinRequests([])
-            }
-          } catch (reqErr) {
-            console.error('Error fetching join requests:', reqErr)
-            setJoinRequests([])
-          }
-        } else {
-          setJoinRequests([])
-        }
       } else {
         setMovies([])
         setGroupMoviesVisible(false)
@@ -110,7 +87,6 @@ const Groups = () => {
       setError('Network error')
     }
   }
-
   // Function for request accept or reject, only the owner can do this
   const handleRequest = async (requestId, action) => {
     try {
@@ -201,6 +177,29 @@ const Groups = () => {
       }
     } catch (error) {
       console.error('Error submitting join request:', error)
+      setError('Network error')
+    }
+  }
+
+  // Fetch join requests for the selected group, only the owner can do this
+  const fetchJoinRequests = async (groupId) => {
+    setError(null)
+    try {
+      const response = await authorizedFetch(`/api/groups/${groupId}/requests`)
+      const data = await response.json()
+      if (response.ok) {
+        const fetchedRequests = Array.isArray(data.requests)
+          ? data.requests
+          : (Array.isArray(data) ? data : [])
+        setJoinRequests(fetchedRequests)
+        if (fetchedRequests.length === 0) {
+          alert('No new requests for this group.')
+        }
+      } else {
+        setError(data.error || 'Error fetching join requests')
+      }
+    } catch (err) {
+      console.error('Error fetching join requests:', err)
       setError('Network error')
     }
   }
@@ -378,27 +377,44 @@ const Groups = () => {
       )}
 
       {/* Group management buttons */}
-      {selectedGroupId && (
-        <div style={{ marginTop: '20px' }}>
-          {getUser() && (
-            <button onClick={() => removeMember(selectedGroupId, getUser().id)}>
-              Remove Member
-            </button>
-          )}
+      {selectedGroupId && (() => {
+        const currentUser = getUser()
+        const selectedGroup = groups.find(g => (g.id || g.group_id) === selectedGroupId)
+        const ownerId = selectedGroup?.owner_id ?? selectedGroup?.group_owner_id ?? selectedGroup?.ownerId ?? selectedGroup?.user_id
+        const isOwner = currentUser && String(currentUser.id) === String(ownerId)
 
-          {getUser() && Number(getUser().id) === Number(groups.find(g => (g.id || g.group_id) === selectedGroupId)?.owner_id) && (
-            <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
-              Delete Group
-            </button>
-          )}
+        return (
+          <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+            {/* Show View Requests button ONLY if the current user is the owner of the selected group */}
+            {isOwner && (
+              <button
+                onClick={() => fetchJoinRequests(selectedGroupId)}
+                style={{ backgroundColor: '#e67e22', color: 'white', marginRight: '10px', padding: '6px 12px', cursor: 'pointer' }}
+              >
+                View Join Requests
+              </button>
+            )}
 
-          {getUser() && (
-            <button onClick={() => leaveGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
-              Leave Group
-            </button>
-          )}
-        </div>
-      )}
+            {currentUser && (
+              <button onClick={() => removeMember(selectedGroupId, currentUser.id)}>
+                Remove Member
+              </button>
+            )}
+
+            {isOwner && (
+              <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
+                Delete Group
+              </button>
+            )}
+
+            {currentUser && (
+              <button onClick={() => leaveGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
+                Leave Group
+              </button>
+            )}
+          </div>
+        )
+      })()}
     </div>
   )
 }
