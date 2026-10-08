@@ -51,11 +51,11 @@ export const getGroupsByName = async (name) => {
     return result.rows
 }
 // Luo ryhmäpyyntö tietokantaan
-export const createGroupRequest = async (groupId, userId) => {
+export const createGroupRequest = async (groupId) => {
     try {
         const result = await db.query(
-            'INSERT INTO group_requests (group_id, user_id) VALUES ($1, $2) RETURNING id',
-            [groupId, userId]
+            "SELECT r.id as request_id, r.user_id, r.status, u.username FROM group_requests r JOIN users u ON r.user_id = u.id WHERE r.group_id = $1 AND r.status = 'awaiting processing'",
+            [groupId]
         )
         return result.rows[0].id
     }  catch (err) {
