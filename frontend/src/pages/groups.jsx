@@ -69,6 +69,10 @@ const Groups = () => {
     setSelectedGroupId(groupId)
     setError(null)
     setSearchResults([])
+    
+    const currentGroup = groups.find(g => String(g.id || g.group_id) === String(groupId))
+    const actualOwnerId = groupOwnerId ?? currentGroup?.owner_id ?? currentGroup?.group_owner_id ?? currentGroup?.ownerId ?? currentGroup?.user_id
+
     try {
       const response = await authorizedFetch(`/api/groups/${groupId}/movies`)
       const data = await response.json()
@@ -282,8 +286,8 @@ const Groups = () => {
             {groups.filter(Boolean).map((group) => (
               <li key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
                 <span>{group.name}</span>{' '}
-                <button onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id)}>
-                  Show Movies
+                <button onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id || group.group_owner_id || group.user_id)}>
+                 Show Movies
                 </button>
                 <button onClick={() => joinGroup(group.id || group.group_id)}>
                   Join Group
