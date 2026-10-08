@@ -81,7 +81,7 @@ const Groups = () => {
         setGroupMoviesVisible(true)
         
         const currentUser = getUser()
-        if (currentUser && Number(currentUser.id) === Number(actualOwnerId)) {
+        if (currentUser && Number(currentUser.id) === Number(groupOwnerId)) {
           try {
             const requestsResponse = await authorizedFetch(`/api/groups/${groupId}/requests`)
             const requestsData = await requestsResponse.json()
