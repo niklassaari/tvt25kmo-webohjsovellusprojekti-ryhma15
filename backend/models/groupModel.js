@@ -51,11 +51,11 @@ export const getGroupsByName = async (name) => {
     return result.rows
 }
 // Luo ryhmäpyyntö tietokantaan
-export const createGroupRequest = async (groupId) => {
+export const createGroupRequest = async (groupId, userId) => {
     try {
         const result = await db.query(
-            "SELECT r.id as request_id, r.user_id, r.status, u.username FROM group_requests r JOIN users u ON r.user_id = u.id WHERE r.group_id = $1 AND r.status = 'awaiting processing'",
-            [groupId]
+            'INSERT INTO group_requests (group_id, user_id) VALUES ($1, $2) RETURNING id',
+            [groupId, userId]
         )
         return result.rows[0].id
     }  catch (err) {
@@ -76,7 +76,7 @@ export const getGroupMovies = async (groupId) => {
 //hakee ryhmän hakemukset
 export const getGroupRequests = async (groupId) => {
     const result = await db.query(
-        "SELECT r.id as request_id, r.user_id, r.status, u.username FROM group_requests r JOIN users u ON r.user_id = u.id WHERE r.group_id = $1 AND r.status = 'Awaiting Approval'",
+        "SELECT r.id as request_id, r.user_id, r.status, u.username FROM group_requests r JOIN users u ON r.user_id = u.id WHERE r.group_id = $1 AND r.status = 'awaiting processing'",
         [groupId]
     )
     return result.rows;
