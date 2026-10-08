@@ -18,7 +18,19 @@ const Groups = () => {
   const [searchResults, setSearchResults] = useState([])
 
 const getToken = () => {
-    const token = auth?.token || localStorage.getItem('token') || localStorage.getItem('accessToken') || ''
+    let token = auth?.token || localStorage.getItem('accessToken') || localStorage.getItem('token') || ''
+    if (!token) {
+      try {
+        const userStr = localStorage.getItem('user')
+        if (userStr) {
+          const userObj = JSON.parse(userStr)
+          token = userObj.accessToken || userObj.token || ''
+        }
+      } catch (e) {
+        console.error('Error parsing user from localStorage:', e)
+      }
+    }
+
     console.log('Retrieved token:', token ? `${token.substring(0, 10)}...` : 'No token found')
     return token
   }
