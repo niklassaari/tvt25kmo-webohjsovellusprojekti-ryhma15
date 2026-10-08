@@ -1,28 +1,26 @@
-
 import * as groupModel from '../models/groupModel.js'
 
-//Ryhmän luonti/ownerId tallennetaan tietokantaan
-export const addGroups = async (req, res,) => {
+// Ryhmän luonti / ownerId tallennetaan tietokantaan
+export const addGroups = async (req, res) => {
     try {
-        const {name} = req.body
+        const { name } = req.body
         const ownerId = req.user.id
-        if(!name){
-            return res.status(400).json({error:"Group name is required"})
+        if (!name) {
+            return res.status(400).json({ error: "Group name is required" })
         }
 
         const groupId = await groupModel.createGroup(name, ownerId)
-
         await groupModel.groupRole(groupId, ownerId, 'owner')
 
-        res.status(201).json({message:"Group created successfully", groupId})
+        res.status(201).json({ message: "Group created successfully", groupId })
     } catch (err) {
         console.error('Error creating group:', err)
-        res.status(500).json({error:"Failed to create group", details: err.message})
+        res.status(500).json({ error: "Failed to create group", details: err.message })
     }
 };
 
-//tarkistetaan ryhmän poistoon onko pyynnön tekijä owner
-export const deleteGroup = async (req, res,) => {
+// Tarkistetaan ryhmän poistoon onko pyynnön tekijä owner
+export const deleteGroup = async (req, res) => {
     try {
         const groupId = req.params.id
         const userId = req.user.id
@@ -32,7 +30,7 @@ export const deleteGroup = async (req, res,) => {
             return res.status(404).json({ error: "Group not found" })
         }
 
-        if (userId !== ownerId) {
+        if (Number(userId) !== Number(ownerId)) {
             return res.status(403).json({ error: "You are not the owner of this group" })
         }
 
@@ -43,7 +41,7 @@ export const deleteGroup = async (req, res,) => {
     }
 };
 
-//päivitetään ryhmän nimi jos pyynnön tekijä on owner
+// Päivitetään ryhmän nimi jos pyynnön tekijä on owner
 export const updateGroup = async (req, res) => {
     try {
         const { name } = req.body
@@ -51,17 +49,17 @@ export const updateGroup = async (req, res) => {
         const userId = req.user.id
         const ownerId = await groupModel.getGroupOwner(groupId)
 
-        if (userId !== ownerId) {
+        if (Number(userId) !== Number(ownerId)) {
             return res.status(403).json({ error: "You are not the owner of this group" })
         }
 
-        if (!name){
-            return res.status(400).json({error:"Group name is required"})
+        if (!name) {
+            return res.status(400).json({ error: "Group name is required" })
         }
 
         const groupUpdated = await groupModel.updateGroup(groupId, name)
-        if (!groupUpdated){
-            return res.status(404).json({error:"Group not found"})
+        if (!groupUpdated) {
+            return res.status(404).json({ error: "Group not found" })
         }
 
         res.status(200).json({ message: "Group updated successfully" })
@@ -70,10 +68,10 @@ export const updateGroup = async (req, res) => {
     }
 };
 
-//Hakee kaikki ryhmät nimellä tai ilman nimeä, jos nimeä ei annettu hakee kaikki ryhmät
+// Hakee kaikki ryhmät nimellä tai ilman nimeä
 export const getAllGroups = async (req, res) => {
     try {
-        const {name} = req.query
+        const { name } = req.query
         let groups
         if (name) {
             groups = await groupModel.getGroupsByName(name)
@@ -86,10 +84,10 @@ export const getAllGroups = async (req, res) => {
     }
 };
 
-//lisätään käyttäjä ryhmään ja määritetään rooli
+// Lisätään käyttäjä ryhmään ja määritetään rooli
 export const groupRole = async (req, res) => {
     try {
-        const { groupId, userId, role ='member'} = req.body
+        const { groupId, userId, role = 'member' } = req.body
         if (!groupId || !userId || !role) {
             return res.status(400).json({ error: "Group ID, User ID, and Role are required" })
         }
@@ -122,7 +120,7 @@ export const createGroupRequest = async (req, res) => {
     }
 };
 
-//Jäsenen poisto ryhmästä, tarkistetaan onko pyynnön tekijä owner
+// Jäsenen poisto ryhmästä, tarkistetaan onko pyynnön tekijä owner tai käyttäjä itse
 export const removeMember = async (req, res) => {
     try {
         const groupId = req.params.groupId
@@ -130,8 +128,8 @@ export const removeMember = async (req, res) => {
         const userId = req.user.id
         const ownerId = await groupModel.getGroupOwner(groupId)
 
-        if (userId !== ownerId && userId !== parseInt(userIdToRemove)) {
-            return res.status(403).json({ error: "You are not the owner of this group" })
+        if (Number(userId) !== Number(ownerId) && Number(userId) !== Number(userIdToRemove)) {
+            return res.status(403).json({ error: "You are not authorized to remove this member" })
         }
         const removed = await groupModel.removeMember(groupId, userIdToRemove)
         if (!removed) {
@@ -160,13 +158,13 @@ export const addMovieToGroup = async (req, res) => {
     try {
         const groupId = req.params.groupId
         const userId = req.user.id
-        const {movieId, movieTitle } = req.body
+        const { movieId, movieTitle } = req.body
 
         if (!movieTitle) {
             return res.status(400).json({ error: "Movie title is required" })
         }
 
-        const newMovie =await groupModel.addMovieToGroup(groupId, userId, movieId, movieTitle)
+        const newMovie = await groupModel.addMovieToGroup(groupId, userId, movieId, movieTitle)
         res.status(201).json({ message: "Movie added to group successfully", movie: newMovie })
     } catch (err) {
         if (err.code === '23505') {
@@ -183,7 +181,7 @@ export const getGroupRequests = async (req, res) => {
         const userId = req.user.id
         const ownerId = await groupModel.getGroupOwner(groupId)
 
-        if (userId !== ownerId) {
+        if (Number(userId) !== Number(ownerId)) {
             return res.status(403).json({ error: "You are not the owner of this group" })
         }
         const requests = await groupModel.getGroupRequests(groupId)
@@ -193,12 +191,12 @@ export const getGroupRequests = async (req, res) => {
     }
 };
 
-// käsittelee ryhmän hakemuksen tilan päivityksen
+// Käsittelee ryhmän hakemuksen tilan päivityksen
 export const updateRequestStatus = async (req, res) => {
     try {
         const requestId = req.params.requestId
         const { action, status } = req.body
-        const desicion = action || status
+        const decision = action || status
         const userId = req.user.id
 
         const request = await groupModel.getGroupRequestById(requestId)
@@ -211,17 +209,17 @@ export const updateRequestStatus = async (req, res) => {
             return res.status(403).json({ error: "You are not the owner of this group" })
         }
 
-        if (desicion === 'accept' || desicion === 'Approved') {
-          await groupModel.updateRequestStatus(requestId, 'Approved')
-          await groupModel.groupRole(request.group_id, request.user_id, 'member')
-          return res.status(200).json({ message: "Request accepted and user added to group" })
-      } else if (desicion === 'reject' || desicion === 'Rejected') {
-          await groupModel.updateRequestStatus(requestId, 'Rejected')
-          return res.status(200).json({ message: "Request rejected" })
-      } else {
-        return res.status(400).json({ error: 'Invalid action.' })
-}
-} catch (err) {
+        if (decision === 'accept' || decision === 'Approved') {
+            await groupModel.updateRequestStatus(requestId, 'Approved')
+            await groupModel.groupRole(request.group_id, request.user_id, 'member')
+            return res.status(200).json({ message: "Request accepted and user added to group" })
+        } else if (decision === 'reject' || decision === 'Rejected') {
+            await groupModel.updateRequestStatus(requestId, 'Rejected')
+            return res.status(200).json({ message: "Request rejected" })
+        } else {
+            return res.status(400).json({ error: 'Invalid action.' })
+        }
+    } catch (err) {
         res.status(500).json({ error: "Failed to update request status", details: err.message })
     }
 };
