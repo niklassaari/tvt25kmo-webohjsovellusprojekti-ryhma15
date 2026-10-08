@@ -11,7 +11,8 @@ import {
     getGroupMovies,
     addMovieToGroup,
     getGroupRequests,
-    updateRequestStatus
+    updateRequestStatus,
+    getGroupMembers
 } from '../controllers/groupController.js'
 
 const groupRouter = express.Router()
