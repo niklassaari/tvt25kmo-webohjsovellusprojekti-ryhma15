@@ -107,6 +107,11 @@ export const createGroupRequest = async (req, res) => {
         const { groupId } = req.body
         const userId = req.user.id
 
+        const ownerId = await groupModel.getGroupOwner(groupId)
+        if (Number(userId) === Number(ownerId)) {
+            return res.status(400).json({ error: "You are the owner of this group" })
+        }
+
         await groupModel.createGroupRequest(groupId, userId)
         res.status(201).json({ message: "Group request created successfully" })
     } catch (err) {
