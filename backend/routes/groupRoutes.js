@@ -16,7 +16,7 @@ import {
 
 const groupRouter = express.Router()
 
-groupRouter.post('/add', addGroups)
+groupRouter.post('/add', authenticateToken, addGroups)
 groupRouter.delete('/delete/:id', authenticateToken, deleteGroup)
 groupRouter.put('/update/:id', authenticateToken, updateGroup)
 groupRouter.get('/all', getAllGroups)
