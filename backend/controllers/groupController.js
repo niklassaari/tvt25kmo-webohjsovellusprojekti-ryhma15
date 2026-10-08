@@ -107,6 +107,11 @@ export const createGroupRequest = async (req, res) => {
         const { groupId } = req.body
         const userId = req.user.id
 
+        const ownerId = await groupModel.getGroupOwner(groupId)
+        if (Number(userId) === Number(ownerId)) {
+            return res.status(400).json({ error: "You are the owner of this group" })
+        }
+
         await groupModel.createGroupRequest(groupId, userId)
         res.status(201).json({ message: "Group request created successfully" })
     } catch (err) {
@@ -218,5 +223,16 @@ export const updateRequestStatus = async (req, res) => {
 }
 } catch (err) {
         res.status(500).json({ error: "Failed to update request status", details: err.message })
+    }
+};
+
+// Hakee ryhmän jäsenet
+export const getGroupMembers = async (req, res) => {
+    try {
+        const groupId = req.params.groupId
+        const members = await groupModel.getGroupMembers(groupId)
+        res.status(200).json({ members });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch group members", details: err.message })
     }
 };

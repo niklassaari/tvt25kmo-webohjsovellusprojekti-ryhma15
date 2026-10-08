@@ -27,5 +27,6 @@ groupRouter.get('/:groupId/movies', authenticateToken, getGroupMovies)
 groupRouter.post('/:groupId/movies', authenticateToken, addMovieToGroup)
 groupRouter.get('/:groupId/requests', authenticateToken, getGroupRequests)
 groupRouter.post('/requests/:requestId', authenticateToken, updateRequestStatus)
+groupRouter.get('/:groupId/members', authenticateToken, getGroupMembers)
 
 export default groupRouter

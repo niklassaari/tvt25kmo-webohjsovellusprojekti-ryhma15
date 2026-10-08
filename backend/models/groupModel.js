@@ -113,3 +113,14 @@ export const addMovieToGroup = async (groupId, userId, movieId, movieTitle) => {
     )
     return result.rows[0];
 }
+// Hakee ryhmän jäsenet
+export const getGroupMembers = async (groupId) => {
+    const result = await db.query(
+        `SELECT m.user_id, m.role, u.username 
+         FROM group_members m 
+         JOIN users u ON m.user_id = u.id 
+         WHERE m.group_id = $1`,
+        [groupId]
+    );
+    return result.rows;
+};
