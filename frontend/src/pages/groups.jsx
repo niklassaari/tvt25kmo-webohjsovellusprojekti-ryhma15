@@ -417,10 +417,10 @@ const getToken = () => {
                 </button>
             )}
 
-            {getUser() && getUser().is_owner && (
-                <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
-                    Delete Group
-                </button>
+            {getUser() && Number(getUser().id) === Number(groups.find(g => (g.id || g.group_id) === selectedGroupId)?.owner_id) && (
+              <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
+                Delete Group
+              </button>
             )}
 
             {getUser() && (

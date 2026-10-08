@@ -207,11 +207,11 @@ export const updateRequestStatus = async (req, res) => {
         }
 
         if (action === 'accept') {
-            await groupModel.updateGroupRequestStatus(requestId, 'Approved')
+            await groupModel.updateRequestStatus(requestId, 'Approved')
             await groupModel.groupRole(request.group_id, request.user_id, 'member')
             res.status(200).json({ message: "Request accepted and user added to group" })
         } else if (action === 'reject') {
-            await groupModel.updateGroupRequestStatus(requestId, 'Rejected')
+            await groupModel.updateRequestStatus(requestId, 'Rejected')
             res.status(200).json({ message: "Request rejected" })
         } else {
             res.status(400).json({ error: 'Invalid action.' })
