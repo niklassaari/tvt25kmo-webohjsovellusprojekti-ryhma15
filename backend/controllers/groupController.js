@@ -202,21 +202,21 @@ export const updateRequestStatus = async (req, res) => {
         }
 
         const ownerId = await groupModel.getGroupOwner(request.group_id)
-        if (userId !== ownerId) {
+        if (Number(userId) !== Number(ownerId)) {
             return res.status(403).json({ error: "You are not the owner of this group" })
         }
 
-        if (action === 'accept') {
-            await groupModel.updateRequestStatus(requestId, 'Approved')
-            await groupModel.groupRole(request.group_id, request.user_id, 'member')
-            res.status(200).json({ message: "Request accepted and user added to group" })
-        } else if (action === 'reject') {
-            await groupModel.updateRequestStatus(requestId, 'Rejected')
-            res.status(200).json({ message: "Request rejected" })
-        } else {
-            res.status(400).json({ error: 'Invalid action.' })
-        }
-    } catch (err) {
+        if (desicion === 'accept' || desicion === 'Approved') {
+          await groupModel.updateRequestStatus(requestId, 'Approved')
+          await groupModel.groupRole(request.group_id, request.user_id, 'member')
+          return res.status(200).json({ message: "Request accepted and user added to group" })
+      } else if (desicion === 'reject' || desicion === 'Rejected') {
+          await groupModel.updateRequestStatus(requestId, 'Rejected')
+          return res.status(200).json({ message: "Request rejected" })
+      } else {
+        return res.status(400).json({ error: 'Invalid action.' })
+}
+} catch (err) {
         res.status(500).json({ error: "Failed to update request status", details: err.message })
     }
 };

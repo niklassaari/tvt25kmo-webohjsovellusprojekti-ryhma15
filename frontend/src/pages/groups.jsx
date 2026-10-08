@@ -77,12 +77,13 @@ const Groups = () => {
         setGroupMoviesVisible(true)
         
         const currentUser = getUser()
-        if (currentUser && currentUser.id === groupOwnerId) {
+        if (currentUser && Number(currentUser.id) === Number(groupOwnerId)) {
           try {
             const requestsResponse = await authorizedFetch(`/api/groups/${groupId}/requests`)
             const requestsData = await requestsResponse.json()
             if (requestsResponse.ok) {
-              setJoinRequests(requestsData.requests || [])
+              const fetchedRequests = Array.isArray(requestsData.requests) ? requestsData.requests : (requestsData.requests || [])
+              setJoinRequests(fetchedRequests)
             } else {
               setJoinRequests([])
             }
@@ -115,7 +116,12 @@ const Groups = () => {
         body: JSON.stringify({ action })
       })
       if (response.ok) {
-        setJoinRequests(joinRequests.filter(request => request.id !== requestId))
+        setJoinRequests(prevRequests =>
+          prevRequests.filter(request => {
+            const currentReqId = request.id ?? request.request_id
+            return String(currentReqId) !== String(requestId)
+          })
+        )
         alert(`Request ${action === 'accept' ? 'accepted' : 'rejected'} successfully`)
       } else {
         const data = await response.json()
