@@ -379,24 +379,27 @@ const Groups = () => {
       {/* Group management buttons */}
       {selectedGroupId && (() => {
         const currentUser = getUser()
-        const selectedGroup = groups.find(g => (g.id || g.group_id) === selectedGroupId)
-        const ownerId = selectedGroup?.owner_id ?? selectedGroup?.group_owner_id ?? selectedGroup?.ownerId ?? selectedGroup?.user_id
-        const isOwner = currentUser && String(currentUser.id) === String(ownerId)
-        
-        console.log("DEBUG OMISTAJUUS:", { selectedGroup, currentUser, ownerId, currentUserId, isOwner })
-        
+        const selectedGroup = groups.find(g => String(g.id || g.group_id) === String(selectedGroupId))
+        const ownerId = selectedGroup?.owner_id ?? selectedGroup?.group_owner_id ?? selectedGroup?.ownerId ?? selectedGroup?.user_id ?? selectedGroup?.created_by
+        const currentUserId = currentUser?.id ?? currentUser?.user_id ?? currentUser?.sub
+
+        const isOwner = Boolean(currentUserId && ownerId && String(currentUserId) === String(ownerId))
+
+        console.log('DEBUG OMISTAJUUS:', { selectedGroup, currentUser, ownerId, currentUserId, isOwner })
+
         return (
           <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
             {/* Show View Requests button ONLY if the current user is the owner of the selected group */}
             {isOwner && (
               <button
-                onClick={() => fetchJoinRequests(selectedGroupId)} style={{ backgroundColor: '#e67e22', color: 'white', marginRight: '10px', padding: '6px 12px', cursor: 'pointer' }}>
+                onClick={() => fetchJoinRequests(selectedGroupId)}
+                style={{ backgroundColor: '#e67e22', color: 'white', marginRight: '10px', padding: '6px 12px', cursor: 'pointer' }}>
                 View Join Requests
               </button>
             )}
 
             {currentUser && (
-              <button onClick={() => removeMember(selectedGroupId, currentUser.id)}>
+              <button onClick={() => removeMember(selectedGroupId, currentUserId)}>
                 Remove Member
               </button>
             )}
