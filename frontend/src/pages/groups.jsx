@@ -4,7 +4,7 @@ import { SearchMovies } from '../GetMovie.js'
 import './groups.css'
 
 const Groups = () => {
-  const { auth } = useAuth ? useAuth() : { auth: null }
+  const { user, accessToken, authorizedFetch } = useAuth()
   const [groups, setGroups] = useState([])
   const [newGroupName, setNewGroupName] = useState('')
   const [error, setError] = useState(null)
@@ -18,7 +18,7 @@ const Groups = () => {
   const [searchResults, setSearchResults] = useState([])
 
 const getToken = () => {
-    let token = auth?.token || localStorage.getItem('accessToken') || localStorage.getItem('token') || ''
+    let token = accessToken || localStorage.getItem('accessToken') || localStorage.getItem('token') || ''
     if (!token) {
       try {
         const userStr = localStorage.getItem('user')
@@ -36,9 +36,8 @@ const getToken = () => {
   }
 
   const getUser = () => {
-    if (!auth) return null
-    if (typeof auth.getUser === 'function') return auth.getUser()
-    return auth.User || auth
+    if (!user) return null
+    return user
   }
 
   useEffect(() => {
