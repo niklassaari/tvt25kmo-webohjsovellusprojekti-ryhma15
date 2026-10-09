@@ -377,7 +377,8 @@ const Groups = () => {
               <ul>
                 {searchResults.map((movie) => (
                   <li key={movie.id} style={{ marginBottom: '5px' }}>
-                    {movie.title} ({movie.release_date?.slice(0, 4) || 'N/A'}){' '}
+                    {movie.title}
+                    {movie.release_date ? ` (${movie.release_date.slice(0, 4)})` : ''}{' '}
                     <button onClick={() => addMovieToGroup(movie.id, movie.title)}>
                       + Add to Group
                     </button>
