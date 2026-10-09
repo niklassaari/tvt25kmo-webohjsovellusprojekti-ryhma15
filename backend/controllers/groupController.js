@@ -142,7 +142,7 @@ export const removeMember = async (req, res) => {
     }
 };
 
-// Hakee käyttäjän elokuvat
+// Hakee käyttäjän ryhmät
 export const getUserGroups = async (req, res) => {
     try {
         const { username } = req.params;
