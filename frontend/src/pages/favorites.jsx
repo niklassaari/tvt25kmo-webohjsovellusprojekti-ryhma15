@@ -8,8 +8,9 @@ import { useAuth } from '../context/authContext';
 const MyFavorites = () => {
   const { username } = useParams();
   const [movies, setMovies] = useState([]);
+  const [message, setMessage] = useState("");
   const { accessToken } = useAuth();
-
+  
   useEffect(() => {
     fetch(`/api/movies/favorites/${username}`)
       .then(res => res.json())
@@ -47,7 +48,7 @@ const MyFavorites = () => {
 // nappi mistä favorites sivulla kopioi sen osoitteen suoraan leikepöuydälle, ei anna tällä hetkellä mitään infoo siitä että onnistuku kopio muuten kun f12 consolessa
   return (
     <div id="Favorites">
-      <h2>{username} Favorites</h2>
+      <h2>{username}'s Favorites</h2>
    
    
     <button
@@ -60,7 +61,7 @@ const MyFavorites = () => {
 
           input.select();
           document.execCommand('copy');
-
+          setMessage("Linkki kopioitu!");
           document.body.removeChild(input);
 
           console.log('URL kopioitu!');
@@ -68,6 +69,7 @@ const MyFavorites = () => {
       >
             Share with URL
           </button>
+          {message && <p role="status">{message}</p>}
       <div className="movie-list">
         {movies.map(movie => (
           <MovieData key={movie.id} movie={movie} isFavoritePage={true} onRemove={removeFavorite} />

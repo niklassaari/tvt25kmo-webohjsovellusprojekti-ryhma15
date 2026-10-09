@@ -1,0 +1,13 @@
+#Favorites [role="status"] {
+    color: white;
+}
+
+#Favorites h2 {
+    margin-top: 10px;
+    color: white;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.copyUrl-btn {
+    background: transparent;
+}

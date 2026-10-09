@@ -142,6 +142,22 @@ export const removeMember = async (req, res) => {
     }
 };
 
+// Hakee käyttäjän elokuvat
+export const getUserGroups = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const groups = await groupModel.getUserGroups(username);
+
+        res.status(200).json({ groups });
+    } catch (err) {
+        console.error('Error fetching user groups:', err);
+        res.status(500).json({
+            error: "Failed to fetch user groups",
+            details: err.message
+        });
+    }
+};
+
 // Hakee ryhmän elokuvat
 export const getGroupMovies = async (req, res) => {
     try {
