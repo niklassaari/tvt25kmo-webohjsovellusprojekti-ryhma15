@@ -37,12 +37,12 @@ const Navbar = () => {
       <div className="navbar-left">
 
         <Link to="/">
-          <img src={download} alt="ShopNow logo" />
+          <img src={download} style={{marginLeft: "15px"}} alt="ShopNow logo" />
         </Link>
 
         <Dropdown className="navbar-left-dropdown">
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            test
+
+          <Dropdown.Toggle style={{width: "100px", height: "60px", marginBottom: "10px"}} variant="success" id="dropdown-basic">
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
@@ -69,15 +69,14 @@ const Navbar = () => {
               </Dropdown.Item>
             )}
 
-            <Dropdown.Item as={Link} to="/Moviestesti">
-              Testi
-            </Dropdown.Item>
-
+            {loggedIn && user && (
             <Dropdown.Item as={Link} to="/Profile">
               Profile
             </Dropdown.Item>
+          
+            )}
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown>  
 
         {!loggedIn ? (
           <form onSubmit={handleLogin}>
@@ -106,7 +105,7 @@ const Navbar = () => {
               />
             </div>
 
-            <button type="submit">
+            <button type="submit" className="login-button" style={{marginTop: "10px", marginBottom: "10px"}}>
               Login
             </button>
           </form>

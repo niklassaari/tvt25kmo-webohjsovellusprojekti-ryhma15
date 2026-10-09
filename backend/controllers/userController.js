@@ -35,12 +35,26 @@ export async function addUser(req, res, next) {
                      return res.status(400).json({
                             error: "Username, email and password are required"
                      });
+              }
 
 
+              // varmistaa että salasana sisältää vähintää yhden ison kirjaimen ja numeron
+
+              // HUOM, LISÄÄ KÄYTTÖLIITTYMÄÄN HUOMAUTUS TÄSTÄ
+              
+              const hasUppercase = /[A-Z]/.test(password);
+              const hasNumber = /[0-9]/.test(password);
+              const MinLength = password.length >= 8;
+
+              if (!hasUppercase || !hasNumber || !MinLength) {
+                     return res.status(400).json({
+                            error: "Password requires one uppercase letter, one number, and be at least 8 characters long"
+                     });
               }
 
 
               const user = await addOne(username, email, password);
+
               res.status(201).json({
                      message: "User created successfully",
                      username: user.username,
@@ -49,7 +63,7 @@ export async function addUser(req, res, next) {
               });
 
 
-              // HUOM: usernamenki pitää sitten ola UQ
+              // HUOM: usernamenki pitää sitten olla UQ
 
        } catch (err) {
 
