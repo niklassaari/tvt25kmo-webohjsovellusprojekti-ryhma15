@@ -51,7 +51,7 @@ app.get("/test", (req, res) => {
 
 
 //Suojaamattomat endpointit
-app.use("/user", userRouter);
+app.use("/api/users", userRouter);
 app.use("/reviews", reviewRouter);
 
 //Suojatut endpointit
