@@ -8,6 +8,7 @@ import userRouter from "./routes/userRouter.js";
 import reviewRouter from './routes/reviewRoutes.js';
 import { authenticateToken } from "./middleware/auth.js";
 import groupRoutes from "./routes/groupRoutes.js";
+import { getUserGroups } from "./controllers/groupController.js";
 
 const port = process.env.PORT||3001
 const app = express()
@@ -53,6 +54,7 @@ app.get("/test", (req, res) => {
 //Suojaamattomat endpointit
 app.use("/api/users", userRouter);
 app.use("/reviews", reviewRouter);
+app.get("/api/users/user/:username", getUserGroups);
 
 //Suojatut endpointit
 app.listen(port, () => {

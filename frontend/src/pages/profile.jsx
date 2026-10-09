@@ -35,8 +35,15 @@ if (!user?.username) return;
 
 const fetchGroups = async () => {
 try {
-const response = await fetch(`/api/users/user/${encodeURIComponent(user.username)}`);
+const response = await fetch(
+  `/api/users/user/${encodeURIComponent(user.username)}`
+);
+
   const data = await response.json();
+
+  //test
+  console.log("Groups response status:", response.status);
+  console.log("Groups response data:", data);
 
   if (response.ok) {
     setGroups(data.groups || []);
