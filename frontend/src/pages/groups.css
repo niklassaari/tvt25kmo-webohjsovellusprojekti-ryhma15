@@ -1,0 +1,16 @@
+/* Asetetaan kaikkien teksti-elementtien väri valkoiseksi Groups-sivulla */
+#Groups,
+#Groups h1,
+#Groups h2,
+#Groups h3,
+#Groups p,
+#Groups span,
+#Groups li,
+#Groups label {
+  color: #ffffff;
+}
+
+/* Varmistetaan, että tekstikentän (input) teksti säilyy tummana, jotta kirjoitus näkyy valkoisella pohjalla */
+#Groups input {
+  color: #ffffff;
+}
