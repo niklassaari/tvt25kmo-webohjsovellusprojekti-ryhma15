@@ -8,22 +8,32 @@
   margin: 0 auto;
 }
 
+#container h1 {
+    color: white;
+    margin-top: 10px;
+    font-family: "Times New Roman", Times, serif;
+}
+
 #search-input {
   width: 300px;
   text-align: left;
   height: 50px;
+  background-image: url('../assets/tausta.png');
+
 }
 
 #search-form select,
 #search-form input[type="number"]
 {
   height: 50px;
+  background-image: url('../assets/tausta.png');
 }
 
 
 #search-form button {
   height: 50px;
   width: 100px;
+  background-image: url('../assets/hooter.png');
 }
 
 #search-form input[type="number"] {
@@ -45,6 +55,18 @@
 
 @media (max-width: 480px) {
 
+#container h1 {
+    color: white;
+    margin-top: 10px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+#search-input,
+#search-form select,
+#search-form input[type="number"] {
+    color: white;
+}
+
 #search-form {
   display: flex;
     flex-wrap: wrap;
@@ -54,6 +76,7 @@
     max-width: 100% !important;
     padding: 0 3px !important;      
     box-sizing: border-box;
+    
   }
 
   #search-input, #search-form select, #search-form input[type="number"] {
@@ -71,6 +94,7 @@
     font-size: 14px;
     margin-top: 4px;
     box-sizing: border-box;
+    
   }
 
   
@@ -85,4 +109,5 @@
     margin-bottom: 10px;
   }
 
+  
 }

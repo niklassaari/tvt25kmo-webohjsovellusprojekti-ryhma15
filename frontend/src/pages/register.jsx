@@ -43,7 +43,7 @@ const Register = () => {
     if (response.ok) {
       setMessage("Registration successful!");
     } else {
-      setMessage("Registration failed.");
+      setMessage("Registration failed. (Make sure your password contains at least one uppercase letter and one number and is at least 8 characters long.)");
     }
 
     console.log(data);
@@ -95,7 +95,7 @@ const Register = () => {
         Register new profile
       </button>
 
-      {message && <p>{message}</p>}
+      {message && <p className="registermessage">{message}</p>}
 
     </form>
   );

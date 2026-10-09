@@ -24,8 +24,13 @@ export async function SearchMovies(searchTerm) {
 
         const data = await response.json();
         
-        // TMDB returns an array of results in the 'results' property
-        return data.results; 
+         // Remove duplicate movies based on TMDB ID
+        const uniqueResults = data.results.filter(
+            (movie, index, self) =>
+                index === self.findIndex(m => m.id === movie.id)
+        );
+
+        return uniqueResults;
 
     } catch (error) {
         console.error('Error searching movies:', error);

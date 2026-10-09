@@ -3,6 +3,7 @@
   justify-content: space-between;
   align-items: center;
   background-color: #333;
+  background-image: url('../assets/hooter.png');
   color: #fff;
   padding: 1rem;
 }
@@ -21,25 +22,86 @@
 .navbar-left .dropdown {
   margin-left: 15px;
   top: 6px;
-  color: #333;
+  color: #000000;
+  
+}
+
+
+.navbar .dropdown-menu {
+  background-color: #333;
+  background-image: url('../assets/tausta.png');
+  border-color: white;
+}
+
+
+.navbar-left-dropdown .dropdown-menu .dropdown-item {
+color: white !important;
 }
 
 .navbar-left form {
   margin-left: auto;
   margin-right: 15px;
+  
+  
 }
 
 .navbar-left-dropdown .dropdown-toggle {
-  background-color: #222;
-  border-color: #222;
+  background-color: #333;
+  background-image: url('../assets/hooter.png');
+  border-color: #999;
 }
+
+
 
 .logout-button {
   margin-left: auto;
   margin-right: 15px;
 }
 
+.navbar .form-control {
+  background-image: url('../assets/tausta.png');
+  color: white;
+  -webkit-text-fill-color: white;
+}
+
+.navbar .form-control::placeholder {
+    color: white;
+}
+
+.navbar .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  background-image: url('../assets/tausta.png');
+}
+
+.navbar .login-button {
+  background-color: #333;
+  background-image: url('../assets/tausta.png');
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.navbar .logout-button {
+  background-color: #333;
+  background-image: url('../assets/tausta.png');
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
 @media (max-width: 480px) {
+  
+  .navbar .form-control {
+    color: white;
+    -webkit-text-fill-color: white;
+}
+
+.navbar .form-control::placeholder {
+    color: white;
+}
+  
   form {
     width: 100% !important;
     max-width: 160px !important;
@@ -50,5 +112,23 @@
     padding: 5px 8px !important;
     font-size: 11px !important;
     height: auto !important;
+    background-image: url('../assets/tausta.png');
   } 
+
+.navbar .login-button {
+  background-color: #333;
+  background-image: url('../assets/tausta.png');
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.navbar .logout-button {
+  background-color: #333;
+  background-image: url('../assets/tausta.png');
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
 }

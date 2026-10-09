@@ -5,9 +5,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useEffect, useState } from 'react';
 import { genreNames } from '../Genres';
 
-import halfstar from '../assets/reviewstars/halfstar.png';
-import fullstar from '../assets/reviewstars/fullstar.png';
-
 import { useAuth } from '../context/authContext';
 
 // review jutut
@@ -195,7 +192,10 @@ try {
 // muuttaa genre_id:t genren nimiksi Genres.js tiedoston avulla
 const convertGenreIds = (movie) => {
 
-  const genreName = movie.genre_ids.map(genre => genreNames[genre] || "Unknown Genre");
+  const genreName = (movie.genre_ids || []).map(
+    genre => genreNames[genre] || "Unknown Genre"
+  );
+
   return genreName;
 };
 
@@ -259,7 +259,7 @@ return (
             <img
               src={`https://image.tmdb.org/t/p/w500${currentMovie?.poster_path}`}
               name="logo"
-              style={{ width: '90px', height: '150px', objectFit: 'cover' }}
+              style={{ width: '90px', height: '145px', objectFit: 'cover' }}
             />
 
 
@@ -404,7 +404,7 @@ return (
       </strong> 
   </span> 
 
-      <span> Rating: 
+      <span> Rating:   
         <span className="review-rating"> 
           {[1, 2, 3, 4, 5].map((star) => ( 
             <i key={star} 
@@ -437,13 +437,13 @@ return (
   </button>
   )}
 </div>
-
+<div className="review-comment">
                     <p>
                       {review.comment}
                     </p>
 
                     
-
+</div>
                   </div>
                 ))
               )}
@@ -454,7 +454,7 @@ return (
 
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn btn-secondary close-button"
               data-bs-dismiss="modal"
               onClick={() => setCurrentMovie(null)}
             >
