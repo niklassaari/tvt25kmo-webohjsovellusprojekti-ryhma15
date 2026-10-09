@@ -1,5 +1,5 @@
 import './profile.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/authContext';
 import { useEffect } from 'react';
@@ -14,6 +14,8 @@ const Profile = () => {
   // hakee lempielokuvat
   const [movies, setMovies] = useState([]);
 
+  // mahdollistaa sen että Favorites nappi toimii linkkinä Favorites näkymään
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,23 +31,28 @@ const Profile = () => {
   };
 
 useEffect(() => {
-    const fetchGroups = async () => {
-        try {
-            const response = await fetch('/api/groups/all')
-            const data = await response.json()
-            if (response.ok) {
-                setGroups(data.groups || [])
-            } else {
-                setError(data.error || 'Error fetching groups')
-            }
-        } catch (error) {
-            console.error('Error fetching groups:', error)
-            setError('Network error')
-        }
-    };
+if (!user?.username) return;
 
-    fetchGroups();
-}, []);
+const fetchGroups = async () => {
+try {
+const response = await fetch(`/api/users/user/${encodeURIComponent(user.username)}`
+);
+
+  const data = await response.json();
+
+  if (response.ok) {
+    setGroups(data.groups || []);
+  } else {
+    console.error('Error fetching groups:', data.error);
+  }
+} catch (error) {
+  console.error('Error fetching groups:', error);
+}
+
+};
+
+fetchGroups();
+}, [user?.username]);
 
 useEffect(() => {
   if (!user?.username) return;
@@ -122,10 +129,10 @@ useEffect(() => {
           </button>
 
           <button
-            type="button"
-            className="favorite-btn"
-          >
-            Favorites
+  type="button"
+  className="favorite-btn"
+  onClick={() => navigate(`/favorites/${user.username}`)}>
+  Favorites
           </button>
 
           <div

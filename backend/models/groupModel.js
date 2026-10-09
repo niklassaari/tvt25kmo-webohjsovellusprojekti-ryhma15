@@ -22,6 +22,13 @@ export const getAllGroups = async () => {
     const result = await db.query('SELECT * FROM moviegroups');
     return result.rows
 }
+
+// Hakee käyttäjän ryhmät
+export const getUserGroups = async (username) => {
+    const result = await db.query(`SELECT DISTINCT mg.* FROM moviegroups mg  JOIN group_members gm ON gm.group_id = mg.id JOIN users u ON u.id = gm.user_id WHERE u.username = $1`, [username]);
+    return result.rows;
+};
+
 //Hakee ryhmän ID:n perusteella
 export const getGroupById = async (id) => {
     const result = await db.query('SELECT * FROM moviegroups WHERE id = $1', [id]);

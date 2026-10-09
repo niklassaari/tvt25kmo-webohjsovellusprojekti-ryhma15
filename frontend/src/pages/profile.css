@@ -3,6 +3,23 @@
   justify-content: center;
   gap: 40px;
   margin-bottom: 80px;
+  color: white;
+  
+}
+
+.profile-details {
+  color: white;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.delete-profile-button {
+background: transparent;
+margin-right: 5px;
+}
+
+.favorite-btn {
+  background: transparent;
+  margin-left: 5px;
 }
 
 @media (max-width: 768px) {

@@ -13,8 +13,31 @@ const Register = () => {
   const [newpassword, setNewpassword] = useState("");
   const [message, setMessage] = useState("");
 
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setMessage("");
+
+// Validate required fields before sending the request
+if (!newusername.trim() || !newemail.trim() || !newpassword) {
+  setMessage("Make sure none of the fields are empty.");
+  return;
+}
+
+// Validate password before sending the request
+const hasUppercase = /[A-Z]/.test(newpassword);
+const hasNumber = /[0-9]/.test(newpassword);
+const hasMinLength = newpassword.length >= 8;
+
+if (!hasUppercase || !hasNumber || !hasMinLength) {
+  setMessage(
+    "Password must be at least 8 characters long, contain at least one uppercase letter and one number."
+  );
+  return;
+}
+
 
     const newUser = {
       username: newusername,
