@@ -52,7 +52,7 @@ app.get("/test", (req, res) => {
 
 
 //Suojaamattomat endpointit
-app.use("/api/users", userRouter);
+app.use("/user", userRouter);
 app.use("/reviews", reviewRouter);
 app.get("/api/users/user/:username", getUserGroups);
 
