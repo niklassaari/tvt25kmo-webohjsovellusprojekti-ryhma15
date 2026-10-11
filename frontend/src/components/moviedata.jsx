@@ -305,7 +305,7 @@ return (
                 </p>
 
                 <p>
-                  Rating: {movie.vote_average}
+                  TMBD Rating: {movie.vote_average}
                 </p>
 
               </div>

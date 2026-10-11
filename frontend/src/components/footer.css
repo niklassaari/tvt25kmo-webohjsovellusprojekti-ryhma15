@@ -1,4 +1,61 @@
 .footer {
+  
+  width: 100%;
+  background-image: url('../assets/hooter.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+}
+
+.footer-title {
+  font-family: "Times New Roman", Times, serif;
+  margin-top: 10px;
+}
+
+.footer-members {
+  padding: 10px;
+  text-align: center;
+  
+}
+
+.footer-docs {
+  padding: 20px;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.footer-members h4 {
+  margin: 0 0 12px;
+  font-size: 20x;
+  font-family: "Times New Roman", Times, serif;
+  
+}
+
+.footer-members p {
+  margin: 3px;
+  font-size: 15px;
+}
+
+.footer-divider {
+  width: 90%;
+  height: 1px;
+  background-color: white;
+  margin: 0 auto;
+}
+
+.footer-github {
+  padding: 20px;
+  color: white;
+}
+
+.footer-docs a {
+  color: white;
+}
+
+.footer-github img {
+  width: 50px;
   height: 50px;
-  background-color: #333;
+  object-fit: contain;
+  text-align: center
 }

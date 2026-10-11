@@ -35,7 +35,7 @@ services:
        DB_USER: postgres
        DB_PASSWORD: mysecretpassword
        DB_NAME: moviedb
-       TMDB_API_KEY: ${TMDB_API_KEY}
+       VITE_TMDB_TOKEN: ${VITE_TMDB_TOKEN}
     depends_on:
       - db
 
