@@ -1,15 +1,12 @@
-version: '3.8'
-
 services:
   # Tietokanta nää pitää sit muuttaa kun on se tietokanta tehty
   db:
     image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: moviedb
+    env_file:
+      - ./backend/.env
     ports:
       - "5432:5432"
+
 ## ^
 
 #testi, db.sql pitäis nyt mennä läpi
@@ -24,28 +21,23 @@ services:
   # Node.js backend
   backend:
     build: ./backend
+    env_file:
+      - ./backend/.env
     ports:
       - "3001:3001"
     environment:
-       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
-       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
-       FRONTEND_URL: ${FRONTEND_URL}
-       PORT: 3001
-       DB_HOST: db
-       DB_USER: postgres
-       DB_PASSWORD: mysecretpassword
-       DB_NAME: moviedb
-       TMDB_API_KEY: ${TMDB_API_KEY}
+      PORT: 3001
+      DB_HOST: db
     depends_on:
       - db
 
   # React frontend
   frontend:
     build: ./frontend
+    env_file:
+      - ./frontend/.env
     ports:
       - "5173:5173"
-    environment:
-      VITE_API_URL: ${VITE_API_URL}
     depends_on:
       - backend
 
@@ -54,4 +46,3 @@ services:
 # Määritellään PostgreSQL:n käyttämä pysyvä volume.
 volumes:
   postgres_data:
-

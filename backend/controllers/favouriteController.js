@@ -85,7 +85,7 @@ export async function getPublicFavorites(req,res) {
                 const response = await fetch( `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
             {
                 headers: {
-                    Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+                    Authorization: `Bearer ${process.env.VITE_TMDB_TOKEN}`,
                     accept: 'application/json'
                 }
             }

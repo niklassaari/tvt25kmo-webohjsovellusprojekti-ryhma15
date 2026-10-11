@@ -61,7 +61,7 @@ const MyFavorites = () => {
 
           input.select();
           document.execCommand('copy');
-          setMessage("Linkki kopioitu!");
+          setMessage("Link copied succesfully!");
           document.body.removeChild(input);
 
           console.log('URL kopioitu!');
