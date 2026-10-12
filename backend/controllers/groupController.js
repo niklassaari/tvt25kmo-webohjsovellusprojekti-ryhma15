@@ -192,6 +192,16 @@ export const addMovieToGroup = async (req, res) => {
             return res.status(400).json({ error: "Movie title is required" })
         }
 
+        //check if the user is Member or the owner
+        const ownerId = await groupModel.getGroupOwner(groupId)
+        const members = await groupModel.getGroupMembers(groupId)
+        const isOwner = Number(userId) === Number(ownerId)
+        const isMember = members.some(m => Number(m.user_id) === Number(userId))
+
+        if (!isOwner && !isMember) {
+            return res.status(403).json({ error: "You must be a member or owner to add movies to this group" })
+        }
+
         const newMovie = await groupModel.addMovieToGroup(groupId, userId, movieId, movieTitle)
         res.status(201).json({ message: "Movie added to group successfully", movie: newMovie })
     } catch (err) {

@@ -19,4 +19,9 @@ profit
 
 ## Usage
 
+Go to [project](http://128.214.255.200:5173/) to get to the website
 
+There you can see the different movies and their reviews.
+If you want to leave your own review you must create a profiel in the Register page.
+After you have registered now you can leave reviews and create or join groups.
+If you want to see groups movie list you must first join it or create your own.
