@@ -64,14 +64,14 @@ const LoadMore = async () => {
   return (
     <div id="container">
 
-      <h1>Elokuvahaku</h1>
+      <h1>Movie search</h1>
 
       <form id="search-form" onSubmit={handleSearch}>
 
         <input
           type="text"
           id="search-input"
-          placeholder="Syötä elokuvan tai sarjan nimi..."
+          placeholder="Search for a movie or TV Series..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -114,8 +114,8 @@ const LoadMore = async () => {
           onChange={(e) => setYear(e.target.value)}
         />
 
-        <button type="submit">
-          Hae
+        <button id="search-button" type="submit">
+          Search
         </button>
 
       </form>
@@ -129,7 +129,7 @@ const LoadMore = async () => {
       </div>
 
 {movies.length > 0 && (
-  <button onClick={LoadMore} className="loadMore-button" style={{ marginBottom: '20px' }}>
+  <button id="loadMore-button" onClick={LoadMore}>
     Load more
   </button>
 )}

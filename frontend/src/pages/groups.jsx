@@ -149,7 +149,7 @@ const Groups = () => {
 
     try {
       const response = await SearchMovies(movieSearchTerm)
-      setSearchResults(response || [])
+      setSearchResults((response || []).filter(movie => movie.media_type !== 'tv'))
     } catch (err) {
       console.error('Error searching movies:', err)
       setError('Failed to search movies')
@@ -299,32 +299,33 @@ const Groups = () => {
       <h1>Groups Page</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <p>Enter a group name to create a new group.</p>
-      <form onSubmit={createGroup}>
+      <form className="create-group-form" onSubmit={createGroup}>
         <input
+          className="group-name-form"
           type="text"
           value={newGroupName}
           onChange={(e) => setNewGroupName(e.target.value)}
           placeholder="Enter group name"
         />
-        <button type="submit">Create Group</button>
+        <button className="create-group-btn" type="submit">Create Group</button>
       </form>
 
       {/* Display the list of groups and join request buttons */}
-      <div style={{ marginTop: '20px' }}>
-        <h2>All Groups</h2>
+      <div className="group-list-all" style={{ marginTop: '20px' }}>
+        <h2 className="groups-title">All Groups</h2>
         {(!groups || groups.filter(Boolean).length === 0) ? (
           <p>No groups found.</p>
         ) : (
-          <ul>
+          <ul className="groups-list">
             {groups.filter(Boolean).map((group) => (
-              <li key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
-                <span>{group.name}</span>{' '}
+              <li className="group-item" key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
+                <span className="group-name">{group.name}</span>{' '}
 
-                <button onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id || group.group_owner_id || group.user_id)}>
+                <button className="show-movies-btn" onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id || group.group_owner_id || group.user_id)}>
                  Show Movies
                 </button>
 
-                <button onClick={() => joinGroup(group.id || group.group_id)}>
+                <button className="join-group-btn" onClick={() => joinGroup(group.id || group.group_id)}>
                   Join Group
                 </button>
               </li>
@@ -362,35 +363,41 @@ const Groups = () => {
       {/* Button to add a movie to the selected group */}
       {selectedGroupId && (isOwner||isMember) && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
-          <h2>Search and Add Movie to Selected Group</h2>
-          <form onSubmit={handleMovieSearch}>
+          <h2 className="movie-search-title">Search & add a movie to your group's list</h2>
+          <form className="movie-search-row" onSubmit={handleMovieSearch}>
             <input
+              className="movie-search-form"
               type="text"
               value={movieSearchTerm}
               onChange={(e) => setMovieSearchTerm(e.target.value)}
-              placeholder="Search movie title from TMDB..."
+              placeholder="Search for movies..."
             />
             {(isOwner || isMember) && (
-              <button type="submit">Search TMDB</button>
+              <button className="search-tmbd-btn" type="submit">Search TMDB</button>
             )}
           </form>
 
           {/* TMDB search results */}
-          {searchResults.length > 0 && (
-            <div style={{ marginTop: '10px' }}>
-              <h3>Search Results:</h3>
-              <ul>
-                {searchResults.map((movie) => (
-                  <li key={movie.id} style={{ marginBottom: '5px' }}>
-                    {movie.title}
-                    {movie.release_date ? ` (${movie.release_date.slice(0, 4)})` : ''}{' '}
-                    <button onClick={() => addMovieToGroup(movie.id, movie.title)}>
-                      + Add to Group
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+{searchResults.length > 0 && (
+  <div className="search-results">
+    <h3 className="search-results-title">Search Results:</h3>
+    <ul className="search-results-list">
+      {searchResults.map((movie) => (
+        <li className="search-result-item" key={movie.id}>
+          <span className="search-result-name">
+            {movie.title}
+            {movie.release_date ? ` (${movie.release_date.slice(0, 4)})` : ''}
+          </span>
+          <button
+            className="add-to-group-btn"
+            onClick={() => addMovieToGroup(movie.id, movie.title)}
+          >
+            + Add to Group
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
           )}
         </div>
       )}
@@ -398,7 +405,7 @@ const Groups = () => {
       {/* Display the list of group members */}
       {selectedGroupId && members.length > 0 && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
-          <h2>Group Members</h2>
+          <h2 className="member-list-title">Group Members</h2>
           <ul>
             {members.map((member) => (
               <li key={member.user_id} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -420,7 +427,7 @@ const Groups = () => {
       {/* Display the list of group favorite movies */}
       {groupMoviesVisible && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
-          <h2>Group Favorite Movies</h2>
+          <h2 className="group-fav-title">Group Favorite Movies</h2>
           {movies.length === 0 ? (
             <p>No favorite movies found in this group.</p>
           ) : (
@@ -448,7 +455,7 @@ const Groups = () => {
           )}
 
           {isOwner && (
-            <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px' }}>
+            <button onClick={() => deleteGroup(selectedGroupId)} style={{ marginLeft: '10px', backgroundColor: '#6e0202', color: 'white', marginRight: '10px', padding: '6px 12px', cursor: 'pointer' }}>
               Delete Group
             </button>
           )}
