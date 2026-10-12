@@ -2,26 +2,40 @@
 
 ## Description
 
-This is a project for the course Web Applications Development at Oulu University of Applied Sciences.
-The application runs in docker container where back-, frontend and database have their own container.
-The project is a web application that allows users to give feedback and rate different movies.
-The users can also see the average rating of each movie and read other users' feedback.
-They can also create groups witch have groups own movie lists.
+This is a project for the Web Applications Development course at Oulu University of Applied Sciences (Oamk). 
+The application is containerized using Docker, with separate containers for the backend, frontend, and database.
 
-## Insallation
+The web application allows users to:
+- Browse and search for different movies.
+- Rate movies and read feedback from other users.
+- View average ratings for each movie.
+- Create and join user groups with dedicated group movie lists.
 
-In terminal run
-```bash
-npm install
-run dev
-profit
-```
+## Tech Stack
+
+- **Frontend:** React, Vite
+- **Backend:** Node.js, Express.js
+- **Database:** PostgreSQL
+- **Containerization:** Docker & Docker Compo
+
+## Installation & Running
+
+Make sure you have [Docker](https://www.docker.com/) and Docker Compose installed on your machine.
+
+1. Clone the repository:
+    ```bash
+    git clone [https://github.com/your-username/tvt25kmo-WebBrogAppProject-group15.git](https://github.com/your-username/tvt25kmo-WebBrogAppProject-group15.git)
+    cd tvt25kmo-WebBrogAppProject-group15
+
+2. Build and start containers using Docker Compose
+    docker compose up --build
+
+3. Open your browser and navigate to:
+    Frontend: http://localhost:5173 (or check your container port mapping)
 
 ## Usage
+1. Go to the [live application](http://128.214.255.200:5173/) or your local instance.
 
-Go to [project](http://128.214.255.200:5173/) to get to the website
+2. Register a new profile on the Register page to unlock full features.
 
-There you can see the different movies and their reviews.
-If you want to leave your own review you must create a profiel in the Register page.
-After you have registered now you can leave reviews and create or join groups.
-If you want to see groups movie list you must first join it or create your own.
+3. Once logged in, you can write reviews, create new groups, or join existing ones to view group-specific movie lists.
