@@ -292,6 +292,7 @@ const Groups = () => {
   const selectedGroup = groups.find(g => String(g.id || g.group_id) === String(selectedGroupId))
   const ownerId = selectedGroup?.owner_id ?? selectedGroup?.group_owner_id ?? selectedGroup?.ownerId ?? selectedGroup?.user_id ?? selectedGroup?.created_by
   const isOwner = Boolean(currentUserId && ownerId && String(currentUserId) === String(ownerId))
+  const isMember = Boolean(members.some(member => String(member.user_id) === String(currentUserId)))
 
   return (
     <div id="Groups">
@@ -367,7 +368,9 @@ const Groups = () => {
               onChange={(e) => setMovieSearchTerm(e.target.value)}
               placeholder="Search movie title from TMDB..."
             />
-            <button type="submit">Search TMDB</button>
+            {(isOwner || isMember) && (
+              <button type="submit">Search TMDB</button>
+            )}
           </form>
 
           {/* TMDB search results */}
