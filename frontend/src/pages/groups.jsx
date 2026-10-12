@@ -360,7 +360,7 @@ const Groups = () => {
       )}
 
       {/* Button to add a movie to the selected group */}
-      {selectedGroupId && (
+      {selectedGroupId && (isOwner||isMember) && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
           <h2>Search and Add Movie to Selected Group</h2>
           <form onSubmit={handleMovieSearch}>
