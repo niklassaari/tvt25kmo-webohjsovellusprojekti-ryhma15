@@ -1,6 +1,6 @@
 import * as groupModel from '../models/groupModel.js'
 
-// Ryhmän luonti / ownerId tallennetaan tietokantaan
+// Create a group / ownerId is saved to the database
 export const addGroups = async (req, res) => {
     try {
         const { name } = req.body
@@ -19,7 +19,7 @@ export const addGroups = async (req, res) => {
     }
 };
 
-// Tarkistetaan ryhmän poistoon onko pyynnön tekijä owner
+// Check if the requester is the owner before deleting the group
 export const deleteGroup = async (req, res) => {
     try {
         const groupId = req.params.id
@@ -41,7 +41,7 @@ export const deleteGroup = async (req, res) => {
     }
 };
 
-// Päivitetään ryhmän nimi jos pyynnön tekijä on owner
+// Update group name if the requester is the owner
 export const updateGroup = async (req, res) => {
     try {
         const { name } = req.body
@@ -68,7 +68,7 @@ export const updateGroup = async (req, res) => {
     }
 };
 
-// Hakee kaikki ryhmät nimellä tai ilman nimeä
+// Fetch all groups with or without a name filter
 export const getAllGroups = async (req, res) => {
     try {
         const { name } = req.query
@@ -84,7 +84,7 @@ export const getAllGroups = async (req, res) => {
     }
 };
 
-// Lisätään käyttäjä ryhmään ja määritetään rooli
+// Add a user to a group and assign a role
 export const groupRole = async (req, res) => {
     try {
         const { groupId, userId, role = 'member' } = req.body
@@ -99,7 +99,7 @@ export const groupRole = async (req, res) => {
     }
 };
 
-// Luo ryhmään liittymis pyyntö
+// Create a join request for a group
 export const createGroupRequest = async (req, res) => {
     try {
         const { groupId } = req.body
@@ -120,7 +120,7 @@ export const createGroupRequest = async (req, res) => {
     }
 };
 
-// Jäsenen poisto ryhmästä, tarkistetaan onko pyynnön tekijä owner tai käyttäjä itse
+// Remove a member from a group, check if the requester is the owner or the user themselves
 export const removeMember = async (req, res) => {
     try {
         const groupId = req.params.groupId
@@ -142,7 +142,7 @@ export const removeMember = async (req, res) => {
     }
 };
 
-// Hakee käyttäjän ryhmät
+// Fetch user's groups
 export const getUserGroups = async (req, res) => {
     try {
         const { username } = req.params;
@@ -158,18 +158,30 @@ export const getUserGroups = async (req, res) => {
     }
 };
 
-// Hakee ryhmän elokuvat
+// Fetch group movies
 export const getGroupMovies = async (req, res) => {
     try {
         const groupId = req.params.groupId;
-        const movies = await groupModel.getGroupMovies(groupId);
-        res.status(200).json({ movies });
+        const userId = req.user.id
+
+        // Check if the user is the owner or a member
+        const ownerId = await groupModel.getGroupOwner(groupId)
+        const members = await groupModel.getGroupMembers(groupId)
+        const isOwner = Number(userId) === Number(ownerId)
+        const isMember = members.some(m => Number(m.user_id) === Number(userId));
+
+        if (!isOwner && !isMember) {
+            return res.status(403).json({ error: "You must be a member or owner to view this group's movies" })
+        }
+        // Get movies after checking if the user belongs to the group
+        const movies = await groupModel.getGroupMovies(groupId)
+        res.status(200).json({ movies })
     } catch (err) {
         res.status(500).json({ error: "Failed to fetch group movies", details: err.message });
     }
 };
 
-// Lisää elokuva ryhmään
+// Add a movie to a group
 export const addMovieToGroup = async (req, res) => {
     try {
         const groupId = req.params.groupId
@@ -190,7 +202,7 @@ export const addMovieToGroup = async (req, res) => {
     }
 };
 
-// Hakee ryhmän hakemukset
+// Fetch group requests
 export const getGroupRequests = async (req, res) => {
     try {
         const groupId = req.params.groupId
@@ -207,7 +219,7 @@ export const getGroupRequests = async (req, res) => {
     }
 };
 
-// Käsittelee ryhmän hakemuksen tilan päivityksen
+// Handle group request status updates
 export const updateRequestStatus = async (req, res) => {
     try {
         const requestId = req.params.requestId
@@ -240,7 +252,7 @@ export const updateRequestStatus = async (req, res) => {
     }
 };
 
-// Hakee ryhmän jäsenet
+// Fetch group members
 export const getGroupMembers = async (req, res) => {
     try {
         const groupId = req.params.groupId

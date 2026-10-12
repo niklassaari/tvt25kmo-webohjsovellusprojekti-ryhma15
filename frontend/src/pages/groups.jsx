@@ -319,9 +319,11 @@ const Groups = () => {
             {groups.filter(Boolean).map((group) => (
               <li key={group.id || group.group_id} style={{ marginBottom: '10px' }}>
                 <span>{group.name}</span>{' '}
+
                 <button onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id || group.group_owner_id || group.user_id)}>
                  Show Movies
                 </button>
+
                 <button onClick={() => joinGroup(group.id || group.group_id)}>
                   Join Group
                 </button>
