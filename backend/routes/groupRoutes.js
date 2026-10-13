@@ -1,3 +1,5 @@
+/* Set the routes here and connect them to the correct controller functions */
+
 import express from 'express'
 import { authenticateToken } from '../middleware/auth.js'
 import {

@@ -22,7 +22,7 @@
   background-image: url('../assets/hooter.png');
 }
 
-.add-to-group-btn{
+.add-to-group-btn {
   background-image: url('../assets/hooter.png');
 }
 
@@ -82,7 +82,7 @@
 
 .join-group-btn {
   background-image: url('../assets/hooter.png');
-  
+
 }
 
 .search-results {
@@ -100,17 +100,17 @@
 }
 
 .search-result-item {
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 12px;
-margin-bottom: 10px;
-flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .search-result-name {
-text-align: right;
-width: 250px;
+  text-align: right;
+  width: 250px;
 }
 
 
@@ -158,6 +158,7 @@ width: 250px;
 
 
 @media (max-width: 576px) {
+
   #Groups .create-group-form,
   #Groups .movie-search-row {
     display: flex;
@@ -200,4 +201,3 @@ width: 250px;
     width: auto;
   }
 }
-

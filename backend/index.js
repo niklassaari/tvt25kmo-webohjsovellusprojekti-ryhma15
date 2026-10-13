@@ -10,7 +10,7 @@ import { authenticateToken } from "./middleware/auth.js";
 import groupRoutes from "./routes/groupRoutes.js";
 import { getUserGroups } from "./controllers/groupController.js";
 
-const port = process.env.PORT||3001
+const port = process.env.PORT || 3001
 const app = express()
 
 
@@ -18,17 +18,16 @@ const app = express()
 
 
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
-app.use('/api/movies',movieRoutes);
-app.use('/api/groups',groupRoutes);
+app.use(express.urlencoded({ extended: false }))
+app.use('/api/movies', movieRoutes);
+app.use('/api/groups', groupRoutes);
 
 app.get('/api/movies/test2', (req, res) => {
-  console.log("🔥 TEST2 OSUI");
-  res.send("TEST2 TOIMII");
+    console.log("🔥 TEST2 OSUI");
+    res.send("TEST2 TOIMII");
 });
 
 
-//test
 const allowedOrigins = [
     "http://localhost:5173",
     "http://128.214.255.200:5173"
@@ -42,31 +41,31 @@ app.use(cors({
 app.use(cookieParser());
 
 app.get("/", async (req, res) => {
- res.send("Postgres APIiiiiiiii esimerkki");
+    res.send("Postgres API EXAMPLE");
 });
-//testi
+
 app.get("/test", (req, res) => {
-  console.log("🔥 SERVER TEST OSUI");
-  res.send("SERVER TEST TOIMII");
+    console.log("SERVER TEST MATCH");
+    res.send("SERVER TEST WORKS");
 });
 
 
-//Suojaamattomat endpointit
+// Public endpoints
 app.use("/user", userRouter);
 app.use("/reviews", reviewRouter);
 app.get("/api/users/user/:username", getUserGroups);
 
-//Suojatut endpointit
+// Protected endpoints
 app.listen(port, () => {
- console.log(`Server is listening port ${port}`);
+    console.log(`Server is listening port ${port}`);
 });
 
-app.use((err,req,res,next)=>{
+app.use((err, req, res, next) => {
     const statusCode = err.status || 500
     res.status(statusCode).json({
         error: {
             message: err.message,
-            status:statusCode
+            status: statusCode
         }
     })
 })

@@ -1,45 +1,48 @@
 import {
-    addReview,
-    fetchReviews,
-    deleteReview
+  addReview,
+  fetchReviews,
+  deleteReview
 } from "../models/reviewmodel.js";
 
 export async function postReview(req, res) {
-// lisää arvostelun tietokantaan
-    const { movie_id, rating, comment } = req.body; // nää ottaa käyttäjän id ja sit ton elokuvan id talteen
-    const userId = req.user.id;
 
-   try {
-        await addReview(userId, movie_id, rating, comment);
 
-        res.status(201).json({
-            message: 'review created successfully'
-        });
+  // Adds a review to the database
+  const { movie_id, rating, comment } = req.body; //  stores the user's and the movie's ID
+  const userId = req.user.id;
 
-    } catch (error) {
-        console.error('error when creating review', error);
-        res.status(500).json({
-            error: 'database error'
-        });
-    }
+  try {
+    await addReview(userId, movie_id, rating, comment);
+
+    res.status(201).json({
+      message: 'review created successfully'
+    });
+
+  } catch (error) {
+    console.error('error when creating review', error);
+    res.status(500).json({
+      error: 'database error'
+    });
+  }
 }
 
-// hakee kaikki elokuvan arvostelut
+
+// Fetches all the reviews for the selected movie
 
 export async function getReviews(req, res) {
-    const {movie_id} = req.params;
-    
-     try {
-        const reviews = await fetchReviews(movie_id);
+  const { movie_id } = req.params;
 
-        res.status(200).json(reviews.rows);
+  try {
+    const reviews = await fetchReviews(movie_id);
 
-    } catch (error) {
-        console.error('error when getting reviews', error);
-        res.status(500).json({
-            error: 'database error'
-        });
-    }
+    res.status(200).json(reviews.rows);
+
+  } catch (error) {
+    console.error('error when getting reviews', error);
+    res.status(500).json({
+      error: 'database error'
+    });
+  }
 }
 
 export async function removeReview(req, res) {

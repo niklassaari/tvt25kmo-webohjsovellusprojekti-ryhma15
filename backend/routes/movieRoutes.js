@@ -1,4 +1,4 @@
-/* tänne tulee verkko osotteet ja yhistää ne oikeaan kontrolleri funktioon */
+/* Set the routes here and connect them to the correct controller functions */
 
 import express from 'express';
 
@@ -30,7 +30,7 @@ router.post('/favorites', authenticateToken, addFavorite);
 router.get('/favorites', authenticateToken, getAllFavorites);
 router.delete('/favorites', authenticateToken, deleteFromFavorites);
 
-// tää sitä varten että kaikki näkee sen sun favoritet
+
 router.get('/favorites/:username', getPublicFavorites);
 
 

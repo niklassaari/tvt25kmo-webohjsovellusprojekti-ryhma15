@@ -7,176 +7,180 @@ const API_URL = import.meta.env.VITE_API_URL;
 export function AuthProvider({ children }) {
 
 
- const [user, setUser] = useState(null);
-
- // näyttää konsolissa milloin auth state muuttuu
-useEffect(() => {
-  console.log("AUTH STATE CHANGED, LOGGED IN:", user);
-}, [user]);
- 
- // loggedIn muuttuja sitä varten että tilaan on helpompi viitata muualla koodissa
- // user === null    -> loggedIn = false
- // user !== null    -> loggedIn = true
-    const loggedIn = user !== null;
-
- const [accessToken, setAccessToken] = useState(null);
- const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
 
- // Tarkista sessio sivun latautuessa
- useEffect(() => {
- refreshToken();
- }, []);
+  // Displays changes to the Auth state in the console
+  useEffect(() => {
+    console.log("AUTH STATE CHANGED, LOGGED IN:", loggedIn);
+  }, [user]);
 
+  // loggedIn variable is for easier userState tracking
+  // user === null    -> loggedIn = false
+  // user !== null    -> loggedIn = true
+  const loggedIn = user !== null;
 
- const login = async (email, password) => {
- const res = await fetch(`${API_URL}/user/login`, {
- method: "POST",
- headers: { "Content-Type": "application/json" },
- credentials: "include", // Lähetä ja vastaanota cookies
- body: JSON.stringify({ email, password }),
- });
-
- if (!res.ok) {
- const error = await res.json();
- throw new Error(error.error || "Login failed");
- }
-
- const data = await res.json();
-
-  // user = null -> user object
-  // eli loggedIn vaihtuu false -> true
- setUser({ id: data.id, username: data.username, email: data.email });
-
- setAccessToken(data.accessToken);
- return data;
- };
-
-
- // LOGOUT
- const logout = async () => {
-
- await fetch(`${API_URL}/user/logout`, { 
-    method: "POST",
-    credentials: "include",
- });
-
- // asettaa userin tilaan null = logged out
- setUser(null);
- setAccessToken(null);
- };
-
- // authorizedFetch automaattisesti uusii tokenin tarvittaessa
- const authorizedFetch = async (url, options = {}) => {
- if (!accessToken) {
- throw new Error("Not authenticated");
- }
-
- // lisää Authorization headerin
- const headers = {
- ...options.headers,
- 'Authorization': `Bearer ${accessToken}`,
- };
-
- // Tee ensimmäinen pyyntö
- let response = await fetch(url, { ...options, headers });
-
- // Jos  401 (Unauthorized), yritä uusia token ja uudelleen
- if (response.status === 401) {
- const newToken = await refreshToken();
- if (!newToken) {
-
- // Token refresh epäonnistui - käyttäjä ei ole enää kirjautunut
- throw new Error('Session expired. Please login again.');
- }
-
- // Yritä uudelleen uudella tokenilla
- headers['Authorization'] = `Bearer ${newToken}`;
- response = await fetch(url, { ...options, headers });
- }
-
- return response;
- };
+  const [accessToken, setAccessToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 
 
-// PROFIILIN POISTO
-const deleteprofile = async (email, password) => {
-    const res = await authorizedFetch(`${API_URL}/user/deleteprofile`, {
-        method: "DELETE",
-         headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
-  });
+  // Checks the session when refreshing page
+  useEffect(() => {
+    refreshToken();
+  }, []);
 
-      if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.error || "Profile deletion failed");
+
+  const login = async (email, password) => {
+    const res = await fetch(`${API_URL}/user/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // Send and receive cookies
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.error || "Login failed");
+    }
+
+    const data = await res.json();
+
+    // user = null -> user object
+    // loggedIn changes false -> true
+    setUser({ id: data.id, username: data.username, email: data.email });
+
+    setAccessToken(data.accessToken);
+    return data;
+  };
+
+
+  // LOGOUT
+  const logout = async () => {
+
+    await fetch(`${API_URL}/user/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    // sets user's state to null (= logged out)
+    setUser(null);
+    setAccessToken(null);
+  };
+
+  // authorizedFetch automatically refreshes token when needed
+  const authorizedFetch = async (url, options = {}) => {
+    if (!accessToken) {
+      throw new Error("Not authenticated");
+    }
+
+    // Adds authorization header
+    const headers = {
+      ...options.headers,
+      'Authorization': `Bearer ${accessToken}`,
+    };
+
+    // First request
+    let response = await fetch(url, { ...options, headers });
+
+    // If  401 (Unauthorized), attempt to refresh token and retry
+    if (response.status === 401) {
+      const newToken = await refreshToken();
+      if (!newToken) {
+
+        // Token refresh failed - user is no longer logged in
+        throw new Error('Session expired. Please login again.');
       }
-  setUser(null);
-  setAccessToken(null);
-};
-
- const refreshToken = async () => {
- try {
- const res = await fetch(`${API_URL}/user/refresh`, {
- method: "POST",
- credentials: "include", // Lähetä cookie
- });
-
- if (res.ok) {
- const data = await res.json();
- setAccessToken(data.accessToken);
-
- 
- // Dekoodaa username tokenista
- const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
- setUser({ id: payload.id, username: payload.username, email: payload.email });
-
- return data.accessToken; // Palauta uusi token
 
 
- } else if (res.status === 401 || res.status === 403) {
- // Käyttäjä ei ole kirjautuneena
- // user = null -> loggedIn = false
- setUser(null);
- setAccessToken(null);
- return null;
+      // Try again with new token
+      headers['Authorization'] = `Bearer ${newToken}`;
+      response = await fetch(url, { ...options, headers });
+    }
 
- } else {
- console.error("Unexpected error during token refresh:", res.status);
- return null;
- }
-
- } catch (error) {
- console.error("Token refresh failed:", error);
- return null;
-
- } finally {
- setLoading(false);
- }
- };
+    return response;
+  };
 
 
 
- const value = {
- user,
- loggedIn,
- accessToken,
- login,
- logout,
- deleteprofile,
- refreshToken,
- authorizedFetch,
- loading,
- };
-return React.createElement(
+  // Delete profile
+  const deleteprofile = async (email, password) => {
+    const res = await authorizedFetch(`${API_URL}/user/deleteprofile`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.error || "Profile deletion failed");
+    }
+    setUser(null);
+    setAccessToken(null);
+  };
+
+  const refreshToken = async () => {
+    try {
+      const res = await fetch(`${API_URL}/user/refresh`, {
+        method: "POST",
+        credentials: "include", // Send cookie
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setAccessToken(data.accessToken);
+
+
+        // Decodes username from token
+        const payload = JSON.parse(atob(data.accessToken.split('.')[1]));
+        setUser({ id: payload.id, username: payload.username, email: payload.email });
+
+        return data.accessToken; // Return new token
+
+
+      } else if (res.status === 401 || res.status === 403) {
+        // User isn't logged in
+        // user = null -> loggedIn = false
+        setUser(null);
+        setAccessToken(null);
+        return null;
+
+      } else {
+        console.error("Unexpected error during token refresh:", res.status);
+        return null;
+      }
+
+    } catch (error) {
+      console.error("Token refresh failed:", error);
+      return null;
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
+  const value = {
+    user,
+    loggedIn,
+    accessToken,
+    login,
+    logout,
+    deleteprofile,
+    refreshToken,
+    authorizedFetch,
+    loading,
+  };
+  return React.createElement(
     AuthContext.Provider,
     { value: value },
     children
-);}
+  );
+}
 export function useAuth() {
- return useContext(AuthContext);
+  return useContext(AuthContext);
 }
