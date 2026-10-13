@@ -8,10 +8,12 @@
 
 .register-form .form-group {
   width: 100%;
-  max-width: 320px; /* Säiliön leveys */
+  max-width: 320px;
+  /* Säiliön leveys */
   display: flex;
   justify-content: center;
-  margin-bottom: 2px; /* Hyvin pieni rako kenttien välillä */
+  margin-bottom: 2px;
+  /* Hyvin pieni rako kenttien välillä */
 }
 
 .register-form .userinput,
@@ -30,18 +32,18 @@
 .register-form .register-submit {
   width: 100%;
   max-width: 320px;
-  
+
   font-size: 20px;
   cursor: pointer;
   background-image: url('../assets/hooter.png');
 }
 
 .registermessage {
-    font-size: 14px;
-    color: #FFFFFF;
-    margin-top: 10px;
-    text-align: center;
-  }
+  font-size: 14px;
+  color: #FFFFFF;
+  margin-top: 10px;
+  text-align: center;
+}
 
 @media (max-width: 480px) {
 
@@ -58,15 +60,15 @@
     box-sizing: border-box;
   }
 
-  
- .register-form .form-group {
+
+  .register-form .form-group {
     width: 100%;
     display: flex;
     justify-content: center;
     margin-bottom: 3px;
   }
 
-  
+
   .register-form .userinput,
   .register-form .emailinput,
   .register-form .passwordinput {
@@ -78,10 +80,10 @@
     color: #FFFFFF;
   }
 
-  
+
   .register-form .register-submit {
     max-height: 40px;
-    color:#FFFFFF;
+    color: #FFFFFF;
     max-width: 280px;
     cursor: pointer;
     font-size: 15px;

@@ -10,7 +10,7 @@ function Home() {
         <NowPlaying />
       </section>
 
-      {/* parhaiten arvostellut elokuvat */}
+      {/* Highest reviewed movies (TMDB) */}
       <section className="TopRatedMovies">
         <TopMovies />
       </section>

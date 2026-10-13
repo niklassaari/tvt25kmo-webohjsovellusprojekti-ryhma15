@@ -36,30 +36,30 @@ const Movies = () => {
     }
   };
 
-  // Hakee lisää elokuvia kun scrollaa sivun loppuun 
-const LoadMore = async () => {
-  try {
-    const nextPage = page + 1;
+  // Fetches the next "page" of results when Load more button is pressed 
+  const LoadMore = async () => {
+    try {
+      const nextPage = page + 1;
 
-    const results = await SearchMovies(
-      searchTerm,
-      genre,
-      year,
-      type,
-      nextPage
-    );
+      const results = await SearchMovies(
+        searchTerm,
+        genre,
+        year,
+        type,
+        nextPage
+      );
 
-    setMovies(prevMovies => [
-      ...prevMovies,
-      ...results
-    ]);
+      setMovies(prevMovies => [
+        ...prevMovies,
+        ...results
+      ]);
 
-    setPage(nextPage);
+      setPage(nextPage);
 
-  } catch (err) {
-    console.error('Error while loading more movies', err);
-  }
-};
+    } catch (err) {
+      console.error('Error while loading more movies', err);
+    }
+  };
 
   return (
     <div id="container">
@@ -128,11 +128,11 @@ const LoadMore = async () => {
         ))}
       </div>
 
-{movies.length > 0 && (
-  <button id="loadMore-button" onClick={LoadMore}>
-    Load more
-  </button>
-)}
+      {movies.length > 0 && (
+        <button id="loadMore-button" onClick={LoadMore}>
+          Load more
+        </button>
+      )}
 
     </div>
   );

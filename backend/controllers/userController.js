@@ -1,5 +1,3 @@
-// tää pitää pushaa sit, selvitä route jututki
-
 import {
        getAll,
        addOne,
@@ -16,7 +14,7 @@ import {
        verifyRefreshToken
 } from "../middleware/jwt.js";
 
-// Hae kaikki käyttäjät
+// Fetches all the users
 export async function getUsers(req, res, next) {
        try {
               const users = await getAll();
@@ -26,7 +24,7 @@ export async function getUsers(req, res, next) {
        }
 }
 
-// Rekisteröi uusi käyttäjä
+// Register a new user
 export async function addUser(req, res, next) {
        try {
               const { username, email, password } = req.body;
@@ -38,10 +36,8 @@ export async function addUser(req, res, next) {
               }
 
 
-              // varmistaa että salasana sisältää vähintää yhden ison kirjaimen ja numeron
+              // Makes sure the password has at least one uppercase letter, a number, and a minimum length of 8 characters
 
-              // HUOM, LISÄÄ KÄYTTÖLIITTYMÄÄN HUOMAUTUS TÄSTÄ
-              
               const hasUppercase = /[A-Z]/.test(password);
               const hasNumber = /[0-9]/.test(password);
               const MinLength = password.length >= 8;
@@ -63,18 +59,18 @@ export async function addUser(req, res, next) {
               });
 
 
-              // HUOM: usernamenki pitää sitten olla UQ
+              // !!! username also has to be unique
 
        } catch (err) {
 
-              if (err.code === '23505') { // PostgreSQL unique violation
+              if (err.code === '23505') {
                      return res.status(409).json({ error: "Username already exists" });
               }
               next(err);
        }
 }
 
-// Kirjaudu sisään 
+// Login 
 
 export async function login(req, res, next) {
        try {
@@ -92,32 +88,29 @@ export async function login(req, res, next) {
 
 
 
-              // Luo tokenit
+              // Create tokens
               const accessToken = generateAccessToken(user);
               const refreshToken = generateRefreshToken(user);
 
 
-              //HUOM: refreshToken taulu pitää sitten olla
-              // Tallenna refresh token tietokantaan
 
-
-              //tuossa alunperin username, vaihdoin id:hen
+              // Saves the refresh token in the database
 
               await saveRefreshToken(user.id, refreshToken);
 
 
-              // Aseta refresh token HTTP-only cookieen
+              // Sets the refresh token to HTTP-only cookie
               res.cookie("refreshToken", refreshToken, {
-                     httpOnly: true, // Ei JavaScript-pääsyä
-                     secure: process.env.NODE_ENV === "production", // HTTPS tuotannossa
-                     sameSite: "strict", // CSRF-suojaus
-                     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 päivää
+                     httpOnly: true, // no JavaScript
+                     secure: process.env.NODE_ENV === "production",
+                     sameSite: "strict", // CSRF-security
+                     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
               });
 
 
               res.json({
                      message: "Login successful",
-                     id: user.id, 
+                     id: user.id,
                      username: user.username,
                      email: user.email,
                      accessToken
@@ -130,7 +123,7 @@ export async function login(req, res, next) {
 }
 
 
-// Päivitä access token
+// Refreshes the access token
 export async function refreshAccessToken(req, res, next) {
        try {
               const refreshToken = req.cookies.refreshToken;
@@ -139,21 +132,21 @@ export async function refreshAccessToken(req, res, next) {
               }
 
 
-              // Validoi refresh token
+              // Validates the refresh token
               const decoded = verifyRefreshToken(refreshToken);
               if (!decoded) {
                      return res.status(403).json({ error: "Invalid or expired refresh token" });
               }
 
 
-              // Tarkista että token on tietokannassa
+              // Makes sure the token is in the database
               const user = await getUserByRefreshToken(refreshToken);
               if (!user) {
                      return res.status(403).json({ error: "Invalid refresh token" });
               }
 
 
-              // Luo uusi access token
+              // Create new access token
               const accessToken = generateAccessToken(user);
               res.json({ accessToken });
        } catch (err) {
@@ -162,20 +155,20 @@ export async function refreshAccessToken(req, res, next) {
 }
 
 
-// Kirjaudu ulos
+// Logout
 export async function logout(req, res, next) {
        try {
               const refreshToken = req.cookies.refreshToken;
               if (refreshToken) {
                      const user = await getUserByRefreshToken(refreshToken);
 
-                     // Poista refresh token tietokannasta
+                     // Remove refresh token from database
                      if (user) {
                             await clearRefreshToken(user.id);
                      }
               }
 
-              // Poista cookie
+              // Remove cookies
               res.clearCookie("refreshToken");
               res.json({ message: "Logout successful" });
 

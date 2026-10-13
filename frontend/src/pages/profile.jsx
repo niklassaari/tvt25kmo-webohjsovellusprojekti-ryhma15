@@ -1,5 +1,5 @@
 import './profile.css';
-import { Link, useNavigate  } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/authContext';
 import { useEffect } from 'react';
@@ -7,14 +7,14 @@ import MovieData from '../components/moviedata';
 
 const Profile = () => {
 
-  // hakee ryhmät
+  // Fetches user's groups
   const [groups, setGroups] = useState([])
 
 
-  // hakee lempielokuvat
+  // Fetches user's favourites
   const [movies, setMovies] = useState([]);
 
-  // mahdollistaa sen että Favorites nappi toimii linkkinä Favorites näkymään
+  // Enables the favourite button to redirect the user to their favourites page
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -30,46 +30,46 @@ const Profile = () => {
     }
   };
 
-useEffect(() => {
-if (!user?.username) return;
+  useEffect(() => {
+    if (!user?.username) return;
 
-const fetchGroups = async () => {
-try {
-const response = await fetch(
-  `/api/users/user/${encodeURIComponent(user.username)}`
-);
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch(
+          `/api/users/user/${encodeURIComponent(user.username)}`
+        );
 
-  const data = await response.json();
+        const data = await response.json();
 
-  //test
-  console.log("Groups response status:", response.status);
-  console.log("Groups response data:", data);
 
-  if (response.ok) {
-    setGroups(data.groups || []);
-  } else {
-    console.error('Error fetching groups:', data.error);
-  }
-} catch (error) {
-  console.error('Error fetching groups:', error);
-}
+        console.log("Groups response status:", response.status);
+        console.log("Groups response data:", data);
 
-};
+        if (response.ok) {
+          setGroups(data.groups || []);
+        } else {
+          console.error('Error fetching groups:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+      }
 
-fetchGroups();
-}, [user?.username]);
+    };
 
-useEffect(() => {
-  if (!user?.username) return;
+    fetchGroups();
+  }, [user?.username]);
 
-  fetch(`/api/movies/favorites/${user.username}`)
-    .then(res => res.json())
-    .then(res => {
-      console.log("Favorites:", res);
-      setMovies(res);
-    })
-    .catch(err => console.error(err));
-}, [user]);
+  useEffect(() => {
+    if (!user?.username) return;
+
+    fetch(`/api/movies/favorites/${user.username}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log("Favorites:", res);
+        setMovies(res);
+      })
+      .catch(err => console.error(err));
+  }, [user]);
 
 
 
@@ -95,27 +95,27 @@ useEffect(() => {
 
           <div className="profile-box favorites-box">
             <div className="favscroll">
-  {movies.map(movie => (
-    <div key={movie.id}>
-      {movie.title}
-      </div>
-    
-  ))}
-</div>
+              {movies.map(movie => (
+                <div key={movie.id}>
+                  {movie.title}
+                </div>
 
+              ))}
+            </div>
+
+          </div>
         </div>
-  </div>
 
         <div className="profile-section">
           <h2><strong>Groups</strong></h2>
 
           <div className="profile-box group-box">
             <div className="groupcroll">
-{groups.map(group => (
-    <div key={group.id}>
-      {group.name}
-    </div>
-  ))}
+              {groups.map(group => (
+                <div key={group.id}>
+                  {group.name}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -134,10 +134,10 @@ useEffect(() => {
           </button>
 
           <button
-  type="button"
-  className="favorite-btn"
-  onClick={() => navigate(`/favorites/${user.username}`)}>
-  Favorites
+            type="button"
+            className="favorite-btn"
+            onClick={() => navigate(`/favorites/${user.username}`)}>
+            Favorites
           </button>
 
           <div
@@ -209,7 +209,7 @@ useEffect(() => {
       )}
 
     </div>
-  ); 
+  );
 };
 
 export default Profile;

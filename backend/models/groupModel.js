@@ -48,7 +48,7 @@ export const deleteGroup = async (id) => {
 export const groupRole = async (groupId, userId, role) => {
     const result = await db.query(
         'INSERT INTO group_members (group_id, user_id, role) VALUES ($1, $2, $3) RETURNING id',
-         [groupId, userId, role]
+        [groupId, userId, role]
     )
     return result.rows[0].id
 }
@@ -65,7 +65,7 @@ export const createGroupRequest = async (groupId, userId) => {
             [groupId, userId]
         )
         return result.rows[0].id
-    }  catch (err) {
+    } catch (err) {
         if (err.code === '23505') {
             throw new Error('Group request already exists')
         }

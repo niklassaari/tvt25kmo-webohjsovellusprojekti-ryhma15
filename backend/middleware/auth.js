@@ -1,21 +1,21 @@
 import { verifyAccessToken } from "./jwt.js";
 
 
-// Varmistaa että token on vielä voimassa
+// Makes sure the token is still valid
 export function authenticateToken(req, res, next) {
- const authHeader = req.headers["authorization"];
- const token = authHeader && authHeader.split(" ")[1]; // "Bearer TOKEN"
- 
- if (!token) {
- return res.status(401).json({ error: "Access token required" });
- }
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; // "Bearer TOKEN"
 
- const decoded = verifyAccessToken(token);
+    if (!token) {
+        return res.status(401).json({ error: "Access token required" });
+    }
 
- if (!decoded) {
- return res.status(403).json({ error: "Invalid or expired access token" });
- }
+    const decoded = verifyAccessToken(token);
 
- req.user = decoded; // { req.user sisältää id, email ja user }
- next();
+    if (!decoded) {
+        return res.status(403).json({ error: "Invalid or expired access token" });
+    }
+
+    req.user = decoded; // { req.user contains id, email ja user }
+    next();
 }

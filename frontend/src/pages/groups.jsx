@@ -13,7 +13,7 @@ const Groups = () => {
   const [selectedGroupId, setSelectedGroupId] = useState(null)
   const [joinRequests, setJoinRequests] = useState([])
   const [members, setMembers] = useState([])
-  
+
   // State for movie search
   const [movieSearchTerm, setMovieSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
@@ -66,7 +66,7 @@ const Groups = () => {
   }
 
   // Get groups favorite movie list, and requests if the user is the owner
- const showGroupMovies = async (groupId) => {
+  const showGroupMovies = async (groupId) => {
     setSelectedGroupId(groupId)
     setError(null)
     setSearchResults([])
@@ -122,7 +122,7 @@ const Groups = () => {
         )
 
         // Update the members list if the request was accepted
-        if (action === 'accept'&& selectedGroupId) {
+        if (action === 'accept' && selectedGroupId) {
           const memResponse = await authorizedFetch(`/api/groups/${selectedGroupId}/members`)
           const memData = await memResponse.json()
           if (memResponse.ok) setMembers(memData.members || [])
@@ -322,7 +322,7 @@ const Groups = () => {
                 <span className="group-name">{group.name}</span>{' '}
 
                 <button className="show-movies-btn" onClick={() => showGroupMovies(group.id || group.group_id, group.owner_id || group.group_owner_id || group.user_id)}>
-                 Show Movies
+                  Show Movies
                 </button>
 
                 <button className="join-group-btn" onClick={() => joinGroup(group.id || group.group_id)}>
@@ -361,7 +361,7 @@ const Groups = () => {
       )}
 
       {/* Button to add a movie to the selected group */}
-      {selectedGroupId && (isOwner||isMember) && (
+      {selectedGroupId && (isOwner || isMember) && (
         <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
           <h2 className="movie-search-title">Search & add a movie to your group's list</h2>
           <form className="movie-search-row" onSubmit={handleMovieSearch}>
@@ -378,26 +378,26 @@ const Groups = () => {
           </form>
 
           {/* TMDB search results */}
-{searchResults.length > 0 && (
-  <div className="search-results">
-    <h3 className="search-results-title">Search Results:</h3>
-    <ul className="search-results-list">
-      {searchResults.map((movie) => (
-        <li className="search-result-item" key={movie.id}>
-          <span className="search-result-name">
-            {movie.title}
-            {movie.release_date ? ` (${movie.release_date.slice(0, 4)})` : ''}
-          </span>
-          <button
-            className="add-to-group-btn"
-            onClick={() => addMovieToGroup(movie.id, movie.title)}
-          >
-            + Add to Group
-          </button>
-        </li>
-      ))}
-    </ul>
-  </div>
+          {searchResults.length > 0 && (
+            <div className="search-results">
+              <h3 className="search-results-title">Search Results:</h3>
+              <ul className="search-results-list">
+                {searchResults.map((movie) => (
+                  <li className="search-result-item" key={movie.id}>
+                    <span className="search-result-name">
+                      {movie.title}
+                      {movie.release_date ? ` (${movie.release_date.slice(0, 4)})` : ''}
+                    </span>
+                    <button
+                      className="add-to-group-btn"
+                      onClick={() => addMovieToGroup(movie.id, movie.title)}
+                    >
+                      + Add to Group
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       )}
@@ -411,7 +411,7 @@ const Groups = () => {
               <li key={member.user_id} style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span>{member.username} ({member.role})</span>
                 {isOwner && String(member.user_id) !== String(currentUserId) && (
-                  <button 
+                  <button
                     onClick={() => removeMember(selectedGroupId, member.user_id)}
                     style={{ backgroundColor: '#c0392b', color: 'white', border: 'none', padding: '4px 8px', cursor: 'pointer' }}
                   >

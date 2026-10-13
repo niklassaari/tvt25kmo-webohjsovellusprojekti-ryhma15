@@ -1,27 +1,27 @@
 import { useEffect, useState, useRef } from 'react';
 import MovieData from '../components/moviedata';
 
-// hakee parhaimmat arvostelut suomessa saaneet sarjat
+// Fetches the highest rated TV shows in Finland
 const TopShows = () => {
 
-   const [movies, setShows] = useState([]);
-   const listRef = useRef(null);
-  
-  
+  const [movies, setShows] = useState([]);
+  const listRef = useRef(null);
+
+
   useEffect(() => {
-  fetch('/api/movies/topShows') 
-  .then(res => res.json())
-  .then(res => setShows(res))
-  .catch(err => console.error(err));
+    fetch('/api/movies/topShows')
+      .then(res => res.json())
+      .then(res => setShows(res))
+      .catch(err => console.error(err));
   }, []);
 
 
-useEffect(() => {
-    const interval = setInterval(() => { // pitäs näyttää seuraava elokuva automaattisesti mutta ei toimi jostainsyystä
+  useEffect(() => {
+    const interval = setInterval(() => {
       if (listRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
-        
-        // Jos ollaan lopussa, palaa alkuun, muuten siirry 220px oikealle
+
+
         if (scrollLeft + clientWidth >= scrollWidth - 10) {
           listRef.current.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
@@ -36,8 +36,8 @@ useEffect(() => {
     <div id="Playing">
       <h2>Highest rated shows</h2>
       <div className="movie-list">
-        {movies.map(movie => ( 
-            <MovieData key={movie.id}movie={movie} />
+        {movies.map(movie => (
+          <MovieData key={movie.id} movie={movie} />
         ))}
       </div>
     </div>

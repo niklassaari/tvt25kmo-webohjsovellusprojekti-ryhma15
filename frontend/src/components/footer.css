@@ -1,5 +1,5 @@
 .footer {
-  
+
   width: 100%;
   background-image: url('../assets/hooter.png');
   background-size: cover;
@@ -16,7 +16,7 @@
 .footer-members {
   padding: 10px;
   text-align: center;
-  
+
 }
 
 .footer-docs {
@@ -29,7 +29,7 @@
   margin: 0 0 12px;
   font-size: 20x;
   font-family: "Times New Roman", Times, serif;
-  
+
 }
 
 .footer-members p {

@@ -2,22 +2,23 @@ import 'dotenv/config';
 import pool from '../models/database.js';
 
 export async function addReview(userId, movie_id, rating, comment) {
-// lisää arvostelun tietokantaan
-    
-        return await pool.query(
-            `INSERT INTO reviews (user_id, movie_id, rating, comment, created_at)
+  // Adds review to the database
+
+  return await pool.query(
+    `INSERT INTO reviews (user_id, movie_id, rating, comment, created_at)
              VALUES ($1, $2, $3, $4, NOW())
              ON CONFLICT (user_id, movie_id) DO NOTHING`,
-            [userId, movie_id, rating, comment]
-        );
+    [userId, movie_id, rating, comment]
+  );
 }
-   
-// hakee kaikki elokuvan arvostelut
+
+
+// Fetches all reviews for chosen movie
 
 export async function fetchReviews(movie_id) {
-    
-    return await pool.query(
-         `SELECT 
+
+  return await pool.query(
+    `SELECT 
         reviews.id,
         reviews.user_id,
         users.username,
@@ -28,8 +29,8 @@ export async function fetchReviews(movie_id) {
      JOIN users ON reviews.user_id = users.id
      WHERE reviews.movie_id = $1
      ORDER BY reviews.created_at DESC`,
-        [movie_id]
-    );
+    [movie_id]
+  );
 }
 
 

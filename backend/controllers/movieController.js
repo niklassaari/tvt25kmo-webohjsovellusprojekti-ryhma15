@@ -8,10 +8,8 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.resolve(__dirname, '../Server/.env') });
 
-/* tänne tulee kaikki logiikka ja eri "skenaariot"/tapahtumat */
 
-
-// hakee kaikki elokuvat jotka ovat nyt nähtävillä elokuvateattereissa
+// Fetches movise that are currently playing in Finnish theaters (change "region=FI" to your desired region)
 export async function getNowPlayingMovies(req, res) {
     try {
         const response = await fetch(
@@ -38,8 +36,8 @@ export async function getNowPlayingMovies(req, res) {
 }
 
 
-// hakee elokuvia tai sarjoja
-// hakutuloksia voidaan suodattaa hakusanan, genren, vuoden ja tyypin perusteella
+// Fetches movies and TV shows
+// Results can be filtered by search term, genre, year and type. the page variable is used to get the next set of results when the "Load more" button is pressed
 export async function searchMovies(req, res) {
 
     const searchTerm = req.query.q?.trim() || '';
@@ -54,7 +52,7 @@ export async function searchMovies(req, res) {
 
             let url;
 
-            // Jos hakusana on annettu, käytetään search-endpointia
+            // If a search term is given, the search-endpoint is used
             if (searchTerm) {
                 url =
                     `https://api.themoviedb.org/3/search/${searchType}` +
@@ -63,7 +61,7 @@ export async function searchMovies(req, res) {
                     `&page=${page}`;
             }
 
-            // Jos hakusanaa ei ole, käytetään discover-endpointia
+            // If there's no search term, the discover-endpoint will be used instead
             else {
                 const params = new URLSearchParams();
 
@@ -131,8 +129,8 @@ export async function searchMovies(req, res) {
         }
 
 
-        // Search-endpoint ei suodata genreä,
-        // joten tehdään se tässä hakusanaa käytettäessä
+        // Search-endpoint isn't filtered by genre,
+        // so it's done by using a search term
         if (searchTerm && genre) {
             const genreId = Number(genre);
 
@@ -142,8 +140,8 @@ export async function searchMovies(req, res) {
         }
 
 
-        // Search-endpoint ei suodata vuotta,
-        // joten tehdään se tässä hakusanaa käytettäessä
+        // Search-endpoint isn't filtered by year,
+        // so it's done by using a search term
         if (searchTerm && year) {
             results = results.filter(item => {
 
@@ -159,7 +157,8 @@ export async function searchMovies(req, res) {
         }
 
 
-        // Any-haussa yhdistetyt tulokset järjestetään suosion mukaan
+
+        // When the type is "Any", results will be sorted by popularity
         if (!type) {
             results.sort(
                 (a, b) => (b.popularity || 0) - (a.popularity || 0)
@@ -175,7 +174,7 @@ export async function searchMovies(req, res) {
 }
 
 
-// hakee parhaimmat arvosteluita saaneet elokuvat suomessa
+// Fetches the highest rated movies in Finland
 export async function TopMovies(req, res) {
     try {
         const response = await fetch(
@@ -202,7 +201,7 @@ export async function TopMovies(req, res) {
 }
 
 
-// hakee parhaimmat arvosteluita saaneet sarjat suomessa
+// Fetches the highest rated TV shows in Finland
 export async function TopShows(req, res) {
     try {
         const response = await fetch(
@@ -225,5 +224,5 @@ export async function TopShows(req, res) {
     } catch (error) {
         console.error('Error while finding movies', error);
         res.status(500).json({ error: 'error while finding movies' });
-    } 
+    }
 }

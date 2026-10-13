@@ -14,29 +14,29 @@ const Register = () => {
   const [message, setMessage] = useState("");
 
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setMessage("");
 
-// Validate required fields before sending the request
-if (!newusername.trim() || !newemail.trim() || !newpassword) {
-  setMessage("Make sure none of the fields are empty.");
-  return;
-}
+    // Validate required fields before sending the request
+    if (!newusername.trim() || !newemail.trim() || !newpassword) {
+      setMessage("Make sure none of the fields are empty.");
+      return;
+    }
 
-// Validate password before sending the request
-const hasUppercase = /[A-Z]/.test(newpassword);
-const hasNumber = /[0-9]/.test(newpassword);
-const hasMinLength = newpassword.length >= 8;
+    // Validate password before sending the request
+    const hasUppercase = /[A-Z]/.test(newpassword);
+    const hasNumber = /[0-9]/.test(newpassword);
+    const hasMinLength = newpassword.length >= 8;
 
-if (!hasUppercase || !hasNumber || !hasMinLength) {
-  setMessage(
-    "Password must be at least 8 characters long, contain at least one uppercase letter and one number."
-  );
-  return;
-}
+    if (!hasUppercase || !hasNumber || !hasMinLength) {
+      setMessage(
+        "Password must be at least 8 characters long, contain at least one uppercase letter and one number."
+      );
+      return;
+    }
 
 
     const newUser = {
@@ -45,11 +45,14 @@ if (!hasUppercase || !hasNumber || !hasMinLength) {
       password: newpassword
     };
 
+    // TEST: shows what data the registration sends
+    /*
     console.log("REGISTER DATA SENT:", {
       username: newusername,
       email: newemail,
       password: newpassword
     });
+*/
 
     const response = await fetch(`${API_URL}/user/register`, {
       method: "POST",
@@ -72,14 +75,13 @@ if (!hasUppercase || !hasNumber || !hasMinLength) {
     console.log(data);
   };
 
-  // Jos käyttäjä on kirjautunut sisään,
-  // Register-sivun sisältöä ei näytetä.
+  // Register page is blank if user is logged in
   if (loggedIn) {
     return null;
   }
 
   return (
-    <form className="register-form"onSubmit={handleSubmit}>
+    <form className="register-form" onSubmit={handleSubmit}>
 
       <div className="form-group">
         <input
@@ -123,5 +125,5 @@ if (!hasUppercase || !hasNumber || !hasMinLength) {
     </form>
   );
 };
- 
+
 export default Register;
