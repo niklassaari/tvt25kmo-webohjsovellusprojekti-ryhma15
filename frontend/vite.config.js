@@ -8,10 +8,6 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-//MUUTA IP:ksi kun alat testailemaan
-      //target: process.env.VITE_BACKEND_URL || 'http://128.214.255.200:3001',
-        
-        // tämä vm ja lokaaliin testaukseen
       target: process.env.VITE_BACKEND_URL || 'http://backend:3001',
 
       changeOrigin: true,

@@ -1,4 +1,4 @@
-# tvt25kmo-WebBrogAppProject-group15
+# TVT25KMO Group 15 Web Programming Application Project 
 
 ## Description
 
@@ -17,6 +17,18 @@ The web application allows users to:
 - **Backend:** Node.js, Express.js
 - **Database:** PostgreSQL
 - **Containerization:** Docker & Docker Compose
+
+# REST API Documentation
+
+The REST API documentation is available as a Postman collection, and can be viewed using Postman: 
+
+1. Open the "Collections" section in Postman
+
+2. Click on the "Import" option 
+
+3. Import a file called **Movie_Database_API.json** from the *Project Documentation* folder in the root of the project.
+
+You can read a short overview and explanations for each request in Postman.
 
 ## Installation & Running
 
@@ -37,6 +49,7 @@ Make sure you have [Docker](https://www.docker.com/) and Docker Compose installe
     Frontend: http://localhost:5173 (or check your container port mapping)
 
 ## Usage
+
 1. Go to the [live application](http://128.214.255.200:5173/) or your local instance.
 
 2. Register a new profile on the Register page to unlock full features.
@@ -46,4 +59,5 @@ Make sure you have [Docker](https://www.docker.com/) and Docker Compose installe
 ## Planning
 
 ### User interface was planned using Moqups website
-click here for UI: [Plan](https://app.moqups.com/Id4FP0qgzwahcGSzwfVSEkLi9BZbu0nu/view/page/ad64222d5)
+
+Click here for the UI plan: [Moqups website plan](https://app.moqups.com/Id4FP0qgzwahcGSzwfVSEkLi9BZbu0nu/view/page/ad64222d5)

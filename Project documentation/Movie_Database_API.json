@@ -1,0 +1,1054 @@
+{
+  "info": {
+    "_postman_id": "74409037-817a-4b21-a36a-84c1fdc03d90",
+    "name": "Movie Database API",
+    "description": "**Movie Database API — Postman REST API documentation**\n\nContains 30 requests organized into Users, Movies, Groups, and Reviews, with brief explanations in the docs section of each request.\n\nThe example request bodies and path variables are there for easier setup. Remember to replace the IDs and credentials with proper values before sending.\n\nThe protected endpoints require authentication, which you can get through the /user/login endpoint once you have the containers up and running. The URL defaults to [http://localhost:3001](http://localhost:3001).\n\nFurther info regarding other tokens such as the TMDB API key and token are in the example \".env\" files provided in the repo (in the backend and frontend folders), they don't have to entered again in Postman as they are stored and configured already.\n\nNOTE: AI was used when generating this json, as well was on the brief explanations of all the requests in the \"docs\" section.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51325914",
+    "_collection_link": "https://go.postman.co/collection/51325914-74409037-817a-4b21-a36a-84c1fdc03d90?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "POST /user/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"YOUR_USERNAME_HERE\",\r\n  \"email\": \"YOUR_EMAIL_HERE\",\r\n  \"password\": \"YOUR_EMAIL_HERE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "register"
+              ]
+            },
+            "description": "Register a new user. Send a JSON body containing username, email, and password. Make sure it has at least one number, uppercase letter and is at least 8 characters long. A successful registration returns HTTP 201 with a confirmation message and the new user’s username and email. A duplicate username can return HTTP 409."
+          },
+          "response": [
+            {
+              "name": "201 Created — successful registration (saved example)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"username\": \"uus2\",\r\n  \"email\": \"uus2@gmail.com\",\r\n  \"password\": \"ExamplePassword123!\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/user/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "user",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Origin"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "82"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"52-csRD+c0mUFij1ZtUQQJmnHcXUl0\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Tue, 13 Oct 2026 12:22:17 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [
+                {
+                  "expires": "Invalid Date",
+                  "domain": "",
+                  "path": ""
+                }
+              ],
+              "body": "{\n    \"message\": \"User created successfully\",\n    \"username\": \"uus2\",\n    \"email\": \"uus2@gmail.com\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /user/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"uus2@gmail.com\",\r\n  \"password\": \"ExamplePassword123!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "login"
+              ]
+            },
+            "description": "Log in using an email address and password supplied as JSON. The server issues authentication credentials when configured correctly."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /user/refresh",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "refresh"
+              ]
+            },
+            "description": "Request renewed authentication credentials using the existing refresh-token mechanism (typically a cookie). No JSON request body is required. Requires a valid refresh credential."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /user/logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "logout"
+              ]
+            },
+            "description": "Log out the current user and clear the authentication session or refresh credential as implemented by the server. No JSON request body is required."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /user/user/:username",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/user/:username",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "user",
+                ":username"
+              ],
+              "variable": [
+                {
+                  "key": "username",
+                  "value": "uus2"
+                }
+              ]
+            },
+            "description": "Retrieve the users information by username. Path parameter: username (string)."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /user/",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user"
+              ]
+            },
+            "description": "Retrieve information from the protected user endpoint. Requires authentication; no request body is required. The exact response structure has not been verified."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /user/deleteprofile",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/user/deleteprofile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "deleteprofile"
+              ]
+            },
+            "description": "Delete the authenticated user profile. Requires authentication. Destructive operation: do not send with a real account unless deletion is intended. No JSON body is configured."
+          },
+          "response": []
+        }
+      ],
+      "description": "Request related to the users of the website."
+    },
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "GET /api/movies/now-playing",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/now-playing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "now-playing"
+              ]
+            },
+            "description": "Retrieve currently playing movies from the movie data service. No JSON body is required. Requires a correctly configured TMDB token on the backend."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/movies/topMovies",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/topMovies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "topMovies"
+              ]
+            },
+            "description": "Retrieve top movies from the movie data service. No JSON body is required. Requires a correctly configured TMDB token on the backend."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/movies/topShows",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/topShows",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "topShows"
+              ]
+            },
+            "description": "Retrieve top TV shows from the movie data service. No JSON body is required. Requires a correctly configured TMDB token on the backend."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/movies/search",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/search",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "search"
+              ]
+            },
+            "description": "Search movies and/or TV shows. Optional query parameters supported by the search controller: q (search text), genre (genre ID), year (release year), and type (movie, tv, or empty for either). A search term is not required when filters are provided. Requires the backend TMDB integration."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/movies/favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"movieId\": 550\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/favorites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "favorites"
+              ]
+            },
+            "description": "Add a movie to the authenticated user’s favorites. JSON body: movieId (TMDB movie ID). The user ID is read from the authenticated request, not from the JSON body. On success, returns HTTP 201 with {\"message\":\"added to favorites\"}. Duplicate user/movie pairs are ignored by the database insert."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/movies/favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/favorites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "favorites"
+              ]
+            },
+            "description": "List the authenticated user’s favorite movie IDs. No JSON body is required. On success, returns a JSON array of movie IDs. Requires authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/movies/favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"movieId\": 550\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/favorites",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "favorites"
+              ]
+            },
+            "description": "Remove a movie from the authenticated user’s favorites. JSON body: movieId (TMDB movie ID). User ID comes from authentication. On success, returns {\"message\":\"deleted from favorites\"}."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/movies/favorites/:username",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/movies/favorites/:username",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "favorites",
+                ":username"
+              ],
+              "variable": [
+                {
+                  "key": "username",
+                  "value": "uus2"
+                }
+              ]
+            },
+            "description": "Retrieve public favorite-movie details for a user. Path parameter: username (string, not a numeric user ID). Returns HTTP 404 with {\"error\":\"user not found\"} when the username does not exist. Movie details are fetched from TMDB."
+          },
+          "response": []
+        }
+      ],
+      "description": "Requests related to movies, such as fetching data related to information on the movies, reviews and if the movie has been favourited by the user."
+    },
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "POST /api/groups/add",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Test Movie Group\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/add",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "add"
+              ]
+            },
+            "description": "Create a group owned by the authenticated user. JSON body: name (required group name). Owner ID comes from authentication. On success, returns HTTP 201 with a confirmation message and groupId. Missing name returns HTTP 400."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/groups/delete/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/delete/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "delete",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete an existing group. Path parameter: id (group ID). Only the group owner may delete it. Returns HTTP 200 on success, HTTP 403 if the caller is not the owner, or HTTP 404 if the group is not found. Destructive operation."
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/groups/update/:id",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Updated Movie Group\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/update/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "update",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Rename a group. Path parameter: id (group ID). JSON body: name (required new name). Only the group owner can update it. Returns HTTP 200 on success; HTTP 400 for a missing name and HTTP 403 if the caller is not the owner."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/groups/all",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "all"
+              ]
+            },
+            "description": "List groups. Optional query parameter: name (filter groups by name). When omitted, returns all groups. On success, returns HTTP 200 with a JSON object containing a groups property."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/groups/role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"groupId\": 1,\r\n  \"userId\": 2,\r\n  \"role\": \"member\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "role"
+              ]
+            },
+            "description": "Add a user to a group with a role. JSON body: groupId (group ID), userId (user ID), and role (for example member; defaults to member if omitted). On success, returns HTTP 201 with a confirmation message."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/groups/request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"groupId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/request",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "request"
+              ]
+            },
+            "description": "Create a request to join a group. JSON body: groupId. The requesting user ID comes from authentication. Group owners cannot request to join their own group. Returns HTTP 201 on success, or HTTP 400 for an owner request or duplicate request."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/groups/member/:groupId/:userId",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/member/:groupId/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "member",
+                ":groupId",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "1"
+                },
+                {
+                  "key": "userId",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Remove a member from a group. Path parameters: groupId (group ID) and userId (ID of the member to remove). The group owner or the member themselves can remove that member. Returns HTTP 200 on success, HTTP 403 for insufficient permissions, or HTTP 404 if membership is absent. Destructive operation."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/groups/:groupId/movies",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/:groupId/movies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":groupId",
+                "movies"
+              ],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get movies associated with a group. Path parameter: groupId. Returns HTTP 200 with a JSON object containing a movies property."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/groups/:groupId/movies",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"movieId\": 550,\r\n  \"movieTitle\": \"Fight Club\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/:groupId/movies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":groupId",
+                "movies"
+              ],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Add a movie to a group. Path parameter: groupId. JSON body: movieId (movie ID) and movieTitle (required movie title). User ID comes from authentication. Returns HTTP 201 and a movie object on success; HTTP 400 if the title is missing or the movie already exists in the group."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/groups/:groupId/requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/:groupId/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":groupId",
+                "requests"
+              ],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get join requests for a group. Path parameter: groupId. Only the group owner may view requests. Returns HTTP 200 with a requests property or HTTP 403 if the caller is not the owner."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/groups/requests/:requestId",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"action\": \"accept\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/requests/:requestId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "requests",
+                ":requestId"
+              ],
+              "variable": [
+                {
+                  "key": "requestId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Accept or reject a group join request. Path parameter: requestId. JSON body: action set to accept or reject (the controller also accepts status values Approved or Rejected). Only the group owner may decide. Returns HTTP 200 on success, HTTP 400 for invalid action, HTTP 403 for insufficient permissions, or HTTP 404 if the request is not found."
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/groups/:groupId/members",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/groups/:groupId/members",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                ":groupId",
+                "members"
+              ],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get members of a group. Path parameter: groupId. Returns HTTP 200 with a JSON object containing a members property."
+          },
+          "response": []
+        }
+      ],
+      "description": "Requests related to the groups."
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "GET /reviews/getReviews/:movie_id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/getReviews/:movie_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "getReviews",
+                ":movie_id"
+              ],
+              "variable": [
+                {
+                  "key": "movie_id",
+                  "value": "550"
+                }
+              ]
+            },
+            "description": "Get reviews for a movie. Path parameter: movie_id (movie ID). Returns HTTP 200 with a JSON array of review records."
+          },
+          "response": []
+        },
+        {
+          "name": "POST /reviews/createReview",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"movie_id\": 550,\r\n  \"rating\": 5,\r\n  \"comment\": \"Great movie!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reviews/createReview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "createReview"
+              ]
+            },
+            "description": "Create a review for a movie. JSON body: movie_id (movie ID), rating (rating value), and comment (review text). User ID comes from authentication. Returns HTTP 201 with {\"message\":\"review created successfully\"} on success."
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /reviews/deleteReview/:reviewId",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/deleteReview/:reviewId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "deleteReview",
+                ":reviewId"
+              ],
+              "variable": [
+                {
+                  "key": "reviewId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Delete a review belonging to the authenticated user. Path parameter: reviewId. Returns HTTP 200 with a success message or HTTP 404 if the review does not exist or the caller lacks permission. Destructive operation."
+          },
+          "response": []
+        }
+      ],
+      "description": "Requests related to the reviews, such as sending a review and a rating to the database and checking for reviews and then fetching them."
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    }
+  ]
+}
