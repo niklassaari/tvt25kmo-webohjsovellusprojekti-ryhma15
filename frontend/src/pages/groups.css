@@ -1,4 +1,4 @@
-/* Asetetaan kaikkien teksti-elementtien väri valkoiseksi Groups-sivulla */
+/* Makes all text in elements in group page white */
 #Groups,
 #Groups h1,
 #Groups h2,
@@ -10,7 +10,7 @@
   color: #ffffff;
 }
 
-/* Varmistetaan, että tekstikentän (input) teksti säilyy tummana, jotta kirjoitus näkyy valkoisella pohjalla */
+/* Make sure the text is white so it will show in dark background */
 #Groups input {
   color: #ffffff;
 }

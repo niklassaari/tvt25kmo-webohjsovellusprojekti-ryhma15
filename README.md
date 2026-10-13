@@ -39,3 +39,8 @@ Make sure you have [Docker](https://www.docker.com/) and Docker Compose installe
 2. Register a new profile on the Register page to unlock full features.
 
 3. Once logged in, you can write reviews, create new groups, or join existing ones to view group-specific movie lists.
+
+## Planning
+
+### User interface was planned using Moqups website
+click here for UI: [Plan] (https://app.moqups.com/Id4FP0qgzwahcGSzwfVSEkLi9BZbu0nu/view/page/ad64222d5)
