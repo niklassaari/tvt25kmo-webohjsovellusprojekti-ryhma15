@@ -78,6 +78,8 @@
 .show-movies-btn {
   background-image: url('../assets/hooter.png');
   margin-right: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .join-group-btn {
@@ -200,4 +202,20 @@
   .add-to-group-btn {
     width: auto;
   }
+}
+
+@media (max-width: 400px) {
+.group-item {
+flex-direction: column;
+gap: 5px;
+}
+
+.show-movies-btn,
+.join-group-btn {
+width: auto;
+min-width: 140px;
+height: 40px;
+margin: 0;
+white-space: nowrap;
+}
 }

@@ -367,12 +367,21 @@
         min-height: 100px;
         flex-direction: column;
     }
+
+    .movie-list {
+    min-height: 0;
+}
 }
 
 @media(max-width: 500px) {
     .OnTheaters, .TopRatedMovies, .TopRatedShows {
         margin-top: 5px !important;
     }
+
+    .movie-list {
+    min-height: 0;
+}
+    
 
     .OnTheaters .movie, .TopRatedMovies .movie, .TopRatedShows .movie {
         width: 170px !important;
@@ -398,10 +407,16 @@
     }
 }
 
+
+
 @media(max-width: 400px) {
     .OnTheaters, .TopRatedMovies, .TopRatedShows {
         margin-top: 5px !important;
     }
+
+    .movie-list {
+    min-height: 0;
+}
 
     .OnTheaters .movie, .TopRatedMovies .movie, .TopRatedShows .movie {
         width: 140px !important;
@@ -421,6 +436,7 @@
         font-size: 13px !important;
         line-height: 1.2 !important;
     }
+    
 
     .OnTheaters .movie-card, .TopRatedMovies .movie-card, .TopRatedShows .movie-card {
         padding: 5px !important;
