@@ -16,7 +16,7 @@ The web application allows users to:
 - **Frontend:** React, Vite
 - **Backend:** Node.js, Express.js
 - **Database:** PostgreSQL
-- **Containerization:** Docker & Docker Compo
+- **Containerization:** Docker & Docker Compose
 
 ## Installation & Running
 
@@ -24,13 +24,16 @@ Make sure you have [Docker](https://www.docker.com/) and Docker Compose installe
 
 1. Clone the repository:
     ```bash
-    git clone [https://github.com/your-username/tvt25kmo-WebBrogAppProject-group15.git](https://github.com/your-username/tvt25kmo-WebBrogAppProject-group15.git)
-    cd tvt25kmo-WebBrogAppProject-group15
+    git clone https://github.com/niklassaari/tvt25kmo-webohjsovellusprojekti-ryhma15.git
+    cd tvt25kmo-webohjsovellusprojekti-ryhma15
 
-2. Build and start containers using Docker Compose
+2. Configure the environment variables in the *backend* and *frontend* folders
+    Make sure that you've acquired the API key and token from the [The Movie Database](https://www.themoviedb.org/) website before building the containers. (Refer to to the .env.example files for further instructions)
+
+3. Build and start containers using Docker Compose
     docker compose up --build
 
-3. Open your browser and navigate to:
+4. Open your browser and navigate to:
     Frontend: http://localhost:5173 (or check your container port mapping)
 
 ## Usage
