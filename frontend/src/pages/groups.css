@@ -10,7 +10,194 @@
   color: #ffffff;
 }
 
-/* Varmistetaan, että tekstikentän (input) teksti säilyy tummana, jotta kirjoitus näkyy valkoisella pohjalla */
+.group-name-form {
+  background-image: url('../assets/tausta.png');
+}
+
+.movie-search-form {
+  background-image: url('../assets/tausta.png');
+}
+
+.create-group-btn {
+  background-image: url('../assets/hooter.png');
+}
+
+.add-to-group-btn{
+  background-image: url('../assets/hooter.png');
+}
+
+.search-tmbd-btn {
+  background-image: url('../assets/hooter.png');
+}
+
+.group-list-all {
+  align-items: center;
+}
+
+.groups-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.group-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.group-name {
+  text-align: center;
+  min-width: 150px;
+  font-weight: bold;
+  font-family: "Times New Roman", Times, serif;
+}
+
+
+
+.groups-title {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.group-fav-title {
+  font-family: "Times New Roman", Times, serif;
+
+}
+
+.member-list-title {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.movie-search-title {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.show-movies-btn {
+  background-image: url('../assets/hooter.png');
+  margin-right: 5px;
+}
+
+.join-group-btn {
+  background-image: url('../assets/hooter.png');
+  
+}
+
+.search-results {
+  margin-top: 10px;
+}
+
+.search-results-title {
+  color: white;
+}
+
+.search-results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-result-item {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 12px;
+margin-bottom: 10px;
+flex-wrap: wrap;
+}
+
+.search-result-name {
+text-align: right;
+width: 250px;
+}
+
+
 #Groups input {
   color: #ffffff;
 }
+
+#Groups .create-group-form,
+#Groups .movie-search-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+#Groups .create-group-form {
+  margin-bottom: 20px;
+}
+
+#Groups .group-name-form,
+#Groups .movie-search-form {
+  box-sizing: border-box;
+  width: 300px;
+  max-width: 100%;
+}
+
+.member-list-title {
+  text-align: center;
+}
+
+#Groups ul {
+  padding-left: 0;
+}
+
+#Groups ul li {
+  justify-content: center;
+}
+
+#Groups button {
+  color: #fff !important;
+}
+
+
+@media (max-width: 576px) {
+  #Groups .create-group-form,
+  #Groups .movie-search-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0 8px;
+    gap: 8px;
+    box-sizing: border-box;
+  }
+
+  #Groups .create-group-form .group-name-form,
+  #Groups .movie-search-row .movie-search-form {
+    flex: 1 1 200px !important;
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: none !important;
+    box-sizing: border-box;
+  }
+
+  #Groups .create-group-form .create-group-btn,
+  #Groups .movie-search-row .search-tmbd-btn {
+    flex-shrink: 0;
+    width: auto;
+    white-space: nowrap;
+    padding: 8px;
+  }
+
+  .search-result-item {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .search-result-name {
+    width: 100%;
+    text-align: center;
+  }
+
+  .add-to-group-btn {
+    width: auto;
+  }
+}
+
