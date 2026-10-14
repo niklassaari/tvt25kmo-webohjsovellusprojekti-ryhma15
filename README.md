@@ -61,3 +61,4 @@ Make sure you have [Docker](https://www.docker.com/) and Docker Compose installe
 ### User interface was planned using Moqups website
 
 Click here for the UI plan: [Moqups website plan](https://app.moqups.com/Id4FP0qgzwahcGSzwfVSEkLi9BZbu0nu/view/page/ad64222d5)
+OR here for the [PDF](file:///C:/Users/Tuomo/OneDrive/UI%20suunnitelma.pdf) 
